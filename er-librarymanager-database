@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-12-28T12:43:34.011Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="tF5OuqAXOiRXdgj4vq75" version="16.0.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-12-28T12:49:28.282Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="xrzOXCzslEC2iBZngT6d" version="16.0.3" type="github">
   <diagram id="9UsEhW5QkOTx9-0hjYZ5" name="Library Manager Database">
     <mxGraphModel dx="878" dy="519" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -143,7 +143,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="XIHwOgPd7TETNURHoEdX-27" value="Usuarios/Admnistradores" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;" vertex="1" parent="1">
-          <mxGeometry x="600" y="40" width="180" height="190" as="geometry" />
+          <mxGeometry x="600" y="40" width="180" height="220" as="geometry" />
         </mxCell>
         <mxCell id="XIHwOgPd7TETNURHoEdX-28" value="" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;top=0;left=0;bottom=1;right=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="XIHwOgPd7TETNURHoEdX-27">
           <mxGeometry y="30" width="180" height="30" as="geometry" />
@@ -206,6 +206,19 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="XIHwOgPd7TETNURHoEdX-102" value="livros_alugados" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;" vertex="1" parent="XIHwOgPd7TETNURHoEdX-100">
+          <mxGeometry x="30" width="150" height="30" as="geometry">
+            <mxRectangle width="150" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XIHwOgPd7TETNURHoEdX-106" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;top=0;left=0;bottom=0;right=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="XIHwOgPd7TETNURHoEdX-27">
+          <mxGeometry y="180" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XIHwOgPd7TETNURHoEdX-107" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;" vertex="1" parent="XIHwOgPd7TETNURHoEdX-106">
+          <mxGeometry width="30" height="30" as="geometry">
+            <mxRectangle width="30" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XIHwOgPd7TETNURHoEdX-108" value="telefone" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;" vertex="1" parent="XIHwOgPd7TETNURHoEdX-106">
           <mxGeometry x="30" width="150" height="30" as="geometry">
             <mxRectangle width="150" height="30" as="alternateBounds" />
           </mxGeometry>
