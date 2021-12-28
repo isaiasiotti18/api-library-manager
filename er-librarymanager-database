@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-12-28T13:08:45.674Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="m4eYCXnkUQRMQHk_JfC_" version="16.0.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-12-28T13:09:19.687Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="qPTbTmhvHi_29uA5KeOJ" version="16.0.3" type="github">
   <diagram id="9UsEhW5QkOTx9-0hjYZ5" name="Library Manager Database">
     <mxGraphModel dx="878" dy="519" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -392,7 +392,7 @@
         <mxCell id="XIHwOgPd7TETNURHoEdX-122" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=16;" edge="1" parent="1" source="XIHwOgPd7TETNURHoEdX-112" target="XIHwOgPd7TETNURHoEdX-116">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="XIHwOgPd7TETNURHoEdX-123" value="Text" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;" vertex="1" connectable="0" parent="XIHwOgPd7TETNURHoEdX-122">
+        <mxCell id="XIHwOgPd7TETNURHoEdX-123" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;" vertex="1" connectable="0" parent="XIHwOgPd7TETNURHoEdX-122">
           <mxGeometry x="-0.0923" y="1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
