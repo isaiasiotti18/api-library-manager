@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-12-28T13:53:24.451Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="WrcpchnFMwVH-qXKBxTM" version="16.0.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-12-28T13:54:36.571Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="aoQBSaycCT1tFVLtnBnc" version="16.0.3" type="github">
   <diagram id="9UsEhW5QkOTx9-0hjYZ5" name="Library Manager Database">
     <mxGraphModel dx="1080" dy="553" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -282,7 +282,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="XIHwOgPd7TETNURHoEdX-66" value="Aluguel" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="560" y="310" width="180" height="130" as="geometry" />
+          <mxGeometry x="570" y="320" width="180" height="130" as="geometry" />
         </mxCell>
         <mxCell id="XIHwOgPd7TETNURHoEdX-67" value="" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;top=0;left=0;bottom=1;right=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="XIHwOgPd7TETNURHoEdX-66">
           <mxGeometry y="30" width="180" height="30" as="geometry" />
@@ -410,6 +410,11 @@
               <mxPoint x="270" y="390" />
               <mxPoint x="270" y="125" />
             </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XIHwOgPd7TETNURHoEdX-133" value="N:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;" vertex="1" connectable="0" parent="XIHwOgPd7TETNURHoEdX-131">
+          <mxGeometry x="-0.8744" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
       </root>
