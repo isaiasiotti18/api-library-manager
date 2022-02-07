@@ -6,7 +6,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { LivroRequest } from './dtos/livro.request';
+import { LivroRequestDTO } from './dtos/livro.request.dto';
 import { LivroService } from './livro.service';
 import { Livro } from './model/livro.model';
 
@@ -16,7 +16,7 @@ export class LivroController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  async criarLivros(@Body() livro: LivroRequest): Promise<Livro> {
+  async criarLivros(@Body() livro: LivroRequestDTO): Promise<Livro> {
     return await this.livrosService.criarLivro(livro);
   }
 

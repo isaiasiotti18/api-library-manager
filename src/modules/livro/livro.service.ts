@@ -1,83 +1,71 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { AutorRepository } from '../autor/repositories/autor.repository';
-import { EditoraRepository } from '../editora/repositories/editora.repository';
-import { GeneroRepository } from '../genero/repositories/genero.repository';
-import { CriarLivroDTO } from './dtos/criar-livro.dto';
-import { LivroRequest } from './dtos/livro.request';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { AutorService } from '../autor/autor.service';
+import { EditoraService } from '../editora/editora.service';
+import { LivroRequestDTO } from './dtos/livro.request.dto';
 import { Livro } from './model/livro.model';
-import { LivroRepository } from './repositories/livro.repository';
+import { LivroRepository } from './livro.repository';
+import { GeneroService } from '../genero/genero.service';
 
 @Injectable()
 export class LivroService {
+  private logger = new Logger(LivroService.name);
   constructor(
     private readonly livroRepository: LivroRepository,
-    private readonly autorRepository: AutorRepository,
-    private readonly editoraRepository: EditoraRepository,
-    private readonly generoRepository: GeneroRepository,
+    private readonly autorService: AutorService,
+    private readonly editoraService: EditoraService,
+    private readonly generoService: GeneroService,
   ) {}
 
   public async consultarLivros(): Promise<Livro[]> {
     return await this.livroRepository.find();
   }
 
+  public async procurarLivro(isbn_livro: string): Promise<Livro> {
+    const livroJaCadastrado = await this.livroRepository.procurarLivro(
+      isbn_livro,
+    );
+
+    return livroJaCadastrado;
+  }
+
   public async criarLivro({
     titulo,
     nome_editora,
     nome_autor,
-    generos,
+    genero,
     isbn,
     publicacao,
     qtd_paginas,
-  }: LivroRequest): Promise<Livro> {
-    const livroJaExistente = await this.livroRepository.findOne({ isbn });
+  }: LivroRequestDTO): Promise<Livro> {
+    const livroJaCadastrado = await this.procurarLivro(isbn);
 
-    if (livroJaExistente) {
-      throw new BadRequestException('Livro já existente na base de dados.');
+    if (livroJaCadastrado) {
+      throw new BadRequestException('Livro já cadastrado na base de dados.');
     }
 
-    //Verificando se o autor existe
-    const autor = await this.autorRepository.procurarAutor(nome_autor);
+    const autorJaCadastrado = await this.autorService.procurarAutor(nome_autor);
+    const editoraJaCadastrado = await this.editoraService.procurarEditora(
+      nome_editora,
+    );
+    const generoJaCadastrado = await this.generoService.procurarGenero(genero);
+    try {
+      const novoLivro = await this.livroRepository.criarLivro({
+        titulo,
+        autor_id: autorJaCadastrado.autor_id,
+        editora_id: editoraJaCadastrado.editora_id,
+        generos: [generoJaCadastrado],
+        isbn,
+        publicacao,
+        qtd_paginas,
+      });
 
-    if (!autor) {
-      throw new NotFoundException('Autor informado não existe.');
-    }
-
-    //Verificando se a editora existe
-    const editora = await this.editoraRepository.procurarEditora(nome_editora);
-
-    if (!editora) {
-      throw new NotFoundException('Editora informada não existe.');
-    }
-
-    //Verificando os generos
-    generos.map(async (genero) => {
-      const generoEncontrado = await this.generoRepository.procurarGenero(
-        genero.genero,
+      await this.livroRepository.query(
+        `INSERT INTO livro_genero(livro_id, genero_id) VALUES ("${novoLivro.livro_id}", "${novoLivro.generos[0].genero_id}")`,
       );
 
-      console.log('Genero: ' + JSON.stringify(generoEncontrado));
-
-      // Caso o genero não exista no banco de dados
-      // Ele será adicionado
-      if (!generoEncontrado) {
-        await this.generoRepository.criarGenero(genero);
-      }
-    });
-
-    const novoLivro = await this.livroRepository.criarLivro({
-      titulo,
-      autor_id: autor.autor_id,
-      editora_id: editora.editora_id,
-      generos,
-      isbn,
-      publicacao,
-      qtd_paginas,
-    });
-
-    return novoLivro;
+      return novoLivro;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

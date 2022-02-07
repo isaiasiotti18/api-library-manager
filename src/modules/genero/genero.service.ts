@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CriarGeneroDTO } from './dtos/criar-genero.dto';
 import { Genero } from './model/genero.model';
-import { GeneroRepository } from './repositories/genero.repository';
+import { GeneroRepository } from './genero.repository';
 
 @Injectable()
 export class GeneroService {

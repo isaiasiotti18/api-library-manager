@@ -1,6 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CriarAutorDTO } from './dtos/criar-autor.dto';
-import { AutorRepository } from './repositories/autor.repository';
+import { AutorRepository } from './autor.repository';
 import { Autor } from './model/autor.model';
 
 @Injectable()
@@ -13,5 +17,15 @@ export class AutorService {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  async procurarAutor(autor: string): Promise<Autor> {
+    const autorJaCadastrado = await this.autorRepository.procurarAutor(autor);
+
+    if (!autorJaCadastrado) {
+      throw new NotFoundException(`Autor não castrado na base de dados`);
+    }
+
+    return autorJaCadastrado;
   }
 }

@@ -5,7 +5,7 @@ import { EditoraModule } from '../editora/editora.module';
 import { GeneroModule } from '../genero/genero.module';
 import { LivroController } from './livro.controller';
 import { LivroService } from './livro.service';
-import { LivroRepository } from './repositories/livro.repository';
+import { LivroRepository } from './livro.repository';
 
 @Module({
   imports: [

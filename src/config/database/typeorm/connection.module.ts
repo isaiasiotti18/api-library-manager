@@ -9,12 +9,13 @@ import { Livro } from 'src/modules/livro/model/livro.model';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'database-librarymanager.catldh1cisbk.us-east-1.rds.amazonaws.com',
+      host: '172.17.0.2',
       port: 3306,
-      username: 'admin',
-      password: 'admin12345',
+      username: 'root',
+      password: 'root',
       database: 'dblibrarymanager',
       entities: [Livro, Genero, Autor, Editora],
+      synchronize: true,
     }),
   ],
   controllers: [],

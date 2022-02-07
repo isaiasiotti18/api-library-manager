@@ -13,7 +13,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-@Entity('livros')
+@Entity()
 export class Livro {
   @PrimaryGeneratedColumn('uuid')
   livro_id: string;
@@ -35,7 +35,9 @@ export class Livro {
   @JoinColumn({ name: 'editora_id' })
   editora: Editora;
 
-  @ManyToMany(() => Genero)
+  @ManyToMany(() => Genero, (genero) => genero.livros, {
+    cascade: true,
+  })
   @JoinTable()
   generos: Genero[];
 

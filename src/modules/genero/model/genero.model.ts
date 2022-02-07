@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('generos')
+@Entity()
 export class Genero {
   @PrimaryGeneratedColumn('uuid')
   genero_id: string;
@@ -15,7 +15,7 @@ export class Genero {
   @Column()
   genero: string;
 
-  @ManyToMany(() => Livro)
+  @ManyToMany(() => Livro, (livro) => livro.generos)
   @JoinTable()
   livros: Livro[];
 }
