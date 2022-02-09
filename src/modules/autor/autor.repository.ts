@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { CriarAutorDTO } from '../dtos/criar-autor.dto';
-import { AutorRepositoryInterface } from '../interfaces/autor-repository.interface';
-import { Autor } from '../model/autor.model';
+import { CriarAutorDTO } from './dtos/criar-autor.dto';
+import { AutorRepositoryInterface } from './interfaces/autor-repository.interface';
+import { Autor } from './model/autor.model';
 
 @EntityRepository(Autor)
 export class AutorRepository

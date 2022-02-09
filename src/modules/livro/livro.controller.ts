@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -23,5 +25,20 @@ export class LivroController {
   @Get()
   consultarLivros(): Promise<Livro[]> {
     return this.livrosService.consultarLivros();
+  }
+
+  @Get('/genero')
+  async consultarLivrosPorGenero(
+    @Query('genero') genero: string,
+  ): Promise<Livro[]> {
+    return await this.livrosService.consultarLivrosPorGenero(genero);
+  }
+
+  @Post(':isbn_livro/genero/:genero')
+  async atribuirGeneroALivro(@Param() params: string): Promise<void> {
+    const isbn_livro = params['isbn_livro'];
+    const genero = params['genero'];
+
+    await this.livrosService.atribuirGeneroALivro(isbn_livro, genero);
   }
 }

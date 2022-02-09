@@ -1,7 +1,7 @@
-import { CriarLivroDTO } from '../dtos/criar-livro.dto';
+import { LivroDTO } from '../daos/criar-livro.dto';
 import { Livro } from '../model/livro.model';
 
 export interface LivroRepositoryInterface {
-  criarLivro(livro: CriarLivroDTO): Promise<Livro>;
-  procurarLivro(isbn_livro: string): Promise<Livro>;
+  criarLivro(livro: LivroDTO): Promise<Livro>;
+  consultarLivro(isbn_livro: string): Promise<Livro>;
 }

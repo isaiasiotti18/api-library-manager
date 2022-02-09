@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { CriarEditoraDTO } from '../dtos/criar-editora.dto';
-import { AutorRepositoryInterface } from '../interfaces/editora-repository.interface';
-import { Editora } from '../model/editora.model';
+import { CriarEditoraDTO } from './dtos/criar-editora.dto';
+import { AutorRepositoryInterface } from './interfaces/editora-repository.interface';
+import { Editora } from './model/editora.model';
 
 @EntityRepository(Editora)
 export class EditoraRepository
