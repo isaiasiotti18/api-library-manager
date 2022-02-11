@@ -9,6 +9,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { LivroRequestDTO } from './dtos/livro.request.dto';
+import { LivroResponse } from './interfaces/livro-response.interface';
 import { LivroService } from './livro.service';
 import { Livro } from './model/livro.model';
 
@@ -23,14 +24,21 @@ export class LivroController {
   }
 
   @Get()
-  consultarLivros(): Promise<Livro[]> {
+  consultarLivros(): Promise<LivroResponse[]> {
     return this.livrosService.consultarLivros();
+  }
+
+  @Get('/titulo_livro')
+  async consultarLivroPeloTitulo(
+    @Query('titulo_livro') titulo_livro: string,
+  ): Promise<Livro> {
+    return await this.livrosService.consultarLivroPeloTitulo(titulo_livro);
   }
 
   @Get('/genero')
   async consultarLivrosPorGenero(
     @Query('genero') genero: string,
-  ): Promise<Livro[]> {
+  ): Promise<LivroResponse[]> {
     return await this.livrosService.consultarLivrosPorGenero(genero);
   }
 

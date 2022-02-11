@@ -15,7 +15,6 @@ import { Livro } from 'src/modules/livro/model/livro.model';
       password: 'root',
       database: 'dblibrarymanager',
       entities: [Livro, Genero, Autor, Editora],
-      synchronize: true,
     }),
   ],
   controllers: [],
