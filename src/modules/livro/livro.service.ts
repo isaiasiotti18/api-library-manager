@@ -9,7 +9,7 @@ import { LivroRequestDTO } from './dtos/livro.request.dto';
 import { Livro } from './model/livro.model';
 import { LivroRepository } from './livro.repository';
 import { GeneroService } from '../genero/genero.service';
-import { LivroResponse } from './interfaces/livro-response.interface';
+import { LivroResultado } from './interfaces/livro-response.interface';
 
 @Injectable()
 export class LivroService {
@@ -20,73 +20,40 @@ export class LivroService {
     private readonly generoService: GeneroService,
   ) {}
 
-  public async consultarLivros(): Promise<LivroResponse[]> {
-    const livros = await this.livroRepository.find({
-      relations: ['autor', 'editora'],
-    });
-
-    return livros.map((livro) => {
-      const livroObj: LivroResponse = {
-        titulo: livro.titulo,
-        autor: livro.autor.nome,
-        editora: livro.editora.editora,
-        isbn: livro.isbn,
-        publicacao: livro.publicacao,
-        qtd_paginas: livro.qtd_paginas,
-      };
-
-      return livroObj;
-    });
+  public async consultarLivros(): Promise<LivroResultado[]> {
+    try {
+      return await this.livroRepository.consultarLivros();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   public async consultarLivrosPorGenero(
     genero: string,
-  ): Promise<LivroResponse[]> {
+  ): Promise<LivroResultado[]> {
     try {
       const generoJaCadastrado = await this.generoService.procurarGenero(
         genero,
       );
 
-      const listaLivros: LivroResponse[] = await this.livroRepository.query(`
-        SELECT 
-          livro.titulo, 
-          livro.isbn, 
-          livro.publicacao, 
-          livro.qtd_paginas,
-          autor.nome as autor,
-          editora.editora,
-          genero.genero
-          FROM livro
-          JOIN livro_genero ON livro.livro_id = livro_genero.livro_id
-          JOIN genero ON genero.genero_id = livro_genero.genero_id
-          JOIN autor ON autor.autor_id = livro.autor_id
-          JOIN editora ON editora.editora_id = livro.editora_id
-          WHERE genero.genero = "${generoJaCadastrado.genero}"
-      `);
-
-      return listaLivros.map((livro) => {
-        const livroObj = {
-          titulo: livro.titulo,
-          autor: livro.autor,
-          editora: livro.editora,
-          isbn: livro.isbn,
-          qtd_paginas: livro.qtd_paginas,
-          publicacao: livro.publicacao,
-        };
-
-        return livroObj;
-      });
+      return await this.livroRepository.consultarLivrosPorGenero(
+        generoJaCadastrado.genero,
+      );
     } catch (error) {
       throw new NotFoundException(error.message);
     }
   }
 
   public async consultarLivro(isbn_livro: string): Promise<Livro> {
-    const livroJaCadastrado = await this.livroRepository.consultarLivro(
-      isbn_livro,
-    );
+    try {
+      const livroJaCadastrado = await this.livroRepository.consultarLivro(
+        isbn_livro,
+      );
 
-    return livroJaCadastrado;
+      return livroJaCadastrado;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   public async criarLivro({
@@ -108,12 +75,15 @@ export class LivroService {
       const autorJaCadastrado = await this.autorService.procurarAutor(
         nome_autor,
       );
+
       const editoraJaCadastrado = await this.editoraService.procurarEditora(
         nome_editora,
       );
+
       const generoJaCadastrado = await this.generoService.procurarGenero(
         genero,
       );
+
       const novoLivro = await this.livroRepository.criarLivro({
         titulo,
         autor_id: autorJaCadastrado.autor_id,
@@ -124,8 +94,9 @@ export class LivroService {
         qtd_paginas,
       });
 
-      await this.livroRepository.query(
-        `INSERT INTO livro_genero(livro_id, genero_id) VALUES ("${novoLivro.livro_id}", "${generoJaCadastrado.genero_id}")`,
+      await this.livroRepository.adicionarRelacionamentoLivroGenero(
+        novoLivro.livro_id,
+        generoJaCadastrado.genero_id,
       );
 
       return novoLivro;
@@ -145,9 +116,9 @@ export class LivroService {
       );
 
       if (generoJaCadastrado) {
-        await this.livroRepository.query(
-          `INSERT INTO livro_genero(livro_id, genero_id) 
-          VALUES ("${livroJaCadastrado.livro_id}", "${generoJaCadastrado.genero_id}")`,
+        await this.livroRepository.adicionarRelacionamentoLivroGenero(
+          livroJaCadastrado.livro_id,
+          generoJaCadastrado.genero_id,
         );
       }
     } catch (error) {
@@ -157,48 +128,21 @@ export class LivroService {
 
   public async consultarLivroPeloTitulo(
     titulo_livro: string,
-  ): Promise<Livro | any> {
-    const livro = await this.livroRepository.consultarLivroPeloTitulo(
-      titulo_livro,
-    );
-
-    const queryGeneros = await this.livroRepository.query(`
-      SELECT genero.genero from livro
-      JOIN livro_genero ON livro.livro_id = livro_genero.livro_id
-      JOIN genero ON genero.genero_id = livro_genero.genero_id
-      WHERE livro.titulo = "${livro.titulo}";
-    `);
-
-    if (queryGeneros.length === 0) {
-      throw new NotFoundException(
-        'Ops! Não há nenhum livro correspondente com o título informado. Tente novamente!',
+  ): Promise<LivroResultado[]> {
+    if (titulo_livro.length == 0) {
+      throw new BadRequestException(
+        'O campo título para pesquisa não pode estar vazio.',
       );
     }
 
-    const autorLivro = await this.livroRepository.findOne({
-      relations: ['autor'],
-      where: { titulo: livro.titulo },
-    });
+    const result = await this.livroRepository.consultarLivroPeloTitulo(
+      titulo_livro,
+    );
 
-    const editoraLivro = await this.livroRepository.findOne({
-      relations: ['editora'],
-      where: { titulo: livro.titulo },
-    });
+    if (result.length == 0) {
+      throw new NotFoundException('Nenhum livro foi encontrado.');
+    }
 
-    const autor = autorLivro.autor.nome;
-    const editora = editoraLivro.editora.editora;
-    const generos = queryGeneros.map((genero) => genero.genero);
-
-    const retornoLivro = {
-      titulo: livro.titulo,
-      autor,
-      editora,
-      generos: [...generos],
-      isbn: livro.isbn,
-      paginas: livro.qtd_paginas,
-      publicacao: livro.publicacao,
-    };
-
-    return retornoLivro;
+    return result;
   }
 }

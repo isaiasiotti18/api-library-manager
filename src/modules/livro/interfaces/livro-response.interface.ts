@@ -1,4 +1,4 @@
-export interface LivroResponse {
+export interface LivroResultado {
   titulo: string;
   autor: string;
   editora: string;
