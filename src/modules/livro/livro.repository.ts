@@ -82,7 +82,7 @@ export class LivroRepository
     return await this.findOne({ isbn: isbn_livro });
   }
 
-  async consultarLivroPeloTitulo(
+  async consultarLivrosPorTitulo(
     titulo_livro: string,
   ): Promise<LivroResultado[]> {
     const queryResult = this.query(`
@@ -135,12 +135,40 @@ export class LivroRepository
   }
 
   async consultarLivrosPorAutor(nome_autor: string): Promise<LivroResultado[]> {
-    return;
+    const listaLivros: LivroResultado[] = await this.query(`
+    SELECT 
+    livro.titulo,
+    autor.nome,
+    editora.editora,
+    livro.isbn,
+    livro.publicacao,
+    livro.qtd_paginas
+    FROM livro
+    JOIN autor ON autor.autor_id = livro.autor_id
+    JOIN editora ON editora.editora_id = livro.editora_id
+    WHERE autor.nome = '${nome_autor}';
+    `);
+
+    return listaLivros;
   }
 
   async consultarLivrosPorEditora(
     nome_editora: string,
   ): Promise<LivroResultado[]> {
-    return;
+    const listaLivros: LivroResultado[] = await this.query(`
+    SELECT 
+    livro.titulo,
+    autor.nome,
+    editora.editora,
+    livro.isbn,
+    livro.publicacao,
+    livro.qtd_paginas
+    FROM livro
+    JOIN autor ON autor.autor_id = livro.autor_id
+    JOIN editora ON editora.editora_id = livro.editora_id
+    WHERE editora.editora = '${nome_editora}';
+    `);
+
+    return listaLivros;
   }
 }

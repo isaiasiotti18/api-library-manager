@@ -130,7 +130,7 @@ export class LivroService {
     }
   }
 
-  public async consultarLivroPeloTitulo(
+  public async consultarLivrosPorTitulo(
     titulo_livro: string,
   ): Promise<LivroResultado[]> {
     if (titulo_livro.length == 0) {
@@ -139,14 +139,73 @@ export class LivroService {
       );
     }
 
-    const result = await this.livroRepository.consultarLivroPeloTitulo(
+    const retornoLivros = await this.livroRepository.consultarLivrosPorTitulo(
       titulo_livro,
     );
 
-    if (result.length == 0) {
+    if (retornoLivros.length == 0) {
       throw new NotFoundException('Nenhum livro foi encontrado.');
     }
 
-    return result;
+    return retornoLivros;
+  }
+
+  public async consultarLivrosPorAutor(
+    nome_autor: string,
+  ): Promise<LivroResultado[]> {
+    try {
+      if (nome_autor.length === 0) {
+        throw new BadRequestException(
+          'O campo nome_autor para pesquisa não pode estar vazio.',
+        );
+      }
+
+      const autorJaCadastrado = await this.autorService.procurarAutor(
+        nome_autor,
+      );
+
+      const retornoLivros = await this.livroRepository.consultarLivrosPorAutor(
+        autorJaCadastrado.nome,
+      );
+
+      if (retornoLivros.length === 0) {
+        console.log(autorJaCadastrado.nome);
+        throw new NotFoundException('Nenhum livro foi encontrado.');
+      }
+
+      return retornoLivros;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  public async consultarLivrosPorEditora(
+    nome_editora: string,
+  ): Promise<LivroResultado[]> {
+    try {
+      if (nome_editora.length === 0) {
+        throw new BadRequestException(
+          'O campo nome_editora para pesquisa não pode estar vazio.',
+        );
+      }
+
+      const editoraJaCadastrado = await this.editoraService.procurarEditora(
+        nome_editora,
+      );
+
+      const retornoLivros =
+        await this.livroRepository.consultarLivrosPorEditora(
+          editoraJaCadastrado.editora,
+        );
+
+      if (retornoLivros.length === 0) {
+        console.log(editoraJaCadastrado.editora);
+        throw new NotFoundException('Nenhum livro foi encontrado.');
+      }
+
+      return retornoLivros;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
