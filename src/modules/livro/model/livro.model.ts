@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Autor } from 'src/modules/autor/model/autor.model';
 import { Editora } from 'src/modules/editora/model/editora.model';
 import { Genero } from 'src/modules/genero/model/genero.model';
@@ -13,7 +14,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'livro' })
 export class Livro {
   @PrimaryGeneratedColumn('uuid')
   livro_id: string;
@@ -25,7 +26,6 @@ export class Livro {
   autor_id: string;
 
   @ManyToOne(() => Autor, (autor) => autor.livros)
-  @JoinColumn({ name: 'autor_id' })
   autor: Autor;
 
   @Column()
@@ -51,8 +51,10 @@ export class Livro {
   publicacao: Date;
 
   @CreateDateColumn()
+  @Exclude()
   created_at: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updated_at: Date;
 }

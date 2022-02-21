@@ -5,11 +5,13 @@ import {
 } from '@nestjs/common';
 import { AutorService } from '../autor/autor.service';
 import { EditoraService } from '../editora/editora.service';
-import { LivroRequestDTO } from './dtos/livro.request.dto';
+import { LivroBodyJSON } from './interfaces/livro-body-json';
 import { Livro } from './model/livro.model';
 import { LivroRepository } from './livro.repository';
 import { GeneroService } from '../genero/genero.service';
-import { LivroResultado } from './interfaces/livro-response.interface';
+import { LivroResultado } from './interfaces/livro-resultado.interface';
+import { PageOptionsDto } from 'src/config/pagination/page-options.dto';
+import { PageDto } from 'src/config/pagination/page.dto';
 
 @Injectable()
 export class LivroService {
@@ -20,42 +22,6 @@ export class LivroService {
     private readonly generoService: GeneroService,
   ) {}
 
-  public async consultarLivros(): Promise<LivroResultado[]> {
-    try {
-      return await this.livroRepository.consultarLivros();
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-
-  public async consultarLivrosPorGenero(
-    genero: string,
-  ): Promise<LivroResultado[]> {
-    try {
-      const generoJaCadastrado = await this.generoService.procurarGenero(
-        genero,
-      );
-
-      return await this.livroRepository.consultarLivrosPorGenero(
-        generoJaCadastrado.genero,
-      );
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
-  }
-
-  public async consultarLivro(isbn_livro: string): Promise<Livro> {
-    try {
-      const livroJaCadastrado = await this.livroRepository.consultarLivro(
-        isbn_livro,
-      );
-
-      return livroJaCadastrado;
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
-  }
-
   public async criarLivro({
     titulo,
     nome_editora,
@@ -64,7 +30,7 @@ export class LivroService {
     isbn,
     publicacao,
     qtd_paginas,
-  }: LivroRequestDTO): Promise<Livro> {
+  }: LivroBodyJSON): Promise<Livro> {
     try {
       const livroJaCadastrado = await this.consultarLivro(isbn);
 
@@ -121,6 +87,44 @@ export class LivroService {
           generoJaCadastrado.genero_id,
         );
       }
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  public async consultarLivro(isbn_livro: string): Promise<Livro> {
+    try {
+      const livroJaCadastrado = await this.livroRepository.consultarLivro(
+        isbn_livro,
+      );
+
+      return livroJaCadastrado;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  public async consultarLivros(
+    pageOptionsDto: PageOptionsDto,
+  ): Promise<PageDto<LivroResultado>> {
+    try {
+      return await this.livroRepository.consultarLivros(pageOptionsDto);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  public async consultarLivrosPorGenero(
+    genero: string,
+  ): Promise<LivroResultado[]> {
+    try {
+      const generoJaCadastrado = await this.generoService.procurarGenero(
+        genero,
+      );
+
+      return await this.livroRepository.consultarLivrosPorGenero(
+        generoJaCadastrado.genero,
+      );
     } catch (error) {
       throw new NotFoundException(error.message);
     }

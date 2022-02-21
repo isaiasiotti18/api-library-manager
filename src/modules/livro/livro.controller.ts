@@ -8,34 +8,35 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Pagination } from 'nestjs-typeorm-paginate';
-import { LivroRequestDTO } from './dtos/livro.request.dto';
-import { LivroResultado } from './interfaces/livro-response.interface';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { PageOptionsDto } from 'src/config/pagination/page-options.dto';
+import { PageDto } from 'src/config/pagination/page.dto';
+import { LivroBodyJSON } from './interfaces/livro-body-json';
+import { LivroResultado } from './interfaces/livro-resultado.interface';
 import { LivroService } from './livro.service';
 import { Livro } from './model/livro.model';
 
 @Controller('api/v1/livros')
+@ApiTags('livros')
 export class LivroController {
   constructor(private readonly livrosService: LivroService) {}
 
   @Post()
-  @ApiTags('livros')
-  @ApiBody({ type: LivroRequestDTO })
+  @ApiBody({ type: LivroBodyJSON })
   @UsePipes(ValidationPipe)
-  async criarLivros(@Body() livro: LivroRequestDTO): Promise<Livro> {
+  async criarLivros(@Body() livro: LivroBodyJSON): Promise<Livro> {
     return await this.livrosService.criarLivro(livro);
   }
 
   @Get()
-  @ApiTags('livros')
-  async consultarLivros(): Promise<LivroResultado[]> {
+  async consultarLivros(
+    @Query() pageOptionsDto: PageOptionsDto,
+  ): Promise<PageDto<LivroResultado>> {
     //limit = limit > 100 ? 100 : limit;
-    return await this.livrosService.consultarLivros();
+    return await this.livrosService.consultarLivros(pageOptionsDto);
   }
 
   @Get('/titulo_livro')
-  @ApiTags('livros')
   @UsePipes(ValidationPipe)
   async consultarLivroPeloTitulo(
     @Query('titulo_livro') titulo_livro: string,
@@ -44,7 +45,6 @@ export class LivroController {
   }
 
   @Get('/genero')
-  @ApiTags('livros')
   async consultarLivrosPorGenero(
     @Query('genero') genero: string,
   ): Promise<LivroResultado[]> {
@@ -52,7 +52,6 @@ export class LivroController {
   }
 
   @Post(':isbn_livro/genero/:genero')
-  @ApiTags('livros')
   async atribuirGeneroALivro(@Param() params: string): Promise<void> {
     const isbn_livro = params['isbn_livro'];
     const genero = params['genero'];

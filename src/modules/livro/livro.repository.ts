@@ -1,35 +1,37 @@
-import { EntityRepository, Like, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { LivroDTO } from './dtos/livro.dto';
 import { LivroRepositoryInterface } from './interfaces/livro-repository.interface';
-import { LivroResultado } from './interfaces/livro-response.interface';
+import { LivroResultado } from './interfaces/livro-resultado.interface';
 import { Livro } from './model/livro.model';
+import { PageDto } from 'src/config/pagination/page.dto';
+import { PageOptionsDto } from 'src/config/pagination/page-options.dto';
+import { PageMetaDto } from 'src/config/pagination/page-meta.dto';
+import { Autor } from '../autor/model/autor.model';
 
 @EntityRepository(Livro)
 export class LivroRepository
   extends Repository<Livro>
   implements LivroRepositoryInterface
 {
-  async consultarLivroPeloTitulo(
-    titulo_livro: string,
-  ): Promise<LivroResultado[]> {
-    const queryResult = this.query(`
-    SELECT 
-    livro.titulo,
-    autor.nome,
-    editora.editora,
-    livro.isbn,
-    livro.publicacao,
-    livro.qtd_paginas
-    FROM livro
-    JOIN autor ON autor.autor_id = livro.autor_id
-    JOIN editora ON editora.editora_id = livro.editora_id
-    WHERE livro.titulo LIKE '%${titulo_livro}%';
-    `);
+  async criarLivro(livro: LivroDTO): Promise<Livro> {
+    const novoLivro = this.create(livro);
 
-    return queryResult;
+    return await this.save(novoLivro);
   }
 
-  async consultarLivros(): Promise<LivroResultado[]> {
+  async adicionarRelacionamentoLivroGenero(
+    livro_id: string,
+    genero_id: string,
+  ): Promise<void> {
+    return await this.query(
+      `INSERT INTO livro_genero(livro_id, genero_id) VALUES ("${livro_id}", "${genero_id}")`,
+    );
+  }
+
+  async consultarLivros(
+    pageOptionsDto: PageOptionsDto,
+  ): Promise<PageDto<LivroResultado>> {
+    /*
     const livros = await this.find({
       order: { titulo: 'ASC' },
       relations: ['autor', 'editora'],
@@ -49,10 +51,55 @@ export class LivroRepository
 
       return livroObj;
     });
+    */
+
+    const queryBuilder = this.createQueryBuilder('livro');
+
+    queryBuilder
+      .select([
+        'livro.autor_id',
+        'livro.editora_id',
+        'livro.titulo',
+        'livro.isbn',
+        'livro.publicacao',
+        'livro.qtd_paginas',
+      ])
+      .orderBy('livro.titulo', pageOptionsDto.order)
+      .skip(pageOptionsDto.skip)
+      .take(pageOptionsDto.take);
+
+    console.error(queryBuilder);
+
+    const itemCount = await queryBuilder.getCount();
+    const { entities } = await queryBuilder.getRawAndEntities();
+
+    const pageMetaDto = new PageMetaDto({ itemCount, pageOptionsDto });
+
+    return new PageDto(entities, pageMetaDto);
   }
 
   async consultarLivro(isbn_livro: string): Promise<Livro> {
     return await this.findOne({ isbn: isbn_livro });
+  }
+
+  async consultarLivroPeloTitulo(
+    titulo_livro: string,
+  ): Promise<LivroResultado[]> {
+    const queryResult = this.query(`
+    SELECT 
+    livro.titulo,
+    autor.nome,
+    editora.editora,
+    livro.isbn,
+    livro.publicacao,
+    livro.qtd_paginas
+    FROM livro
+    JOIN autor ON autor.autor_id = livro.autor_id
+    JOIN editora ON editora.editora_id = livro.editora_id
+    WHERE livro.titulo LIKE '%${titulo_livro}%';
+    `);
+
+    return queryResult;
   }
 
   async consultarLivrosPorGenero(genero: string): Promise<LivroResultado[]> {
@@ -87,18 +134,13 @@ export class LivroRepository
     });
   }
 
-  async adicionarRelacionamentoLivroGenero(
-    livro_id: string,
-    genero_id: string,
-  ): Promise<void> {
-    return await this.query(
-      `INSERT INTO livro_genero(livro_id, genero_id) VALUES ("${livro_id}", "${genero_id}")`,
-    );
+  async consultarLivrosPorAutor(nome_autor: string): Promise<LivroResultado[]> {
+    return;
   }
 
-  async criarLivro(livro: LivroDTO): Promise<Livro> {
-    const novoLivro = this.create(livro);
-
-    return await this.save(novoLivro);
+  async consultarLivrosPorEditora(
+    nome_editora: string,
+  ): Promise<LivroResultado[]> {
+    return;
   }
 }

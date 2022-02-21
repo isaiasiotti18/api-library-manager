@@ -1,13 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsDate,
-  IsDateString,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-} from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class LivroRequestDTO {
+export class LivroBodyJSON {
   @ApiProperty()
   @IsNotEmpty({ message: `O título não pode estar vazio.` })
   @IsString({ message: `O título não é uma string válida.` })
