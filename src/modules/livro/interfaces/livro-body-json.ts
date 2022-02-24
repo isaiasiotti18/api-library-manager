@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class LivroBodyJSON {
   @ApiProperty()
@@ -36,4 +42,19 @@ export class LivroBodyJSON {
   @IsNotEmpty({ message: `A quantidade de páginas precisa ser informada.` })
   @IsNumber()
   qtd_paginas: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  estoque?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  preco?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  capa?: string;
 }

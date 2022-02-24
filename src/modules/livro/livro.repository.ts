@@ -6,7 +6,6 @@ import { Livro } from './model/livro.model';
 import { PageDto } from 'src/config/pagination/page.dto';
 import { PageOptionsDto } from 'src/config/pagination/page-options.dto';
 import { PageMetaDto } from 'src/config/pagination/page-meta.dto';
-import { Autor } from '../autor/model/autor.model';
 
 @EntityRepository(Livro)
 export class LivroRepository

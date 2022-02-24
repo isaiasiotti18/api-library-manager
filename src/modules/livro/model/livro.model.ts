@@ -26,6 +26,7 @@ export class Livro {
   autor_id: string;
 
   @ManyToOne(() => Autor, (autor) => autor.livros)
+  @JoinColumn({ name: 'autor_id' })
   autor: Autor;
 
   @Column()
@@ -49,6 +50,15 @@ export class Livro {
 
   @Column('datetime')
   publicacao: Date;
+
+  @Column()
+  preco: number;
+
+  @Column()
+  estoque: number;
+
+  @Column()
+  capa: string;
 
   @CreateDateColumn()
   @Exclude()
