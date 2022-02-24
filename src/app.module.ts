@@ -5,6 +5,7 @@ import { AutorModule } from './modules/autor/autor.module';
 import { EditoraModule } from './modules/editora/editora.module';
 import { GeneroModule } from './modules/genero/genero.module';
 import { UsuarioModule } from './modules/usuario/usuario.module';
+import { EnderecoModule } from './modules/endereco/endereco.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
     EditoraModule,
     GeneroModule,
     UsuarioModule,
+    EnderecoModule,
   ],
   controllers: [],
   providers: [],
