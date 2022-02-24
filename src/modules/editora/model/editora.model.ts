@@ -1,7 +1,7 @@
 import { Livro } from 'src/modules/livro/model/livro.model';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('editora')
 export class Editora {
   @PrimaryGeneratedColumn('uuid')
   editora_id: string;
