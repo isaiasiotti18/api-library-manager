@@ -8,7 +8,9 @@ export class EnderecoRepository
   extends Repository<Endereco>
   implements EnderecoRepositoryInterface
 {
-  criarEndereco(criarEnderecoDTO: CriarEnderecoDTO): Promise<Endereco> {
-    throw new Error('Method not implemented.');
+  async criarEndereco(criarEnderecoDTO: CriarEnderecoDTO): Promise<Endereco> {
+    const novoEndereco = this.create(criarEnderecoDTO);
+
+    return await this.save(novoEndereco);
   }
 }

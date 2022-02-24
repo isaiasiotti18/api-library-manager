@@ -12,6 +12,9 @@ export class Endereco {
   logradouro: string;
 
   @Column()
+  numero: number;
+
+  @Column()
   bairro: string;
 
   @Column()
