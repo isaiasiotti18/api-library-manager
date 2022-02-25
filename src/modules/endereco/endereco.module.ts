@@ -9,5 +9,6 @@ import { EnderecoService } from './endereco.service';
   imports: [TypeOrmModule.forFeature([EnderecoRepository]), HttpModule],
   providers: [EnderecoService],
   controllers: [EnderecoController],
+  exports: [EnderecoService],
 })
 export class EnderecoModule {}

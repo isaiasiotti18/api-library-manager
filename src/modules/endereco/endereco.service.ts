@@ -1,5 +1,10 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { EnderecoRepository } from './endereco.repository';
 import { EnderecoBodyJson } from './interfaces/endereco-body-json.interface';
 import { Endereco } from './model/endereco.model';
@@ -43,6 +48,22 @@ export class EnderecoService {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  async consultarEndereco({
+    cep,
+    numero,
+  }: EnderecoBodyJson): Promise<Endereco> {
+    const enderecoEncontrado = await this.enderecoRepository.consultarEndereco({
+      cep,
+      numero,
+    });
+
+    if (!enderecoEncontrado) {
+      throw new NotFoundException(`Endereco não encontrado.`);
+    }
+
+    return enderecoEncontrado;
   }
 
   async consultarEnderecos(): Promise<Endereco[]> {
