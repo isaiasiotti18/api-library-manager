@@ -12,12 +12,23 @@ import {
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { contentParser } from 'fastify-multer';
+
+const config = new DocumentBuilder()
+  .setTitle('API Library Manager')
+  .setDescription('A simple API for managment Libraries')
+  .setVersion('1.0')
+  .addTag('LibraryManager')
+  .build();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
   );
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
   app.register(fastifyHelmet, {
     contentSecurityPolicy: {
@@ -34,16 +45,7 @@ async function bootstrap() {
   app.register(fastifyHelmet, {
     contentSecurityPolicy: false,
   });
-
-  const config = new DocumentBuilder()
-    .setTitle('API Library Manager')
-    .setDescription('A simple API for managment Libraries')
-    .setVersion('1.0')
-    .addTag('LibraryManager')
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  app.register(contentParser);
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new AllExceptionFilter());
