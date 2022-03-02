@@ -1,5 +1,15 @@
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CriarUsuarioDTO } from './dtos/criar-usuario.dto';
 import { Usuario } from './model/usuario.model';
@@ -14,6 +24,7 @@ export class UsuarioController {
 
   @Post()
   @ApiBody({ type: CriarUsuarioComEnderecoBodyJson })
+  @UsePipes(ValidationPipe)
   async criarUsuario(
     @Body() criarUsuarioDTO: CriarUsuarioDTO,
     @Body() enderecoBodyJson: EnderecoBodyJson,
@@ -27,6 +38,7 @@ export class UsuarioController {
   @Put('/:id_usuario/alterar')
   @ApiParam({ name: 'id_usuario' })
   @ApiBody({ type: AlterarUsuarioDTO })
+  @UsePipes(ValidationPipe)
   async alterarUsuario(
     @Param('id_usuario') id_usuario: string,
     @Body() alterarUsuarioDTO: AlterarUsuarioDTO,
