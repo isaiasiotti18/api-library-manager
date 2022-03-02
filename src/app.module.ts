@@ -6,9 +6,11 @@ import { EditoraModule } from './modules/editora/editora.module';
 import { GeneroModule } from './modules/genero/genero.module';
 import { UsuarioModule } from './modules/usuario/usuario.module';
 import { EnderecoModule } from './modules/endereco/endereco.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     ConnectionModule,
     LivroModule,
     AutorModule,
