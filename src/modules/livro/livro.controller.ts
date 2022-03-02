@@ -12,9 +12,15 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { PageOptionsDto } from 'src/config/pagination/page-options.dto';
-import { PageDto } from 'src/config/pagination/page.dto';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
+import { PageOptionsDto } from 'src/shared/pagination/page-options.dto';
+import { PageDto } from 'src/shared/pagination/page.dto';
 import { AtualizarLivroDTO } from './dtos/atualizar-livro.dto';
 import { LivroBodyJSON } from './interfaces/livro-body-json';
 import { LivroResultado } from './interfaces/livro-resultado.interface';
@@ -53,6 +59,18 @@ export class LivroController {
   @ApiParam({ name: 'isbn_livro' })
   @UsePipes(ValidationPipe)
   @UseInterceptors(FastifyFileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   async uploadCapaLivro(
     @UploadedFile() file: Express.Multer.File,
     @Param('isbn_livro') isbn_livro: string,

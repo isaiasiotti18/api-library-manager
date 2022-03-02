@@ -10,8 +10,8 @@ import { Livro } from './model/livro.model';
 import { LivroRepository } from './livro.repository';
 import { GeneroService } from '../genero/genero.service';
 import { LivroResultado } from './interfaces/livro-resultado.interface';
-import { PageOptionsDto } from 'src/config/pagination/page-options.dto';
-import { PageDto } from 'src/config/pagination/page.dto';
+import { PageOptionsDto } from 'src/shared/pagination/page-options.dto';
+import { PageDto } from 'src/shared/pagination/page.dto';
 import { AwsS3Service } from '../aws/aws-s3.service';
 import { AtualizarLivroDTO } from './dtos/atualizar-livro.dto';
 
