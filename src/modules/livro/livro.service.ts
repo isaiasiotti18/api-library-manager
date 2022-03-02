@@ -12,6 +12,8 @@ import { GeneroService } from '../genero/genero.service';
 import { LivroResultado } from './interfaces/livro-resultado.interface';
 import { PageOptionsDto } from 'src/config/pagination/page-options.dto';
 import { PageDto } from 'src/config/pagination/page.dto';
+import { AwsS3Service } from '../aws/aws-s3.service';
+import { AtualizarLivroDTO } from './dtos/atualizar-livro.dto';
 
 @Injectable()
 export class LivroService {
@@ -20,6 +22,7 @@ export class LivroService {
     private readonly autorService: AutorService,
     private readonly editoraService: EditoraService,
     private readonly generoService: GeneroService,
+    private readonly awsS3Service: AwsS3Service,
   ) {}
 
   public async criarLivro({
@@ -89,6 +92,52 @@ export class LivroService {
       }
     } catch (error) {
       throw new NotFoundException(error.message);
+    }
+  }
+
+  public async uploadCapaLivro(file: any, isbn_livro: string): Promise<any> {
+    const livroJaCadastrado = await this.consultarLivro(isbn_livro);
+
+    if (!livroJaCadastrado) {
+      throw new NotFoundException('Livro não foi encontrado.');
+    }
+
+    let nomeArquivo = `${livroJaCadastrado.titulo.replace(
+      /[^a-z0-9]/gi,
+      '-',
+    )}-${isbn_livro}`;
+
+    const urlCapaLivro = await this.awsS3Service.uploadArquivo(
+      file,
+      nomeArquivo.replace(',', '-'),
+    );
+
+    const atualizarLivroDTO: AtualizarLivroDTO = {};
+    atualizarLivroDTO.urlCapaLivro = urlCapaLivro.url;
+
+    await this.atualizarLivro(isbn_livro, atualizarLivroDTO);
+
+    return {
+      urlCapaLivro,
+      message: 'Livro Atualizado com Sucesso.',
+    };
+  }
+
+  public async atualizarLivro(
+    isbn_livro: string,
+    atualizarLivroDTO: AtualizarLivroDTO,
+  ): Promise<void> {
+    try {
+      const livroJaCadastrado = await this.consultarLivro(isbn_livro);
+
+      if (livroJaCadastrado) {
+        await this.livroRepository.atualizarLivro(
+          isbn_livro,
+          atualizarLivroDTO,
+        );
+      }
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
   }
 

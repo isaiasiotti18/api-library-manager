@@ -4,17 +4,24 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
+  UploadedFile,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { PageOptionsDto } from 'src/config/pagination/page-options.dto';
 import { PageDto } from 'src/config/pagination/page.dto';
+import { AtualizarLivroDTO } from './dtos/atualizar-livro.dto';
 import { LivroBodyJSON } from './interfaces/livro-body-json';
 import { LivroResultado } from './interfaces/livro-resultado.interface';
 import { LivroService } from './livro.service';
 import { Livro } from './model/livro.model';
+import { Express } from 'express';
+import { FastifyFileInterceptor } from 'src/shared/interceptors/fastify-file-interceptor';
 
 @Controller('api/v1/livros')
 @ApiTags('livros')
@@ -26,6 +33,31 @@ export class LivroController {
   @UsePipes(ValidationPipe)
   async criarLivros(@Body() livro: LivroBodyJSON): Promise<Livro> {
     return await this.livrosService.criarLivro(livro);
+  }
+
+  @Put('/:isbn_livro/atualizar')
+  @ApiParam({ name: 'isbn_livro' })
+  @ApiBody({ type: AtualizarLivroDTO })
+  @UsePipes(ValidationPipe)
+  async atualizarLivro(
+    @Param('isbn_livro') isbn_livro: string,
+    @Body() atualizarLivroDTO: AtualizarLivroDTO,
+  ): Promise<void> {
+    return await this.livrosService.atualizarLivro(
+      isbn_livro,
+      atualizarLivroDTO,
+    );
+  }
+
+  @Post('/:isbn_livro/atribuir-capa')
+  @ApiParam({ name: 'isbn_livro' })
+  @UsePipes(ValidationPipe)
+  @UseInterceptors(FastifyFileInterceptor('file'))
+  async uploadCapaLivro(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('isbn_livro') isbn_livro: string,
+  ): Promise<any> {
+    return await this.livrosService.uploadCapaLivro(file, isbn_livro);
   }
 
   @Get()

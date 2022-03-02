@@ -6,6 +6,7 @@ import { GeneroModule } from '../genero/genero.module';
 import { LivroController } from './livro.controller';
 import { LivroService } from './livro.service';
 import { LivroRepository } from './livro.repository';
+import { AwsModule } from '../aws/aws.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { LivroRepository } from './livro.repository';
     AutorModule,
     EditoraModule,
     GeneroModule,
+    AwsModule,
   ],
   controllers: [LivroController],
   providers: [LivroService],

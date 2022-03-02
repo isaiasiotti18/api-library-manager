@@ -6,6 +6,7 @@ import { Livro } from './model/livro.model';
 import { PageDto } from 'src/config/pagination/page.dto';
 import { PageOptionsDto } from 'src/config/pagination/page-options.dto';
 import { PageMetaDto } from 'src/config/pagination/page-meta.dto';
+import { AtualizarLivroDTO } from './dtos/atualizar-livro.dto';
 
 @EntityRepository(Livro)
 export class LivroRepository
@@ -25,6 +26,30 @@ export class LivroRepository
     return await this.query(
       `INSERT INTO livro_genero(livro_id, genero_id) VALUES ("${livro_id}", "${genero_id}")`,
     );
+  }
+
+  async atualizarLivro(
+    isbn_livro: string,
+    atualizarLivroDTO: AtualizarLivroDTO,
+  ): Promise<void> {
+    const { estoque, preco, urlCapaLivro } = atualizarLivroDTO;
+
+    // await this.save({
+    //   isbn_livro,
+    //   estoque,
+    //   preco,
+    //   capa: urlCapaLivro,
+    // });
+
+    await this.createQueryBuilder()
+      .update()
+      .set({
+        estoque,
+        preco,
+        capa: urlCapaLivro,
+      })
+      .where('isbn = :isbn_livro', { isbn_livro })
+      .execute();
   }
 
   async consultarLivros(
