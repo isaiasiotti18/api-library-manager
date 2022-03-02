@@ -8,4 +8,6 @@ export interface UsuarioRepositoryInterface {
     id_usuario: string,
     alterarUsuarioDTO: AlterarUsuarioDTO,
   ): Promise<void>;
+  consultarUsuarioPorId(id_usuario: string): Promise<Usuario>;
+  retornarUsuariocomEndereco(id_usuario: string): Promise<Usuario>;
 }

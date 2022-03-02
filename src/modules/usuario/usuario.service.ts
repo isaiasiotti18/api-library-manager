@@ -90,4 +90,15 @@ export class UsuarioService {
 
     return usuarioEncontrado;
   }
+
+  async retornarUsuariocomEndereco(id_usuario: string): Promise<Usuario> {
+    const usuarioEncontrado =
+      await this.usuarioRepository.retornarUsuariocomEndereco(id_usuario);
+
+    if (!usuarioEncontrado) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
+
+    return usuarioEncontrado;
+  }
 }

@@ -56,4 +56,13 @@ export class UsuarioController {
   ): Promise<Usuario> {
     return await this.usuarioService.consultarUsuarioPorId(id_usuario);
   }
+
+  @Get('/:id_usuario/usuario-com-endereco')
+  @ApiParam({ name: 'id_usuario' })
+  @UsePipes(ValidationPipe)
+  async retornarUsuariocomEndereco(
+    @Param('id_usuario') id_usuario: string,
+  ): Promise<Usuario> {
+    return await this.usuarioService.retornarUsuariocomEndereco(id_usuario);
+  }
 }
