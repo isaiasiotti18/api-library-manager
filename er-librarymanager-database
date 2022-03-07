@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-03-07T15:33:49.206Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36" etag="aB2F2IkoSgLWUfgbiw8V" version="16.6.6" type="github">
+<mxfile host="app.diagrams.net" modified="2022-03-07T15:38:45.946Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36" etag="Dcu6Ekfw7fwV_LUqVC1B" version="16.6.6" type="github">
   <diagram id="9UsEhW5QkOTx9-0hjYZ5" name="Library Manager Database">
     <mxGraphModel dx="1695" dy="1626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -335,7 +335,7 @@
         <mxCell id="wrEii0kUe5gCBTuRuNpu-1" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;top=0;left=0;bottom=0;right=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="XIHwOgPd7TETNURHoEdX-66">
           <mxGeometry y="60" width="180" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="wrEii0kUe5gCBTuRuNpu-2" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;" vertex="1" parent="wrEii0kUe5gCBTuRuNpu-1">
+        <mxCell id="wrEii0kUe5gCBTuRuNpu-2" value="FK" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;" vertex="1" parent="wrEii0kUe5gCBTuRuNpu-1">
           <mxGeometry width="30" height="30" as="geometry">
             <mxRectangle width="30" height="30" as="alternateBounds" />
           </mxGeometry>
