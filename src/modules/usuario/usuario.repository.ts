@@ -28,6 +28,13 @@ export class UsuarioRepository
     });
   }
 
+  async atribuirAluguel(usuario_id: string, aluguel_id: string): Promise<void> {
+    await this.save({
+      id: usuario_id,
+      aluguel_id,
+    });
+  }
+
   async consultarUsuarioPorId(id_usuario: string): Promise<Usuario> {
     return await this.findOne({
       where: { id: id_usuario },

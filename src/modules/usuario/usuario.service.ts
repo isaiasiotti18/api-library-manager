@@ -10,6 +10,7 @@ import { CriarUsuarioDTO } from './dtos/criar-usuario.dto';
 import { AlterarUsuarioDTO } from './dtos/alterar-usuario.dto';
 import { Usuario } from './model/usuario.model';
 import { UsuarioRepository } from './usuario.repository';
+import { CriarAluguelDTO } from '../aluguel/dtos/criar-aluguel.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -78,6 +79,10 @@ export class UsuarioService {
     } catch (error) {
       throw new NotFoundException(error.message);
     }
+  }
+
+  async atribuirAluguel(usuario_id: string, aluguel_id: string): Promise<void> {
+    await this.usuarioRepository.atribuirAluguel(usuario_id, aluguel_id);
   }
 
   async consultarUsuarioPorId(id_usuario: string): Promise<Usuario> {
