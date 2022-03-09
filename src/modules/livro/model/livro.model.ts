@@ -9,7 +9,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToMany,
-  JoinTable,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
@@ -39,7 +38,6 @@ export class Livro {
   @ManyToMany(() => Genero, (genero) => genero.livros, {
     cascade: true,
   })
-  @JoinTable()
   generos: Genero[];
 
   @Column()

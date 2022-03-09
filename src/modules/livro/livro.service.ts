@@ -142,15 +142,14 @@ export class LivroService {
   }
 
   public async consultarLivro(isbn_livro: string): Promise<Livro> {
-    try {
-      const livroJaCadastrado = await this.livroRepository.consultarLivro(
-        isbn_livro,
-      );
+    const livroJaCadastrado = await this.livroRepository.consultarLivro(
+      isbn_livro,
+    );
 
-      return livroJaCadastrado;
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+    if (!livroJaCadastrado)
+      throw new NotFoundException('Livro não encontrado.');
+
+    return livroJaCadastrado;
   }
 
   public async consultarLivros(
@@ -191,10 +190,6 @@ export class LivroService {
     const retornoLivros = await this.livroRepository.consultarLivrosPorTitulo(
       titulo_livro,
     );
-
-    if (retornoLivros.length == 0) {
-      throw new NotFoundException('Nenhum livro foi encontrado.');
-    }
 
     return retornoLivros;
   }
@@ -253,6 +248,30 @@ export class LivroService {
       }
 
       return retornoLivros;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  public async baixarEstoqueLivro(isbn_livro: string): Promise<void> {
+    try {
+      const livroJaCadastrado = await this.consultarLivro(isbn_livro);
+
+      // Verificando se o estoque já é igual à 0
+      if (livroJaCadastrado.estoque === 0) {
+        throw new BadRequestException('O estoque do livro já é igual a zero.');
+      }
+
+      const baixaEstoque = livroJaCadastrado.estoque - 1;
+
+      const atualizarLivroDTO: AtualizarLivroDTO = {
+        estoque: baixaEstoque,
+      };
+
+      return await this.atualizarLivro(
+        livroJaCadastrado.isbn,
+        atualizarLivroDTO,
+      );
     } catch (error) {
       throw new BadRequestException(error.message);
     }

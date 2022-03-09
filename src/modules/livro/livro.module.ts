@@ -18,5 +18,6 @@ import { AwsModule } from '../aws/aws.module';
   ],
   controllers: [LivroController],
   providers: [LivroService],
+  exports: [LivroService],
 })
 export class LivroModule {}

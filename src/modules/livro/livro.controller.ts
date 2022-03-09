@@ -86,6 +86,15 @@ export class LivroController {
     return await this.livrosService.consultarLivros(pageOptionsDto);
   }
 
+  @Get('/isbn_livro')
+  @ApiQuery({ name: 'isbn_livro' })
+  @UsePipes(ValidationPipe)
+  async consultarLivro(
+    @Query('isbn_livro') isbn_livro: string,
+  ): Promise<LivroResultado> {
+    return await this.livrosService.consultarLivro(isbn_livro);
+  }
+
   @Get('/titulo_livro')
   @ApiQuery({ name: 'titulo_livro' })
   @UsePipes(ValidationPipe)

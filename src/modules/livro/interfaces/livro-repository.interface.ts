@@ -17,11 +17,12 @@ export interface LivroRepositoryInterface {
 
   consultarLivrosPorGenero(genero: string): Promise<LivroResultado[]>;
 
+  consultarLivrosPorAutor(nome_autor: string): Promise<LivroResultado[]>;
+
+  consultarLivrosPorEditora(nome_editora: string): Promise<LivroResultado[]>;
+
   adicionarRelacionamentoLivroGenero(
     livro_id: string,
     genero_id: string,
   ): Promise<void>;
-  consultarLivrosPorAutor(nome_autor: string): Promise<LivroResultado[]>;
-
-  consultarLivrosPorEditora(nome_editora: string): Promise<LivroResultado[]>;
 }
