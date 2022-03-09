@@ -16,6 +16,5 @@ export class Genero {
   genero: string;
 
   @ManyToMany(() => Livro, (livro) => livro.generos)
-  @JoinTable()
   livros: Livro[];
 }
