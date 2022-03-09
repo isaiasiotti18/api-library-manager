@@ -7,6 +7,8 @@ import { GeneroModule } from './modules/genero/genero.module';
 import { UsuarioModule } from './modules/usuario/usuario.module';
 import { EnderecoModule } from './modules/endereco/endereco.module';
 import { ConfigModule } from '@nestjs/config';
+import { NivelLeitorModule } from './modules/nivel-leitor/nivel-leitor.module';
+import { AluguelModule } from './modules/aluguel/aluguel.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { ConfigModule } from '@nestjs/config';
     GeneroModule,
     UsuarioModule,
     EnderecoModule,
+    NivelLeitorModule,
+    AluguelModule,
   ],
   controllers: [],
   providers: [],

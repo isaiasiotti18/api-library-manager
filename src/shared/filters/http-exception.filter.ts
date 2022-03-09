@@ -7,7 +7,6 @@ import {
   Logger,
 } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
-import { ServerResponse } from 'http';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
