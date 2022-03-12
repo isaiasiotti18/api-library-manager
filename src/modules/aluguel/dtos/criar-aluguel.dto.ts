@@ -23,5 +23,5 @@ export class CriarAluguelDTO {
   livros_alugados: Livro[];
   data_alugacao: string;
   data_devolucao: string;
-  codigo_validacao_aluguel: string;
+  codigo: number;
 }

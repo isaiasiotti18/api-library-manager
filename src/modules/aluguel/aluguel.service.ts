@@ -8,10 +8,7 @@ import { UsuarioService } from '../usuario/usuario.service';
 import { AluguelRepository, CodigoRepository } from './aluguel.repository';
 import { CriarAluguelDTO } from './dtos/criar-aluguel.dto';
 import * as moment from 'moment';
-import { Aluguel } from './model/aluguel.model';
 import { Livro } from '../livro/model/livro.model';
-import { authenticator } from 'otplib';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AluguelService {
@@ -20,10 +17,9 @@ export class AluguelService {
     private readonly codigoRepository: CodigoRepository,
     private readonly livroService: LivroService,
     private readonly usuarioService: UsuarioService,
-    private readonly configService: ConfigService,
   ) {}
 
-  async realizarAluguel(criarAluguelDTO: CriarAluguelDTO): Promise<Aluguel> {
+  async realizarAluguel(criarAluguelDTO: CriarAluguelDTO): Promise<any> {
     try {
       const { isbns_passados, usuario_id } = criarAluguelDTO;
 
@@ -58,6 +54,11 @@ export class AluguelService {
 
       if (!usuarioJaCadastrado) throw new BadRequestException();
 
+      //Verificando se já tem um aluguel ativo
+      if (usuarioJaCadastrado.aluguel_id) {
+        throw new BadRequestException('Usuário com alguel já ativo.');
+      }
+
       //Gerar código de aluguel
       const novoCodigoAluguel =
         await this.codigoRepository.gerarCodigoAluguel();
@@ -72,7 +73,7 @@ export class AluguelService {
         livros_alugados,
         data_alugacao: moment().format('YYYY-MM-DD'),
         data_devolucao: dataDevolucao,
-        codigo_validacao_aluguel: novoCodigoAluguel.codigo,
+        codigo: novoCodigoAluguel.codigo,
       });
 
       await this.usuarioService.atribuirAluguel(
@@ -80,35 +81,48 @@ export class AluguelService {
         novoAluguel.aluguel_id,
       );
 
-      return novoAluguel;
+      const { codigo, data_alugacao, data_devolucao, aluguel_id, livros } =
+        novoAluguel;
+
+      const retornoAluguel = {
+        usuario_id,
+        informacoes_aluguel: {
+          aluguel_id,
+          codigo,
+          data_alugacao,
+          data_devolucao,
+        },
+        livros: livros.map((livro) => livro.titulo),
+      };
+
+      return retornoAluguel;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
   }
 
-  async validarAluguel(codigo_validacao_aluguel: string): Promise<any> {
+  async validarAluguel(codigo: number): Promise<any> {
     try {
       const consultaCodigo = await this.codigoRepository.findOne({
-        where: { codigo: codigo_validacao_aluguel },
+        where: { codigo },
       });
 
-      if (!consultaCodigo) throw new NotFoundException('Código Invalido.');
-
-      const SECRET_TOKEN = this.configService.get<string>('SECRET_TOKEN');
-
-      const isValid = authenticator.check(
-        codigo_validacao_aluguel,
-        SECRET_TOKEN,
-      );
-
-      if (isValid) {
-        await this.codigoRepository.save({
-          codigo: consultaCodigo.codigo,
-          validado: true,
-        });
-
-        await this.aluguelRepository.save({});
+      if (!consultaCodigo) {
+        throw new NotFoundException('Codigo inexistente.');
       }
+
+      if (consultaCodigo.validado === true)
+        throw new BadRequestException('Código invalido.');
+
+      consultaCodigo.validado = true;
+
+      await this.codigoRepository.save(consultaCodigo);
+
+      return {
+        statusCode: 201,
+        message:
+          'Código validado com sucesso! O(s) livro(s) já estão liberados para o usuário',
+      };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

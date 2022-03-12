@@ -10,6 +10,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { Codigo } from './codigo.model';
+
 @Entity('aluguel')
 export class Aluguel {
   @PrimaryGeneratedColumn('uuid')
@@ -19,7 +21,11 @@ export class Aluguel {
   aluguel_validado: boolean;
 
   @Column()
-  codigo_validacao_aluguel: string;
+  codigo: number;
+
+  @OneToOne(() => Codigo)
+  @JoinColumn({ name: 'codigo' })
+  codigo_numero: Codigo;
 
   @Column('date')
   data_alugacao: Date;
@@ -44,16 +50,4 @@ export class Aluguel {
 
   @Column('boolean')
   foi_devolvido: boolean;
-}
-
-@Entity('codigo')
-export class Codigo {
-  @PrimaryGeneratedColumn()
-  codigo: any;
-
-  @Column('date')
-  data_expiracao: Date;
-
-  @Column('boolean')
-  validado: boolean;
 }

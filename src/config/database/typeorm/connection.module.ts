@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Aluguel, Codigo } from 'src/modules/aluguel/model/aluguel.model';
+import { Aluguel } from 'src/modules/aluguel/model/aluguel.model';
+import { Codigo } from 'src/modules/aluguel/model/codigo.model';
 import { Autor } from 'src/modules/autor/model/autor.model';
 import { Editora } from 'src/modules/editora/model/editora.model';
 import { Endereco } from 'src/modules/endereco/model/endereco.model';

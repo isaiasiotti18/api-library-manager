@@ -1,7 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { CriarAluguelDTO } from './dtos/criar-aluguel.dto';
 import { AluguelRepositoryInterface } from './interfaces/aluguel-repository.interface';
-import { Aluguel, Codigo } from './model/aluguel.model';
+import { Aluguel } from './model/aluguel.model';
+import { Codigo } from './model/codigo.model';
 import * as moment from 'moment';
 import { authenticator } from 'otplib';
 import { ConfigService } from '@nestjs/config';
@@ -38,7 +39,7 @@ export class CodigoRepository extends Repository<Codigo> {
     const dataExpiracao = dataAtual.add(2, 'days').format('YYYY-MM-DD');
 
     const novoCodigoAluguel = this.create({
-      codigo,
+      codigo: parseInt(codigo),
       data_expiracao: dataExpiracao,
       validado: false,
     });

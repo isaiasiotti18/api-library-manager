@@ -1,5 +1,5 @@
 export class CriarCodigoDTO {
-  codigo: any;
+  codigo: number;
   data_expiracao: string;
   validado = false;
 }
