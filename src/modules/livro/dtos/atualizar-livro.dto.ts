@@ -6,10 +6,6 @@ export class AtualizarLivroDTO {
   @IsOptional()
   preco?: number;
 
-  @ApiProperty()
-  @IsOptional()
-  estoque?: number;
-
   @IsOptional()
   @ApiProperty()
   urlCapaLivro?: string | '';

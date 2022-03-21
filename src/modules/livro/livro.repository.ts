@@ -32,7 +32,7 @@ export class LivroRepository
     isbn_livro: string,
     atualizarLivroDTO: AtualizarLivroDTO,
   ): Promise<void> {
-    const { estoque, preco, urlCapaLivro } = atualizarLivroDTO;
+    const { preco, urlCapaLivro } = atualizarLivroDTO;
 
     // await this.save({
     //   isbn_livro,
@@ -44,7 +44,6 @@ export class LivroRepository
     await this.createQueryBuilder()
       .update()
       .set({
-        estoque,
         preco,
         capa: urlCapaLivro,
       })
