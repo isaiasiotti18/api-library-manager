@@ -9,6 +9,7 @@ import { Genero } from 'src/modules/genero/model/genero.model';
 import { Livro } from 'src/modules/livro/model/livro.model';
 import { NivelLeitor } from 'src/modules/nivel-leitor/model/nivel_leitor.model';
 import { Usuario } from 'src/modules/usuario/model/usuario.model';
+import { Estoque } from 'src/modules/estoque/model/estoque.model';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { Usuario } from 'src/modules/usuario/model/usuario.model';
         NivelLeitor,
         Aluguel,
         Codigo,
+        Estoque,
       ],
     }),
   ],

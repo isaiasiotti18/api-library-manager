@@ -49,7 +49,7 @@ async function bootstrap() {
   app.register(contentParser);
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useGlobalFilters(new AllExceptionFilter());
+  //app.useGlobalFilters(new AllExceptionFilter());
   app.enableCors();
 
   Date.prototype.toJSON = function (): any {

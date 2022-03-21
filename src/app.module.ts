@@ -9,9 +9,14 @@ import { EnderecoModule } from './modules/endereco/endereco.module';
 import { ConfigModule } from '@nestjs/config';
 import { NivelLeitorModule } from './modules/nivel-leitor/nivel-leitor.module';
 import { AluguelModule } from './modules/aluguel/aluguel.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TaskModule } from './modules/aluguel/tasks/task.module';
+import { EstoqueModule } from './modules/estoque/estoque.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
+    TaskModule,
     ConfigModule.forRoot({ isGlobal: true }),
     ConnectionModule,
     LivroModule,
@@ -22,6 +27,7 @@ import { AluguelModule } from './modules/aluguel/aluguel.module';
     EnderecoModule,
     NivelLeitorModule,
     AluguelModule,
+    EstoqueModule,
   ],
   controllers: [],
   providers: [],
