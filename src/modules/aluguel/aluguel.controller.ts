@@ -1,14 +1,14 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   UseFilters,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { AllExceptionFilter } from 'src/shared/filters/http-exception.filter';
-import { CodigoRepository } from './aluguel.repository';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AluguelService } from './aluguel.service';
 import { CriarAluguelDTO } from './dtos/criar-aluguel.dto';
 import { Aluguel } from './model/aluguel.model';
@@ -28,7 +28,7 @@ export class AluguelController {
     return await this.aluguelService.realizarAluguel(criarAluguelDTO);
   }
 
-  @Post('/validar-aluguel')
+  @Post('/:aluguel_id/validar-aluguel')
   @ApiBody({
     schema: {
       properties: {
@@ -38,7 +38,19 @@ export class AluguelController {
       },
     },
   })
-  async validarAluguel(@Body('codigo') codigo: number): Promise<any> {
-    return await this.aluguelService.validarAluguel(codigo);
+  @ApiParam({ name: 'aluguel_id' })
+  async validarAluguel(
+    @Param('aluguel_id') aluguel_id: string,
+    @Body('codigo') codigo: number,
+  ): Promise<any> {
+    return await this.aluguelService.validarAluguel(aluguel_id, codigo);
+  }
+
+  @Get('/:aluguel_id/consulta-livros-aluguel')
+  @ApiParam({ name: 'aluguel_id' })
+  async consultconsultaLivrosDoAluguel(
+    @Param('aluguel_id') aluguel_id: string,
+  ): Promise<any> {
+    return await this.aluguelService.consultaLivrosDoAluguel(aluguel_id);
   }
 }

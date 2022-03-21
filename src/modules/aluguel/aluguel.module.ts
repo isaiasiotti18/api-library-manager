@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EstoqueModule } from '../estoque/estoque.module';
 import { LivroModule } from '../livro/livro.module';
 import { UsuarioModule } from '../usuario/usuario.module';
 import { AluguelController } from './aluguel.controller';
@@ -12,8 +13,10 @@ import { AluguelService } from './aluguel.service';
     TypeOrmModule.forFeature([CodigoRepository]),
     LivroModule,
     UsuarioModule,
+    EstoqueModule,
   ],
   controllers: [AluguelController],
   providers: [AluguelService],
+  exports: [TypeOrmModule],
 })
 export class AluguelModule {}

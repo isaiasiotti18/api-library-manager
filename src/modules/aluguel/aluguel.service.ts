@@ -9,6 +9,9 @@ import { AluguelRepository, CodigoRepository } from './aluguel.repository';
 import { CriarAluguelDTO } from './dtos/criar-aluguel.dto';
 import * as moment from 'moment';
 import { Livro } from '../livro/model/livro.model';
+import { LivroRepository } from '../livro/livro.repository';
+import { EstoqueService } from '../estoque/estoque.service';
+import { Aluguel } from './model/aluguel.model';
 
 @Injectable()
 export class AluguelService {
@@ -17,11 +20,23 @@ export class AluguelService {
     private readonly codigoRepository: CodigoRepository,
     private readonly livroService: LivroService,
     private readonly usuarioService: UsuarioService,
+    private readonly estoqueService: EstoqueService,
   ) {}
 
   async realizarAluguel(criarAluguelDTO: CriarAluguelDTO): Promise<any> {
     try {
       const { isbns_passados, usuario_id } = criarAluguelDTO;
+
+      //Validar o usuário que está alugando
+      const usuarioJaCadastrado =
+        await this.usuarioService.consultarUsuarioPorId(usuario_id);
+
+      if (!usuarioJaCadastrado) throw new BadRequestException();
+
+      //Verificando se já tem um aluguel ativo
+      if (usuarioJaCadastrado.aluguel_id) {
+        throw new BadRequestException('Usuário com aluguel já ativo.');
+      }
 
       //Validar os livros alugados
       if (isbns_passados.length === 0)
@@ -37,27 +52,11 @@ export class AluguelService {
             isbn,
           );
 
-          if (livroJaCadastrado.estoque === 0)
-            throw new BadRequestException('Livro indisponível no momento.');
-
-          await this.livroService.baixarEstoqueLivro(livroJaCadastrado.isbn);
-
           return livros_alugados.push(livroJaCadastrado);
         } catch (error) {
           throw new BadRequestException(error.message);
         }
       });
-
-      //Validar o usuário que está alugando
-      const usuarioJaCadastrado =
-        await this.usuarioService.consultarUsuarioPorId(usuario_id);
-
-      if (!usuarioJaCadastrado) throw new BadRequestException();
-
-      //Verificando se já tem um aluguel ativo
-      if (usuarioJaCadastrado.aluguel_id) {
-        throw new BadRequestException('Usuário com alguel já ativo.');
-      }
 
       //Gerar código de aluguel
       const novoCodigoAluguel =
@@ -101,8 +100,33 @@ export class AluguelService {
     }
   }
 
-  async validarAluguel(codigo: number): Promise<any> {
+  async consultaLivrosDoAluguel(aluguel_id: string): Promise<Aluguel | any> {
+    const consultaLivrosDoAluguel = await this.aluguelRepository.findOne({
+      where: { aluguel_id },
+      relations: ['livros'],
+      select: ['livros'],
+    });
+
+    console.log(consultaLivrosDoAluguel);
+
+    return consultaLivrosDoAluguel.livros.map((livro) => {
+      return livro.livro_id;
+    });
+  }
+
+  async validarAluguel(aluguel_id: string, codigo: number): Promise<any> {
     try {
+      const consultaAluguelValidado = await this.aluguelRepository.findOne({
+        where: {
+          aluguel_id,
+          aluguel_validado: true,
+        },
+      });
+
+      if (consultaAluguelValidado) {
+        throw new BadRequestException('Aluguel já válidado');
+      }
+
       const consultaCodigo = await this.codigoRepository.findOne({
         where: { codigo },
       });
@@ -118,10 +142,18 @@ export class AluguelService {
 
       await this.codigoRepository.save(consultaCodigo);
 
+      const consultaLivrosAluguel = await this.consultaLivrosDoAluguel(
+        aluguel_id,
+      );
+
+      consultaLivrosAluguel.map(async (livro_id: string) => {
+        await this.estoqueService.debitarEstoqueLivro(livro_id);
+      });
+
       return {
         statusCode: 201,
         message:
-          'Código validado com sucesso! O(s) livro(s) já estão liberados para o usuário',
+          'Código validado com sucesso! O(s) livro(s) já estão liberados para o usuário.',
       };
     } catch (error) {
       throw new BadRequestException(error.message);
