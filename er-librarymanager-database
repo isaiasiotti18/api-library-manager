@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-03-29T20:44:04.567Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36" etag="wotAQAU7XZD7goMmPusP" version="17.2.5" type="github">
+<mxfile host="app.diagrams.net" modified="2022-03-29T22:13:33.972Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36" etag="n28dYKaMk7yVa9XSR02F" version="17.2.5" type="github">
   <diagram id="9UsEhW5QkOTx9-0hjYZ5" name="Library Manager Database">
-    <mxGraphModel dx="1695" dy="1626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3307" dy="2475" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -761,7 +761,7 @@
             <Array as="points">
               <mxPoint x="180" y="465" />
               <mxPoint x="180" y="390" />
-              <mxPoint x="300" y="390" />
+              <mxPoint x="210" y="390" />
             </Array>
           </mxGeometry>
         </mxCell>
