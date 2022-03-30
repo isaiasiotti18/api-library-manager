@@ -33,9 +33,8 @@ export class UsuarioService {
       const telefoneFormatado = telefone.replace(/[^\d]+/g, '');
 
       //Tenho que refatorar depois, criar função procurarPorEmail
-      const usuarioJaCadastrado = await this.usuarioRepository.findOne({
-        where: { email },
-      });
+      const usuarioJaCadastrado =
+        await this.usuarioRepository.consultarUsuarioPorEmail(email);
 
       if (usuarioJaCadastrado) {
         throw new BadRequestException('Usuário já cadastrado.');

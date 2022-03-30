@@ -16,8 +16,8 @@ export class CriarUsuarioDTO {
   @ApiProperty()
   nome: string;
 
-  @IsNotEmpty({ message: 'Campo email não pode estar vazio.' })
   @IsEmail({ message: 'E-mail inválido.' })
+  @IsNotEmpty({ message: 'Campo email não pode estar vazio.' })
   @ApiProperty()
   email: string;
 
@@ -27,6 +27,7 @@ export class CriarUsuarioDTO {
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: 'password too weak',
   })
+  @ApiProperty()
   senha_hash: string;
 
   @IsNotEmpty({ message: 'Campo cpf não pode estar vazio.' })

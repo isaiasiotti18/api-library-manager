@@ -41,6 +41,12 @@ export class UsuarioRepository
     });
   }
 
+  async consultarUsuarioPorEmail(email: string): Promise<Usuario> {
+    return await this.findOne({
+      where: { email },
+    });
+  }
+
   async retornarUsuariocomEndereco(id_usuario: string): Promise<any> {
     const usuario = await this.findOne({
       where: { id: id_usuario },
