@@ -1,11 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsCPF } from 'brazilian-class-validator';
 import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
-import { IsCPF } from 'brazilian-class-validator';
 
 export class CriarUsuarioDTO {
   @IsNotEmpty({ message: 'Campo nome não pode estar vazio.' })
@@ -16,6 +20,14 @@ export class CriarUsuarioDTO {
   @IsEmail({ message: 'E-mail inválido.' })
   @ApiProperty()
   email: string;
+
+  @IsString()
+  @MinLength(4)
+  @MaxLength(20)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: 'password too weak',
+  })
+  senha_hash: string;
 
   @IsNotEmpty({ message: 'Campo cpf não pode estar vazio.' })
   @IsCPF({ message: 'CPF inválido.' })

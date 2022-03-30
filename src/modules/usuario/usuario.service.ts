@@ -10,7 +10,7 @@ import { CriarUsuarioDTO } from './dtos/criar-usuario.dto';
 import { AlterarUsuarioDTO } from './dtos/alterar-usuario.dto';
 import { Usuario } from './model/usuario.model';
 import { UsuarioRepository } from './usuario.repository';
-import { CriarAluguelDTO } from '../aluguel/dtos/criar-aluguel.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuarioService {
@@ -26,18 +26,15 @@ export class UsuarioService {
     enderecoBodyJson: EnderecoBodyJson,
   ): Promise<Usuario> {
     try {
-      const { cpf, email, nome, telefone } = criarUsuarioDTO;
+      const { cpf, email, nome, telefone, senha_hash } = criarUsuarioDTO;
       const { cep, numero } = enderecoBodyJson;
 
       const cpfFormatado = cpf.replace(/[^\d]+/g, '');
       const telefoneFormatado = telefone.replace(/[^\d]+/g, '');
 
+      //Tenho que refatorar depois, criar função procurarPorEmail
       const usuarioJaCadastrado = await this.usuarioRepository.findOne({
-        where: {
-          cpf: cpfFormatado,
-          email,
-          telefone: telefoneFormatado,
-        },
+        where: { email },
       });
 
       if (usuarioJaCadastrado) {
@@ -52,12 +49,16 @@ export class UsuarioService {
       const novoUsuario = await this.usuarioRepository.criarUsuario({
         nome,
         email,
+        senha_hash: await bcrypt.hash(senha_hash, 10),
         cpf: cpfFormatado,
         telefone: telefoneFormatado,
         endereco_id: novoEndereco.endereco_id,
       });
 
-      return novoUsuario;
+      return {
+        ...novoUsuario,
+        senha_hash: undefined,
+      };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

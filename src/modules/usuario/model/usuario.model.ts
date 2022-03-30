@@ -21,6 +21,9 @@ export class Usuario {
   email: string;
 
   @Column()
+  senha_hash: string;
+
+  @Column()
   cpf: string;
 
   @Column()
