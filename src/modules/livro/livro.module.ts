@@ -7,6 +7,7 @@ import { LivroController } from './livro.controller';
 import { LivroService } from './livro.service';
 import { LivroRepository } from './livro.repository';
 import { AwsModule } from '../aws/aws.module';
+import { EstoqueModule } from '../estoque/estoque.module';
 
 @Module({
   imports: [
@@ -15,9 +16,10 @@ import { AwsModule } from '../aws/aws.module';
     EditoraModule,
     GeneroModule,
     AwsModule,
+    EstoqueModule,
   ],
   controllers: [LivroController],
   providers: [LivroService],
-  exports: [LivroService],
+  exports: [LivroService, TypeOrmModule],
 })
 export class LivroModule {}

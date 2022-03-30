@@ -46,14 +46,11 @@ export class Livro {
   @Column()
   qtd_paginas: number;
 
-  @Column('datetime')
+  @Column('date')
   publicacao: Date;
 
   @Column()
   preco: number;
-
-  @Column()
-  estoque: number;
 
   @Column()
   capa: string;

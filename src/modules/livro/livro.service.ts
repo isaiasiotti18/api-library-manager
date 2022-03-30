@@ -252,28 +252,4 @@ export class LivroService {
       throw new BadRequestException(error.message);
     }
   }
-
-  public async baixarEstoqueLivro(isbn_livro: string): Promise<void> {
-    try {
-      const livroJaCadastrado = await this.consultarLivro(isbn_livro);
-
-      // Verificando se o estoque já é igual à 0
-      if (livroJaCadastrado.estoque === 0) {
-        throw new BadRequestException('O estoque do livro já é igual a zero.');
-      }
-
-      const baixaEstoque = livroJaCadastrado.estoque - 1;
-
-      const atualizarLivroDTO: AtualizarLivroDTO = {
-        estoque: baixaEstoque,
-      };
-
-      return await this.atualizarLivro(
-        livroJaCadastrado.isbn,
-        atualizarLivroDTO,
-      );
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
 }
