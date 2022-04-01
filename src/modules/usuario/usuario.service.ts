@@ -96,6 +96,10 @@ export class UsuarioService {
     return usuarioEncontrado;
   }
 
+  async consultarUsuarioPorEmail(email: string) {
+    return await this.usuarioRepository.consultarUsuarioPorEmail(email);
+  }
+
   async retornarUsuariocomEndereco(id_usuario: string): Promise<Usuario> {
     const usuarioEncontrado =
       await this.usuarioRepository.retornarUsuariocomEndereco(id_usuario);
