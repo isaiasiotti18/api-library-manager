@@ -12,7 +12,7 @@ import { AluguelModule } from './modules/aluguel/aluguel.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TaskModule } from './modules/aluguel/tasks/task.module';
 import { EstoqueModule } from './modules/estoque/estoque.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
