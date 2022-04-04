@@ -28,7 +28,7 @@ export class CriarUsuarioDTO {
     message: 'password too weak',
   })
   @ApiProperty()
-  senha_hash: string;
+  senha: string;
 
   @IsNotEmpty({ message: 'Campo cpf não pode estar vazio.' })
   @IsCPF({ message: 'CPF inválido.' })

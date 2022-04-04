@@ -70,7 +70,7 @@ export class LivroService {
 
       return novoLivro;
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 
@@ -91,7 +91,7 @@ export class LivroService {
         );
       }
     } catch (error) {
-      throw new NotFoundException(error.message);
+      throw new NotFoundException(error);
     }
   }
 
@@ -137,7 +137,7 @@ export class LivroService {
         );
       }
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 
@@ -158,7 +158,7 @@ export class LivroService {
     try {
       return await this.livroRepository.consultarLivros(pageOptionsDto);
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 
@@ -174,7 +174,7 @@ export class LivroService {
         generoJaCadastrado.genero,
       );
     } catch (error) {
-      throw new NotFoundException(error.message);
+      throw new NotFoundException(error);
     }
   }
 
@@ -219,7 +219,7 @@ export class LivroService {
 
       return retornoLivros;
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 
@@ -249,7 +249,7 @@ export class LivroService {
 
       return retornoLivros;
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 }

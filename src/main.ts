@@ -1,18 +1,11 @@
-import 'reflect-metadata';
+//import 'reflect-metadata';
 
 import { AllExceptionFilter } from './shared/filters/http-exception.filter';
 
-import { fastifyHelmet } from 'fastify-helmet';
-
 import { NestFactory } from '@nestjs/core';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { contentParser } from 'fastify-multer';
 import * as momentTimezone from 'moment-timezone';
 
 const config = new DocumentBuilder()
@@ -20,39 +13,24 @@ const config = new DocumentBuilder()
   .setDescription('A simple API for managment Libraries')
   .setVersion('1.0')
   .addTag('LibraryManager')
+  .addBearerAuth(undefined, 'defaultBearerAuth')
   .build();
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter(),
-  );
+  const app = await NestFactory.create(AppModule);
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  app.register(import('fastify-express'));
-
-  app.register(fastifyHelmet, {
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: [`'self'`],
-        styleSrc: [`'self'`, `'unsafe-inline'`],
-        imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
-        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
-      },
-    },
-  });
-
-  // If you are not going to use CSP at all, you can use this:
-  app.register(fastifyHelmet, {
-    contentSecurityPolicy: false,
-  });
-  app.register(contentParser);
-
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  // Pipes
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
   //app.useGlobalFilters(new AllExceptionFilter());
-  app.enableCors();
 
   Date.prototype.toJSON = function (): any {
     return momentTimezone(this)

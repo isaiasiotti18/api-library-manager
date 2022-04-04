@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { Module } from '@nestjs/common';
 import { ConnectionModule } from './config/database/typeorm/connection.module';
 import { LivroModule } from './modules/livro/livro.module';
@@ -13,6 +14,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TaskModule } from './modules/aluguel/tasks/task.module';
 import { EstoqueModule } from './modules/estoque/estoque.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -32,6 +34,11 @@ import { AuthModule } from './modules/auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

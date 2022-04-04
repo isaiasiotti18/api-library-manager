@@ -1,22 +1,24 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Usuario } from '../usuario/model/usuario.model';
-import { UsuarioService } from '../usuario/usuario.service';
-import { PayloadUsuario } from './interfaces/PayloadUsuario';
+import { UsuarioService } from './../usuario/usuario.service';
+import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { Usuario } from '../usuario/model/usuario.model';
+import { UserPayload } from './models/UserPayload';
+import { JwtService } from '@nestjs/jwt';
+import { UserToken } from './models/UserToken';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly jwtService: JwtService,
     private readonly usuarioService: UsuarioService,
+    private readonly jwtService: JwtService,
   ) {}
 
-  login(usuario: Usuario) {
-    const payload: PayloadUsuario = {
+  login(usuario: Usuario): UserToken {
+    // Transforma o usuario em JWT
+    const payload: UserPayload = {
       sub: usuario.id,
       email: usuario.email,
-      nome: usuario.nome,
+      name: usuario.nome,
     };
 
     const jwtToken = this.jwtService.sign(payload);
@@ -26,20 +28,22 @@ export class AuthService {
     };
   }
 
-  async validarUsuario(email: string, senha: string) {
+  async validateUser(email: string, password: string) {
     const usuario = await this.usuarioService.consultarUsuarioPorEmail(email);
 
     if (usuario) {
-      const isPasswordValid = await bcrypt.compare(senha, usuario.senha_hash);
+      // checar se a senha informada corresponde a hash que está no banco
+      const isPasswordValid = await bcrypt.compare(password, usuario.password);
 
       if (isPasswordValid) {
         return {
           ...usuario,
-          senha: undefined,
+          password: undefined,
         };
       }
     }
 
-    throw new BadRequestException('Email ou Senha incorretos.');
+    // Se chegar aqui, significa que não encontrou um user e/ou a senha não corresponde
+    throw new Error('Email address or password provided is incorrect.');
   }
 }

@@ -8,6 +8,9 @@ export class CriarUsuarioComEnderecoBodyJson {
   email: string;
 
   @ApiProperty()
+  senha: string;
+
+  @ApiProperty()
   cpf: string;
 
   @ApiProperty()

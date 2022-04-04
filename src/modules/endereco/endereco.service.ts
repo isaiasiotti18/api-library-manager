@@ -46,7 +46,7 @@ export class EnderecoService {
 
       return criarEndereco;
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 

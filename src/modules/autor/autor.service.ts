@@ -15,7 +15,7 @@ export class AutorService {
     try {
       return await this.autorRepository.criarAutor(autor);
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 

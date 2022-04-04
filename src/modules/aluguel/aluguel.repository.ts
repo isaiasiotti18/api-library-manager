@@ -12,10 +12,19 @@ export class AluguelRepository
   extends Repository<Aluguel>
   implements AluguelRepositoryInterface
 {
-  async criarAluguel(criarAluguelDTO: CriarAluguelDTO): Promise<Aluguel> {
-    const { livros_alugados } = criarAluguelDTO;
+  async criarAluguel(
+    usuario_id: string,
+    criarAluguelDTO: CriarAluguelDTO,
+  ): Promise<Aluguel> {
+    const { livros_alugados, codigo, data_alugacao, data_devolucao } =
+      criarAluguelDTO;
 
-    const novoAluguel = this.create(criarAluguelDTO);
+    const novoAluguel = this.create({
+      usuario_id,
+      codigo,
+      data_alugacao,
+      data_devolucao,
+    });
 
     novoAluguel.livros = livros_alugados;
 

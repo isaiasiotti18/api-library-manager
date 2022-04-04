@@ -1,12 +1,13 @@
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { AuthRequest } from './../auth/models/AuthRequest';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
   Get,
   Param,
-  Patch,
   Post,
   Put,
+  Request,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -16,12 +17,14 @@ import { Usuario } from './model/usuario.model';
 import { EnderecoBodyJson } from '../endereco/interfaces/endereco-body-json.interface';
 import { CriarUsuarioComEnderecoBodyJson } from './interfaces/criar-usuario-endereco-bodyjson';
 import { AlterarUsuarioDTO } from './dtos/alterar-usuario.dto';
+import { IsPublic } from '../auth/decorators/is-public.decorator';
 
 @Controller('api/v1/usuarios')
 @ApiTags('usuarios')
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
+  //@IsPublic()
   @Post()
   @ApiBody({ type: CriarUsuarioComEnderecoBodyJson })
   @UsePipes(ValidationPipe)
@@ -35,16 +38,16 @@ export class UsuarioController {
     );
   }
 
-  @Put('/:id_usuario/alterar')
-  @ApiParam({ name: 'id_usuario' })
+  @ApiBearerAuth('defaultBearerAuth')
+  @Put('alterar')
   @ApiBody({ type: AlterarUsuarioDTO })
   @UsePipes(ValidationPipe)
   async alterarUsuario(
-    @Param('id_usuario') id_usuario: string,
+    @Request() req: AuthRequest,
     @Body() alterarUsuarioDTO: AlterarUsuarioDTO,
   ): Promise<void> {
     return await this.usuarioService.alterarUsuario(
-      id_usuario,
+      req.user.id,
       alterarUsuarioDTO,
     );
   }

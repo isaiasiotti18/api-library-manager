@@ -1,21 +1,23 @@
+import { AuthRequest } from './../auth/models/AuthRequest';
 import {
   Body,
   Controller,
   Get,
   Param,
   Post,
+  Request,
   UseFilters,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AluguelService } from './aluguel.service';
 import { CriarAluguelDTO } from './dtos/criar-aluguel.dto';
 import { Aluguel } from './model/aluguel.model';
-import { Codigo } from './model/codigo.model';
 
 @Controller('aluguel')
 @ApiTags('aluguel')
+@ApiBearerAuth('defaultBearerAuth')
 export class AluguelController {
   constructor(private readonly aluguelService: AluguelService) {}
 
@@ -23,9 +25,13 @@ export class AluguelController {
   @ApiBody({ type: CriarAluguelDTO })
   @UsePipes(ValidationPipe)
   async realizarAluguel(
+    @Request() req: AuthRequest,
     @Body() criarAluguelDTO: CriarAluguelDTO,
   ): Promise<Aluguel> {
-    return await this.aluguelService.realizarAluguel(criarAluguelDTO);
+    return await this.aluguelService.realizarAluguel(
+      req.user.id,
+      criarAluguelDTO,
+    );
   }
 
   @Post('/:aluguel_id/validar-aluguel')

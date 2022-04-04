@@ -23,10 +23,11 @@ export class AluguelService {
     private readonly estoqueService: EstoqueService,
   ) {}
 
-  async realizarAluguel(criarAluguelDTO: CriarAluguelDTO): Promise<any> {
+  async realizarAluguel(
+    usuario_id: string,
+    { isbns_passados }: CriarAluguelDTO,
+  ): Promise<any> {
     try {
-      const { isbns_passados, usuario_id } = criarAluguelDTO;
-
       //Validar o usuário que está alugando
       const usuarioJaCadastrado =
         await this.usuarioService.consultarUsuarioPorId(usuario_id);
@@ -54,7 +55,7 @@ export class AluguelService {
 
           return livros_alugados.push(livroJaCadastrado);
         } catch (error) {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(error);
         }
       });
 
@@ -66,14 +67,16 @@ export class AluguelService {
       let dataAtual = moment();
       let dataDevolucao = dataAtual.add(17, 'days').format('YYYY-MM-DD');
 
-      const novoAluguel = await this.aluguelRepository.criarAluguel({
+      const novoAluguel = await this.aluguelRepository.criarAluguel(
         usuario_id,
-        isbns_passados,
-        livros_alugados,
-        data_alugacao: moment().format('YYYY-MM-DD'),
-        data_devolucao: dataDevolucao,
-        codigo: novoCodigoAluguel.codigo,
-      });
+        {
+          isbns_passados,
+          livros_alugados,
+          data_alugacao: moment().format('YYYY-MM-DD'),
+          data_devolucao: dataDevolucao,
+          codigo: novoCodigoAluguel.codigo,
+        },
+      );
 
       await this.usuarioService.atribuirAluguel(
         usuario_id,
@@ -96,7 +99,7 @@ export class AluguelService {
 
       return retornoAluguel;
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 
@@ -156,7 +159,7 @@ export class AluguelService {
           'Código validado com sucesso! O(s) livro(s) já estão liberados para o usuário.',
       };
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 }

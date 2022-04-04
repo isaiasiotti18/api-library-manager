@@ -1,7 +1,7 @@
-export interface PayloadUsuario {
+export interface UserPayload {
   sub: string;
   email: string;
-  nome: string;
+  name: string;
   iat?: number;
   exp?: number;
 }

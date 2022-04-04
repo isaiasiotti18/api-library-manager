@@ -15,11 +15,6 @@ export class CriarAluguelDTO {
   @ApiProperty()
   isbns_passados: string[];
 
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty()
-  usuario_id: string;
-
   livros_alugados: Livro[];
   data_alugacao: string;
   data_devolucao: string;

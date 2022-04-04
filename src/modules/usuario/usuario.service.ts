@@ -26,7 +26,7 @@ export class UsuarioService {
     enderecoBodyJson: EnderecoBodyJson,
   ): Promise<Usuario> {
     try {
-      const { cpf, email, nome, telefone, senha_hash } = criarUsuarioDTO;
+      const { cpf, email, nome, telefone, senha } = criarUsuarioDTO;
       const { cep, numero } = enderecoBodyJson;
 
       const cpfFormatado = cpf.replace(/[^\d]+/g, '');
@@ -48,7 +48,7 @@ export class UsuarioService {
       const novoUsuario = await this.usuarioRepository.criarUsuario({
         nome,
         email,
-        senha_hash: await bcrypt.hash(senha_hash, 10),
+        senha: await bcrypt.hash(senha, 10),
         cpf: cpfFormatado,
         telefone: telefoneFormatado,
         endereco_id: novoEndereco.endereco_id,
@@ -56,10 +56,10 @@ export class UsuarioService {
 
       return {
         ...novoUsuario,
-        senha_hash: undefined,
+        password: undefined,
       };
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 
@@ -77,7 +77,7 @@ export class UsuarioService {
         );
       }
     } catch (error) {
-      throw new NotFoundException(error.message);
+      throw new NotFoundException(error);
     }
   }
 
