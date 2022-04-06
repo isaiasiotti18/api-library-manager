@@ -46,12 +46,12 @@ export class LivroBodyJSON {
   @ApiProperty()
   @IsOptional()
   @IsNumber()
-  estoque?: number;
+  estoque: number;
 
   @ApiProperty()
   @IsOptional()
   @IsNumber()
-  preco?: number;
+  preco: number;
 
   @ApiProperty()
   @IsOptional()

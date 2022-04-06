@@ -24,8 +24,8 @@ import { IsPublic } from '../auth/decorators/is-public.decorator';
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
-  //@IsPublic()
-  @Post()
+  @IsPublic()
+  @Post('cadastrar')
   @ApiBody({ type: CriarUsuarioComEnderecoBodyJson })
   @UsePipes(ValidationPipe)
   async criarUsuario(

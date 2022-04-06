@@ -13,7 +13,7 @@ export class LivroRepository
   extends Repository<Livro>
   implements LivroRepositoryInterface
 {
-  async criarLivro(livro: LivroDTO): Promise<Livro> {
+  async cadastrarLivro(livro: LivroDTO): Promise<Livro> {
     const novoLivro = this.create(livro);
 
     return await this.save(novoLivro);

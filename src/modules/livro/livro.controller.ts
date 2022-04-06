@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiParam,
@@ -28,17 +29,19 @@ import { LivroService } from './livro.service';
 import { Livro } from './model/livro.model';
 import { Express } from 'express';
 import { FastifyFileInterceptor } from 'src/shared/interceptors/fastify-file-interceptor';
+import { IsPublic } from '../auth/decorators/is-public.decorator';
 
 @Controller('api/v1/livros')
 @ApiTags('livros')
+@ApiBearerAuth('defaultBearerAuth')
 export class LivroController {
   constructor(private readonly livrosService: LivroService) {}
 
-  @Post()
+  @Post('cadastrar')
   @ApiBody({ type: LivroBodyJSON })
   @UsePipes(ValidationPipe)
-  async criarLivros(@Body() livro: LivroBodyJSON): Promise<Livro> {
-    return await this.livrosService.criarLivro(livro);
+  async criarLivro(@Body() livro: LivroBodyJSON): Promise<Livro> {
+    return await this.livrosService.cadastrarLivro(livro);
   }
 
   @Put('/:isbn_livro/atualizar')
@@ -78,6 +81,7 @@ export class LivroController {
     return await this.livrosService.uploadCapaLivro(file, isbn_livro);
   }
 
+  @IsPublic()
   @Get()
   async consultarLivros(
     @Query() pageOptionsDto: PageOptionsDto,
@@ -86,6 +90,7 @@ export class LivroController {
     return await this.livrosService.consultarLivros(pageOptionsDto);
   }
 
+  @IsPublic()
   @Get('/isbn_livro')
   @ApiQuery({ name: 'isbn_livro' })
   @UsePipes(ValidationPipe)
@@ -95,6 +100,7 @@ export class LivroController {
     return await this.livrosService.consultarLivro(isbn_livro);
   }
 
+  @IsPublic()
   @Get('/titulo_livro')
   @ApiQuery({ name: 'titulo_livro' })
   @UsePipes(ValidationPipe)
@@ -104,6 +110,7 @@ export class LivroController {
     return await this.livrosService.consultarLivrosPorTitulo(titulo_livro);
   }
 
+  @IsPublic()
   @Get('/genero')
   @ApiQuery({ name: 'genero' })
   @UsePipes(ValidationPipe)
@@ -113,6 +120,7 @@ export class LivroController {
     return await this.livrosService.consultarLivrosPorGenero(genero);
   }
 
+  @IsPublic()
   @Get('/autor')
   @ApiQuery({ name: 'nome_autor' })
   @UsePipes(ValidationPipe)
@@ -122,6 +130,7 @@ export class LivroController {
     return await this.livrosService.consultarLivrosPorAutor(nome_autor);
   }
 
+  @IsPublic()
   @Get('/editora')
   @ApiQuery({ name: 'nome_editora' })
   @UsePipes(ValidationPipe)

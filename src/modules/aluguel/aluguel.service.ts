@@ -12,6 +12,7 @@ import { Livro } from '../livro/model/livro.model';
 import { LivroRepository } from '../livro/livro.repository';
 import { EstoqueService } from '../estoque/estoque.service';
 import { Aluguel } from './model/aluguel.model';
+import { Codigo } from './model/codigo.model';
 
 @Injectable()
 export class AluguelService {
@@ -36,7 +37,17 @@ export class AluguelService {
 
       //Verificando se já tem um aluguel ativo
       if (usuarioJaCadastrado.aluguel_id) {
-        throw new BadRequestException('Usuário com aluguel já ativo.');
+        //Se tiver...Irá deletar
+        this.aluguelRepository
+          .createQueryBuilder()
+          .delete()
+          .from(Aluguel)
+          .where('aluguel_id = :aluguel_id', {
+            aluguel_id: usuarioJaCadastrado.aluguel_id,
+          })
+          .execute();
+
+        usuarioJaCadastrado.aluguel_id = null;
       }
 
       //Validar os livros alugados
@@ -103,20 +114,6 @@ export class AluguelService {
     }
   }
 
-  async consultaLivrosDoAluguel(aluguel_id: string): Promise<Aluguel | any> {
-    const consultaLivrosDoAluguel = await this.aluguelRepository.findOne({
-      where: { aluguel_id },
-      relations: ['livros'],
-      select: ['livros'],
-    });
-
-    console.log(consultaLivrosDoAluguel);
-
-    return consultaLivrosDoAluguel.livros.map((livro) => {
-      return livro.livro_id;
-    });
-  }
-
   async validarAluguel(aluguel_id: string, codigo: number): Promise<any> {
     try {
       const consultaAluguelValidado = await this.aluguelRepository.findOne({
@@ -130,20 +127,7 @@ export class AluguelService {
         throw new BadRequestException('Aluguel já válidado');
       }
 
-      const consultaCodigo = await this.codigoRepository.findOne({
-        where: { codigo },
-      });
-
-      if (!consultaCodigo) {
-        throw new NotFoundException('Codigo inexistente.');
-      }
-
-      if (consultaCodigo.validado === true)
-        throw new BadRequestException('Código invalido.');
-
-      consultaCodigo.validado = true;
-
-      await this.codigoRepository.save(consultaCodigo);
+      await this.validaCodigoAluguel(codigo);
 
       const consultaLivrosAluguel = await this.consultaLivrosDoAluguel(
         aluguel_id,
@@ -161,5 +145,34 @@ export class AluguelService {
     } catch (error) {
       throw new BadRequestException(error);
     }
+  }
+
+  async validaCodigoAluguel(codigo: number): Promise<void> {
+    const consultaCodigo = await this.codigoRepository.findOne({
+      where: { codigo },
+    });
+
+    if (!consultaCodigo) {
+      throw new NotFoundException('Codigo Inexistente.');
+    }
+
+    if (consultaCodigo.validado === true)
+      throw new BadRequestException('Código invalido.');
+
+    consultaCodigo.validado = true;
+
+    await this.codigoRepository.save(consultaCodigo);
+  }
+
+  async consultaLivrosDoAluguel(aluguel_id: string): Promise<Aluguel | any> {
+    const consultaLivrosDoAluguel = await this.aluguelRepository.findOne({
+      where: { aluguel_id },
+      relations: ['livros'],
+      select: ['livros'],
+    });
+
+    return consultaLivrosDoAluguel.livros.map((livro) => {
+      return livro.livro_id;
+    });
   }
 }

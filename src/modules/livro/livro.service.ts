@@ -25,13 +25,15 @@ export class LivroService {
     private readonly awsS3Service: AwsS3Service,
   ) {}
 
-  public async criarLivro({
+  public async cadastrarLivro({
     titulo,
     nome_editora,
     nome_autor,
     genero,
     isbn,
     publicacao,
+    estoque,
+    preco,
     qtd_paginas,
   }: LivroBodyJSON): Promise<Livro> {
     try {
@@ -53,13 +55,15 @@ export class LivroService {
         genero,
       );
 
-      const novoLivro = await this.livroRepository.criarLivro({
+      const novoLivro = await this.livroRepository.cadastrarLivro({
         titulo,
         autor_id: autorJaCadastrado.autor_id,
         editora_id: editoraJaCadastrado.editora_id,
         isbn,
         genero: generoJaCadastrado.genero,
         publicacao,
+        estoque,
+        preco,
         qtd_paginas,
       });
 

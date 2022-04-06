@@ -5,7 +5,7 @@ import { PageDto } from 'src/shared/pagination/page.dto';
 import { PageOptionsDto } from 'src/shared/pagination/page-options.dto';
 
 export interface LivroRepositoryInterface {
-  criarLivro(livro: LivroDTO): Promise<Livro>;
+  cadastrarLivro(livro: LivroDTO): Promise<Livro>;
 
   consultarLivro(isbn_livro: string): Promise<Livro>;
 

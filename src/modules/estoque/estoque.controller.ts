@@ -1,10 +1,11 @@
 import { Body, Controller, Param, Post, Put } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { EntradaEstoqueDTO } from './dto/entrada-estoque.dto';
 import { EstoqueService } from './estoque.service';
 
 @Controller('estoque')
 @ApiTags('estoque')
+@ApiBearerAuth('defaultBearerAuth')
 export class EstoqueController {
   constructor(private readonly estoqueService: EstoqueService) {}
 
