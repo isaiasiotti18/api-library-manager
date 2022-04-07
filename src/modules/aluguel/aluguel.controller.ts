@@ -1,25 +1,26 @@
+import { ValidarAluguelService } from './services/validar-aluguel.service';
 import { AuthRequest } from './../auth/models/AuthRequest';
 import {
   Body,
   Controller,
-  Get,
-  Param,
   Post,
   Request,
-  UseFilters,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
-import { AluguelService } from './aluguel.service';
 import { CriarAluguelDTO } from './dtos/criar-aluguel.dto';
 import { Aluguel } from './model/aluguel.model';
+import { RealizarAluguelService } from './services/realizar-aluguel.service';
 
 @Controller('aluguel')
 @ApiTags('aluguel')
 @ApiBearerAuth('defaultBearerAuth')
 export class AluguelController {
-  constructor(private readonly aluguelService: AluguelService) {}
+  constructor(
+    private readonly realizarAluguelService: RealizarAluguelService,
+    private readonly validarAluguelService: ValidarAluguelService,
+  ) {}
 
   @Post('/realizar-aluguel')
   @ApiBody({ type: CriarAluguelDTO })
@@ -28,13 +29,14 @@ export class AluguelController {
     @Request() req: AuthRequest,
     @Body() criarAluguelDTO: CriarAluguelDTO,
   ): Promise<Aluguel> {
-    return await this.aluguelService.realizarAluguel(
+    console.log(req.user);
+    return await this.realizarAluguelService.realizarAluguel(
       req.user.id,
       criarAluguelDTO,
     );
   }
 
-  @Post('/:aluguel_id/validar-aluguel')
+  @Post('/validar-aluguel')
   @ApiBody({
     schema: {
       properties: {
@@ -44,19 +46,12 @@ export class AluguelController {
       },
     },
   })
-  @ApiParam({ name: 'aluguel_id' })
   async validarAluguel(
-    @Param('aluguel_id') aluguel_id: string,
     @Body('codigo') codigo: number,
+    @Request() req: AuthRequest,
   ): Promise<any> {
-    return await this.aluguelService.validarAluguel(aluguel_id, codigo);
-  }
+    console.log(req.user);
 
-  @Get('/:aluguel_id/consulta-livros-aluguel')
-  @ApiParam({ name: 'aluguel_id' })
-  async consultconsultaLivrosDoAluguel(
-    @Param('aluguel_id') aluguel_id: string,
-  ): Promise<any> {
-    return await this.aluguelService.consultaLivrosDoAluguel(aluguel_id);
+    return await this.validarAluguelService.validarAluguel(req.user.id, codigo);
   }
 }

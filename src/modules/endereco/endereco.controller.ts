@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { EnderecoService } from './endereco.service';
+import { CadastrarEnderecoService } from './services/cadastrar-endereco.service';
 import { Endereco } from './model/endereco.model';
 import { EnderecoBodyJson } from './interfaces/endereco-body-json.interface';
 
@@ -8,21 +8,18 @@ import { EnderecoBodyJson } from './interfaces/endereco-body-json.interface';
 @ApiTags('enderecos')
 @ApiBearerAuth('defaultBearerAuth')
 export class EnderecoController {
-  constructor(private readonly enderecoService: EnderecoService) {}
+  constructor(
+    private readonly cadastrarenderecoService: CadastrarEnderecoService,
+  ) {}
 
   @Post('cadastrar')
   @ApiBody({ type: EnderecoBodyJson })
-  async buscaEndereco(
+  async cadastrarEndereco(
     @Body() { numero, cep }: EnderecoBodyJson,
   ): Promise<Endereco> {
-    return await this.enderecoService.criarEndereco({
+    return await this.cadastrarenderecoService.execute({
       cep,
       numero,
     });
-  }
-
-  @Get()
-  async consultarEnderecos(): Promise<Endereco[]> {
-    return await this.enderecoService.consultarEnderecos();
   }
 }

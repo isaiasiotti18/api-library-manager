@@ -4,10 +4,20 @@ import { AutorModule } from '../autor/autor.module';
 import { EditoraModule } from '../editora/editora.module';
 import { GeneroModule } from '../genero/genero.module';
 import { LivroController } from './livro.controller';
-import { LivroService } from './livro.service';
 import { LivroRepository } from './livro.repository';
 import { AwsModule } from '../aws/aws.module';
 import { EstoqueModule } from '../estoque/estoque.module';
+
+import { ConsultarLivroService } from './services/consultar-livro.service';
+import { CadastrarLivroService } from './services/cadastrar-livro.service';
+import { AtualizarLivroService } from './services/atualizar-livro.service';
+import { UploadCapaLivroService } from './services/upload-capa-livro.service';
+import { AtribuirGeneroALivro } from './services/atribuir-genero-a-livro.service';
+import { ConsultarLivrosPorTituloService } from './services/consultar-livros-por-titulo.service';
+import { ConsultarLivrosPorGeneroService } from './services/consultar-livros-por-genero.service';
+import { ConsultarLivrosService } from './services/consultar-livros.service';
+import { ConsultarLivrosPorAutorService } from './services/consultar-livros-por-autor.service';
+import { ConsultarLivrosPorEditoraService } from './services/consultar-livros-por-editora.service';
 
 @Module({
   imports: [
@@ -19,7 +29,18 @@ import { EstoqueModule } from '../estoque/estoque.module';
     EstoqueModule,
   ],
   controllers: [LivroController],
-  providers: [LivroService],
-  exports: [LivroService, TypeOrmModule],
+  providers: [
+    ConsultarLivroService,
+    ConsultarLivrosService,
+    CadastrarLivroService,
+    AtualizarLivroService,
+    UploadCapaLivroService,
+    AtribuirGeneroALivro,
+    ConsultarLivrosPorTituloService,
+    ConsultarLivrosPorGeneroService,
+    ConsultarLivrosPorAutorService,
+    ConsultarLivrosPorEditoraService,
+  ],
+  exports: [ConsultarLivroService, TypeOrmModule],
 })
 export class LivroModule {}

@@ -30,6 +30,20 @@ export class AluguelRepository
 
     return await this.save(novoAluguel);
   }
+
+  async consultaLivrosDoAluguel(aluguel_id: string): Promise<Aluguel | any> {
+    const consultaLivrosDoAluguel = await this.findOne({
+      where: { aluguel_id },
+      relations: ['livros'],
+      select: ['livros'],
+    });
+
+    console.log(consultaLivrosDoAluguel);
+
+    return consultaLivrosDoAluguel.livros.map((livro) => {
+      return livro.livro_id;
+    });
+  }
 }
 
 @EntityRepository(Codigo)
@@ -54,5 +68,17 @@ export class CodigoRepository extends Repository<Codigo> {
     });
 
     return await this.save(novoCodigoAluguel);
+  }
+
+  async consultarCodigo(codigo: number): Promise<Codigo> {
+    return await this.findOne({
+      where: { codigo },
+    });
+  }
+
+  async validaCodigoAluguel(codigo: Codigo): Promise<void> {
+    codigo.validado = true;
+
+    await this.save(codigo);
   }
 }

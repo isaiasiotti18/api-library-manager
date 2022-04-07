@@ -11,28 +11,34 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { UsuarioService } from './usuario.service';
 import { CriarUsuarioDTO } from './dtos/criar-usuario.dto';
 import { Usuario } from './model/usuario.model';
 import { EnderecoBodyJson } from '../endereco/interfaces/endereco-body-json.interface';
 import { CriarUsuarioComEnderecoBodyJson } from './interfaces/criar-usuario-endereco-bodyjson';
 import { AlterarUsuarioDTO } from './dtos/alterar-usuario.dto';
 import { IsPublic } from '../auth/decorators/is-public.decorator';
+import { CadastrarUsuarioService } from './services/cadastrar-usuario.service';
+import { AlterarUsuarioService } from './services/alterar-usuario.service';
+import { ConsultarUsuarioPorIdService } from './services/consultar-usuario-porId.service';
 
 @Controller('api/v1/usuarios')
 @ApiTags('usuarios')
 export class UsuarioController {
-  constructor(private readonly usuarioService: UsuarioService) {}
+  constructor(
+    private readonly cadastrarUsuarioService: CadastrarUsuarioService,
+    private readonly alterarUsuarioService: AlterarUsuarioService,
+    private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
+  ) {}
 
   @IsPublic()
   @Post('cadastrar')
   @ApiBody({ type: CriarUsuarioComEnderecoBodyJson })
   @UsePipes(ValidationPipe)
-  async criarUsuario(
+  async cadastrarUsuario(
     @Body() criarUsuarioDTO: CriarUsuarioDTO,
     @Body() enderecoBodyJson: EnderecoBodyJson,
   ): Promise<Usuario> {
-    return await this.usuarioService.criarUsuario(
+    return await this.cadastrarUsuarioService.execute(
       criarUsuarioDTO,
       enderecoBodyJson,
     );
@@ -46,7 +52,7 @@ export class UsuarioController {
     @Request() req: AuthRequest,
     @Body() alterarUsuarioDTO: AlterarUsuarioDTO,
   ): Promise<void> {
-    return await this.usuarioService.alterarUsuario(
+    return await this.alterarUsuarioService.execute(
       req.user.id,
       alterarUsuarioDTO,
     );
@@ -57,15 +63,6 @@ export class UsuarioController {
   async consultarUsuarioPorId(
     @Param('id_usuario') id_usuario: string,
   ): Promise<Usuario> {
-    return await this.usuarioService.consultarUsuarioPorId(id_usuario);
-  }
-
-  @Get('/:id_usuario/usuario-com-endereco')
-  @ApiParam({ name: 'id_usuario' })
-  @UsePipes(ValidationPipe)
-  async retornarUsuariocomEndereco(
-    @Param('id_usuario') id_usuario: string,
-  ): Promise<Usuario> {
-    return await this.usuarioService.retornarUsuariocomEndereco(id_usuario);
+    return await this.consultarUsuarioPorIdService.execute(id_usuario);
   }
 }

@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EditoraController } from './editora.controller';
-import { EditoraService } from './editora.service';
 import { EditoraRepository } from './editora.repository';
+import { CadastrarEditoraService } from './services/cadastrar-editora.service';
+import { ConsultarEditoraService } from './services/consultar-editora.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([EditoraRepository])],
   controllers: [EditoraController],
-  providers: [EditoraService],
-  exports: [EditoraService],
+  providers: [CadastrarEditoraService, ConsultarEditoraService],
+  exports: [ConsultarEditoraService],
 })
 export class EditoraModule {}

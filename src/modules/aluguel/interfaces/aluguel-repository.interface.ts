@@ -6,4 +6,6 @@ export interface AluguelRepositoryInterface {
     usuario_id: string,
     criarAluguelDTO: CriarAluguelDTO,
   ): Promise<Aluguel>;
+
+  consultaLivrosDoAluguel(aluguel_id: string): Promise<any>;
 }

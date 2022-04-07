@@ -1,3 +1,4 @@
+import { ValidarAluguelService } from './services/validar-aluguel.service';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EstoqueModule } from '../estoque/estoque.module';
@@ -5,7 +6,8 @@ import { LivroModule } from '../livro/livro.module';
 import { UsuarioModule } from '../usuario/usuario.module';
 import { AluguelController } from './aluguel.controller';
 import { AluguelRepository, CodigoRepository } from './aluguel.repository';
-import { AluguelService } from './aluguel.service';
+import { RealizarAluguelService } from './services/realizar-aluguel.service';
+import { ValidarCodigoAluguelService } from './services/validar-codigo-aluguel.service';
 
 @Module({
   imports: [
@@ -16,7 +18,11 @@ import { AluguelService } from './aluguel.service';
     EstoqueModule,
   ],
   controllers: [AluguelController],
-  providers: [AluguelService],
+  providers: [
+    RealizarAluguelService,
+    ValidarCodigoAluguelService,
+    ValidarAluguelService,
+  ],
   exports: [TypeOrmModule],
 })
 export class AluguelModule {}

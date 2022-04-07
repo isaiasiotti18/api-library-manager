@@ -46,30 +46,4 @@ export class UsuarioRepository
       where: { email },
     });
   }
-
-  async retornarUsuariocomEndereco(id_usuario: string): Promise<any> {
-    const usuario = await this.findOne({
-      where: { id: id_usuario },
-      relations: ['endereco'],
-      select: ['id', 'nome', 'email', 'telefone', 'endereco'],
-    });
-
-    const { id, nome, email, telefone, endereco } = usuario;
-    const { cep, logradouro, numero, bairro, cidade, uf } = endereco;
-
-    return {
-      id,
-      nome,
-      email,
-      telefone,
-      endereco: {
-        cep,
-        logradouro,
-        numero,
-        bairro,
-        cidade,
-        uf,
-      },
-    };
-  }
 }

@@ -1,3 +1,14 @@
+import { AtribuirGeneroALivro } from './services/atribuir-genero-a-livro.service';
+import { ConsultarLivrosPorGeneroService } from './services/consultar-livros-por-genero.service';
+import { ConsultarLivroService } from './services/consultar-livro.service';
+import { ConsultarLivrosService } from './services/consultar-livros.service';
+import { CadastrarLivroService } from './services/cadastrar-livro.service';
+import { AtualizarLivroService } from './services/atualizar-livro.service';
+import { UploadCapaLivroService } from './services/upload-capa-livro.service';
+import { ConsultarLivrosPorTituloService } from './services/consultar-livros-por-titulo.service';
+import { ConsultarLivrosPorAutorService } from './services/consultar-livros-por-autor.service';
+import { ConsultarLivrosPorEditoraService } from './services/consultar-livros-por-editora.service';
+
 import {
   Body,
   Controller,
@@ -11,7 +22,6 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -25,7 +35,6 @@ import { PageDto } from 'src/shared/pagination/page.dto';
 import { AtualizarLivroDTO } from './dtos/atualizar-livro.dto';
 import { LivroBodyJSON } from './interfaces/livro-body-json';
 import { LivroResultado } from './interfaces/livro-resultado.interface';
-import { LivroService } from './livro.service';
 import { Livro } from './model/livro.model';
 import { Express } from 'express';
 import { FastifyFileInterceptor } from 'src/shared/interceptors/fastify-file-interceptor';
@@ -35,13 +44,24 @@ import { IsPublic } from '../auth/decorators/is-public.decorator';
 @ApiTags('livros')
 @ApiBearerAuth('defaultBearerAuth')
 export class LivroController {
-  constructor(private readonly livrosService: LivroService) {}
+  constructor(
+    private readonly cadastrarLivroService: CadastrarLivroService,
+    private readonly atualizarLivroService: AtualizarLivroService,
+    private readonly uploadCapaLivroService: UploadCapaLivroService,
+    private readonly atribuirGeneroALivroService: AtribuirGeneroALivro,
+    private readonly consultarLivrosService: ConsultarLivrosService,
+    private readonly consultarLivroService: ConsultarLivroService,
+    private readonly consultarlivrosPorTituloService: ConsultarLivrosPorTituloService,
+    private readonly consultarLivrosPorGeneroService: ConsultarLivrosPorGeneroService,
+    private readonly consultarLivrosPorAutorService: ConsultarLivrosPorAutorService,
+    private readonly consultarLivrosPorEditoraService: ConsultarLivrosPorEditoraService,
+  ) {}
 
   @Post('cadastrar')
   @ApiBody({ type: LivroBodyJSON })
   @UsePipes(ValidationPipe)
-  async criarLivro(@Body() livro: LivroBodyJSON): Promise<Livro> {
-    return await this.livrosService.cadastrarLivro(livro);
+  async cadastrarLivro(@Body() livro: LivroBodyJSON): Promise<Livro> {
+    return await this.cadastrarLivroService.execute(livro);
   }
 
   @Put('/:isbn_livro/atualizar')
@@ -52,7 +72,7 @@ export class LivroController {
     @Param('isbn_livro') isbn_livro: string,
     @Body() atualizarLivroDTO: AtualizarLivroDTO,
   ): Promise<void> {
-    return await this.livrosService.atualizarLivro(
+    return await this.atualizarLivroService.execute(
       isbn_livro,
       atualizarLivroDTO,
     );
@@ -78,7 +98,7 @@ export class LivroController {
     @UploadedFile() file: Express.Multer.File,
     @Param('isbn_livro') isbn_livro: string,
   ): Promise<any> {
-    return await this.livrosService.uploadCapaLivro(file, isbn_livro);
+    return await this.uploadCapaLivroService.execute(file, isbn_livro);
   }
 
   @IsPublic()
@@ -87,7 +107,7 @@ export class LivroController {
     @Query() pageOptionsDto: PageOptionsDto,
   ): Promise<PageDto<LivroResultado>> {
     //limit = limit > 100 ? 100 : limit;
-    return await this.livrosService.consultarLivros(pageOptionsDto);
+    return await this.consultarLivrosService.execute(pageOptionsDto);
   }
 
   @IsPublic()
@@ -97,7 +117,7 @@ export class LivroController {
   async consultarLivro(
     @Query('isbn_livro') isbn_livro: string,
   ): Promise<LivroResultado> {
-    return await this.livrosService.consultarLivro(isbn_livro);
+    return await this.consultarLivroService.execute(isbn_livro);
   }
 
   @IsPublic()
@@ -107,7 +127,7 @@ export class LivroController {
   async consultarLivrosPorTitulo(
     @Query('titulo_livro') titulo_livro: string,
   ): Promise<LivroResultado[]> {
-    return await this.livrosService.consultarLivrosPorTitulo(titulo_livro);
+    return await this.consultarlivrosPorTituloService.execute(titulo_livro);
   }
 
   @IsPublic()
@@ -117,7 +137,7 @@ export class LivroController {
   async consultarLivrosPorGenero(
     @Query('genero') genero: string,
   ): Promise<LivroResultado[]> {
-    return await this.livrosService.consultarLivrosPorGenero(genero);
+    return await this.consultarLivrosPorGeneroService.execute(genero);
   }
 
   @IsPublic()
@@ -127,7 +147,7 @@ export class LivroController {
   async consultarLivrosPorAutor(
     @Query('nome_autor') nome_autor: string,
   ): Promise<LivroResultado[]> {
-    return await this.livrosService.consultarLivrosPorAutor(nome_autor);
+    return await this.consultarLivrosPorAutorService.execute(nome_autor);
   }
 
   @IsPublic()
@@ -137,7 +157,7 @@ export class LivroController {
   async consultarLivrosPorEditora(
     @Query('nome_editora') nome_editora: string,
   ): Promise<LivroResultado[]> {
-    return await this.livrosService.consultarLivrosPorEditora(nome_editora);
+    return await this.consultarLivrosPorEditoraService.execute(nome_editora);
   }
 
   @Post(':isbn_livro/genero/:genero')
@@ -146,6 +166,6 @@ export class LivroController {
     const isbn_livro = params['isbn_livro'];
     const genero = params['genero'];
 
-    await this.livrosService.atribuirGeneroALivro(isbn_livro, genero);
+    await this.atribuirGeneroALivroService.execute(isbn_livro, genero);
   }
 }

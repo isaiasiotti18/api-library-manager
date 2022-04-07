@@ -1,4 +1,4 @@
-import { UsuarioService } from './../usuario/usuario.service';
+import { ConsultarUsuarioPorEmailService } from './../usuario/services/consultar-usuario-por-email.service';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Usuario } from '../usuario/model/usuario.model';
@@ -9,7 +9,7 @@ import { UserToken } from './models/UserToken';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usuarioService: UsuarioService,
+    private readonly consultarUsuarioPorEmailService: ConsultarUsuarioPorEmailService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -29,7 +29,7 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    const usuario = await this.usuarioService.consultarUsuarioPorEmail(email);
+    const usuario = await this.consultarUsuarioPorEmailService.execute(email);
 
     if (usuario) {
       // checar se a senha informada corresponde a hash que está no banco

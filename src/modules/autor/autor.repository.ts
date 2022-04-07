@@ -8,12 +8,12 @@ export class AutorRepository
   extends Repository<Autor>
   implements AutorRepositoryInterface
 {
-  async criarAutor(autor: CriarAutorDTO): Promise<Autor> {
+  async cadastrarAutor(autor: CriarAutorDTO): Promise<Autor> {
     const novoAutor = this.create(autor);
     return await this.save(novoAutor);
   }
 
-  async procurarAutor(nome_autor: string): Promise<Autor> {
+  async consultarAutor(nome_autor: string): Promise<Autor> {
     return await this.findOne({ nome: nome_autor });
   }
 }
