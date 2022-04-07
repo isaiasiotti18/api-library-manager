@@ -1,7 +1,8 @@
-import { NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneroRepository } from '../genero.repository';
 import { Genero } from '../model/genero.model';
 
+@Injectable()
 export class ConsultarGeneroService {
   constructor(private readonly generoRepository: GeneroRepository) {}
 

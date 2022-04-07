@@ -55,9 +55,11 @@ export class CadastrarLivroService {
         genero: generoJaCadastrado.genero,
         publicacao,
         estoque,
-        preco,
+        preco: Number(preco),
         qtd_paginas,
       });
+
+      console.log(novoLivro);
 
       await this.livroRepository.adicionarRelacionamentoLivroGenero(
         novoLivro.livro_id,
@@ -65,8 +67,8 @@ export class CadastrarLivroService {
       );
 
       return novoLivro;
-    } catch (error) {
-      throw new BadRequestException(error);
+    } catch (error: any) {
+      throw new BadRequestException(error?.message);
     }
   }
 }

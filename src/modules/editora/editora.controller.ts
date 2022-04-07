@@ -6,7 +6,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CriarEditoraDTO } from './dtos/criar-editora.dto';
 import { Editora } from './model/editora.model';
 
@@ -20,6 +20,7 @@ export class EditoraController {
 
   @Post('cadastrar')
   @UsePipes(ValidationPipe)
+  @ApiBody({ type: CriarEditoraDTO })
   async criarEditora(@Body() editora: CriarEditoraDTO): Promise<Editora> {
     return await this.cadastrarEditoraService.execute(editora);
   }

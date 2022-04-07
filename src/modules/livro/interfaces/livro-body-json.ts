@@ -1,10 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsCurrency,
   IsDateString,
   IsNotEmpty,
   IsNumber,
+  IsNumberString,
   IsOptional,
   IsString,
+  Matches,
 } from 'class-validator';
 
 export class LivroBodyJSON {
@@ -50,11 +53,11 @@ export class LivroBodyJSON {
 
   @ApiProperty()
   @IsOptional()
-  @IsNumber()
-  preco: number;
+  @IsString()
+  preco: string;
 
   @ApiProperty()
   @IsOptional()
-  @IsNumber()
+  @IsString()
   capa?: string;
 }

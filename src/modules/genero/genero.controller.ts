@@ -9,7 +9,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CriarGeneroDTO } from './dtos/criar-genero.dto';
 import { Genero } from './model/genero.model';
 
@@ -24,12 +24,13 @@ export class GeneroController {
 
   @Post('cadastrar')
   @UsePipes(ValidationPipe)
+  @ApiBody({ type: CriarGeneroDTO })
   async cadastrar(@Body() genero: CriarGeneroDTO): Promise<Genero> {
     return await this.cadastrarGeneroService.execute(genero);
   }
 
   @Get('/:genero')
-  async procurarGenero(@Param('genero') genero: string): Promise<Genero> {
+  async consultarGenero(@Param('genero') genero: string): Promise<Genero> {
     console.log(genero);
     return await this.consultarGeneroService.execute(genero);
   }
