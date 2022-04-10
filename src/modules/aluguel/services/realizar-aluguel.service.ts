@@ -92,6 +92,15 @@ export class RealizarAluguelService {
       const { codigo, data_alugacao, data_devolucao, aluguel_id, livros } =
         novoAluguel;
 
+      const valor_total = livros.reduce((accum, curr) => {
+        return Number(curr.preco) + accum;
+      }, 0);
+
+      const currencyFormat = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      });
+
       const retornoAluguel = {
         usuario_id,
         informacoes_aluguel: {
@@ -101,6 +110,7 @@ export class RealizarAluguelService {
           data_devolucao,
         },
         livros: livros.map((livro) => livro.titulo),
+        valor_total: currencyFormat.format(valor_total),
       };
 
       return retornoAluguel;
