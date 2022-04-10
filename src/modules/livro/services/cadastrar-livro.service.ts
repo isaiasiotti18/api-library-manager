@@ -1,3 +1,4 @@
+import { EntradaEstoqueLivroService } from './../../estoque/services/entrada-estoque-livro.service';
 import { ConsultarAutorService } from 'src/modules/autor/services/consultar-autor.service';
 import { ConsultarGeneroService } from './../../genero/services/consultar-genero.service';
 import { LivroRepository } from './../livro.repository';
@@ -15,6 +16,7 @@ export class CadastrarLivroService {
     private readonly consultarEditoraService: ConsultarEditoraService,
     private readonly consultarLivroService: ConsultarLivroService,
     private readonly consultarGeneroService: ConsultarGeneroService,
+    private readonly entradaEstoqueLivroService: EntradaEstoqueLivroService,
   ) {}
 
   async execute({
@@ -54,12 +56,16 @@ export class CadastrarLivroService {
         isbn,
         genero: generoJaCadastrado.genero,
         publicacao,
-        estoque,
         preco: Number(preco),
         qtd_paginas,
       });
 
-      console.log(novoLivro);
+      console.log(estoque);
+
+      await this.entradaEstoqueLivroService.execute({
+        livro_id: novoLivro.livro_id,
+        quantidade_livro: estoque,
+      });
 
       await this.livroRepository.adicionarRelacionamentoLivroGenero(
         novoLivro.livro_id,

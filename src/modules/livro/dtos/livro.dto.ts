@@ -6,7 +6,6 @@ export interface LivroDTO {
   isbn: string;
   qtd_paginas: number;
   publicacao: string;
-  estoque: number;
   preco: number;
   capa?: string;
 }

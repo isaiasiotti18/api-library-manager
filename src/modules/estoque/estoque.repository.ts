@@ -19,7 +19,7 @@ export class EstoqueRepository
 
   async entradaEstoqueLivro(
     entradaEstoqueDTO: EntradaEstoqueDTO,
-  ): Promise<void> {
+  ): Promise<Estoque | void> {
     const { livro_id, quantidade_livro } = entradaEstoqueDTO;
 
     const verificaEstoqueLivro = await this.findOne({
@@ -32,7 +32,7 @@ export class EstoqueRepository
         quantidade_livro,
       });
 
-      await this.save(novoEstoque);
+      return await this.save(novoEstoque);
     }
 
     const addEstoqueLivro =

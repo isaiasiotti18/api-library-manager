@@ -36,6 +36,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
   //app.useGlobalFilters(new AllExceptionFilter());
 
   Date.prototype.toJSON = function (): any {
