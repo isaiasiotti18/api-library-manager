@@ -8,14 +8,13 @@ export class EstoqueRepository
   extends Repository<Estoque>
   implements EstoqueRepositoryInterface
 {
-  async consultaEstoque(livro_id: string): Promise<any> {
+  async consultaEstoque(livro_id: string): Promise<Estoque> {
     const consultaEstoque = await this.findOne({
       where: { livro_id },
+      relations: ['livro'],
     });
 
-    const { quantidade_livro } = consultaEstoque;
-
-    return quantidade_livro;
+    return consultaEstoque;
   }
 
   async entradaEstoqueLivro(
@@ -48,33 +47,21 @@ export class EstoqueRepository
       .execute();
   }
 
-  async creditarEstoqueLivro(livro_id: string): Promise<void> {
-    const verificaEstoqueLivro = await this.findOne({
-      where: { livro_id },
-    });
-
-    const quantidade_livro = verificaEstoqueLivro.quantidade_livro + 1;
-
+  async creditaEstoqueLivro(livro_id: string): Promise<void> {
     await this.createQueryBuilder()
       .update()
       .set({
-        quantidade_livro,
+        quantidade_livro: () => 'quantidade_livro + 1',
       })
       .where('livro_id = :livro_id', { livro_id })
       .execute();
   }
 
-  async debitarEstoqueLivro(livro_id: string): Promise<void> {
-    const verificaEstoqueLivro = await this.findOne({
-      where: { livro_id },
-    });
-
-    const quantidade_livro = verificaEstoqueLivro.quantidade_livro - 1;
-
+  async debitaEstoqueLivro(livro_id: string): Promise<void> {
     await this.createQueryBuilder()
       .update()
       .set({
-        quantidade_livro,
+        quantidade_livro: () => 'quantidade_livro - 1',
       })
       .where('livro_id = :livro_id', { livro_id })
       .execute();

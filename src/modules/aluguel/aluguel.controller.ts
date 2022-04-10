@@ -29,7 +29,6 @@ export class AluguelController {
     @Request() req: AuthRequest,
     @Body() criarAluguelDTO: CriarAluguelDTO,
   ): Promise<Aluguel> {
-    console.log(req.user);
     return await this.realizarAluguelService.realizarAluguel(
       req.user.id,
       criarAluguelDTO,
@@ -50,8 +49,6 @@ export class AluguelController {
     @Body('codigo') codigo: number,
     @Request() req: AuthRequest,
   ): Promise<any> {
-    console.log(req.user);
-
     return await this.validarAluguelService.validarAluguel(req.user.id, codigo);
   }
 }

@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnderecoModule } from '../endereco/endereco.module';
-import { NivelLeitorModule } from '../nivel-leitor/nivel-leitor.module';
 import { AlterarUsuarioService } from './services/alterar-usuario.service';
 import { AtribuirAluguelAoUsuarioService } from './services/atribuir-aluguel.service';
 import { CadastrarUsuarioService } from './services/cadastrar-usuario.service';
@@ -11,11 +10,7 @@ import { UsuarioController } from './usuario.controller';
 import { UsuarioRepository } from './usuario.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UsuarioRepository]),
-    EnderecoModule,
-    NivelLeitorModule,
-  ],
+  imports: [TypeOrmModule.forFeature([UsuarioRepository]), EnderecoModule],
   controllers: [UsuarioController],
   providers: [
     CadastrarUsuarioService,

@@ -13,7 +13,13 @@ const config = new DocumentBuilder()
   .setDescription('A simple API for managment Libraries')
   .setVersion('1.0')
   .addTag('LibraryManager')
-  .addBearerAuth(undefined, 'defaultBearerAuth')
+  .addBearerAuth(
+    {
+      type: 'http',
+      bearerFormat: 'JWT',
+    },
+    'defaultBearerAuth',
+  )
   .build();
 
 async function bootstrap() {

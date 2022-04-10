@@ -38,8 +38,6 @@ export class AluguelRepository
       select: ['livros'],
     });
 
-    console.log(consultaLivrosDoAluguel);
-
     return consultaLivrosDoAluguel.livros.map((livro) => {
       return livro.livro_id;
     });

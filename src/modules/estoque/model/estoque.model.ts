@@ -10,7 +10,7 @@ import {
 @Entity('estoque')
 export class Estoque {
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  estoque_id: string;
 
   @Column()
   livro_id: string;

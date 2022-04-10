@@ -1,6 +1,6 @@
 import { Aluguel } from 'src/modules/aluguel/model/aluguel.model';
 import { Endereco } from 'src/modules/endereco/model/endereco.model';
-import { NivelLeitor } from 'src/modules/nivel-leitor/model/nivel_leitor.model';
+
 import {
   Column,
   Entity,
@@ -35,13 +35,6 @@ export class Usuario {
   @OneToOne(() => Aluguel)
   @JoinColumn({ name: 'aluguel_id' })
   aluguel: Aluguel;
-
-  @Column()
-  nivel_id: string;
-
-  @OneToOne(() => NivelLeitor)
-  @JoinColumn({ name: 'nivel_id' })
-  nivel_leitor: NivelLeitor;
 
   @Column()
   endereco_id: string;

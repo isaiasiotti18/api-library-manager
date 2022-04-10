@@ -7,7 +7,6 @@ import { Editora } from 'src/modules/editora/model/editora.model';
 import { Endereco } from 'src/modules/endereco/model/endereco.model';
 import { Genero } from 'src/modules/genero/model/genero.model';
 import { Livro } from 'src/modules/livro/model/livro.model';
-import { NivelLeitor } from 'src/modules/nivel-leitor/model/nivel_leitor.model';
 import { Usuario } from 'src/modules/usuario/model/usuario.model';
 import { Estoque } from 'src/modules/estoque/model/estoque.model';
 
@@ -27,7 +26,6 @@ import { Estoque } from 'src/modules/estoque/model/estoque.model';
         Editora,
         Usuario,
         Endereco,
-        NivelLeitor,
         Aluguel,
         Codigo,
         Estoque,
