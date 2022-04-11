@@ -31,7 +31,7 @@ export class AluguelRepository
     return await this.save(novoAluguel);
   }
 
-  async consultaLivrosDoAluguel(aluguel_id: string): Promise<Aluguel | any> {
+  async consultaLivrosDoAluguel(aluguel_id: string): Promise<string[]> {
     const consultaLivrosDoAluguel = await this.findOne({
       where: { aluguel_id },
       relations: ['livros'],

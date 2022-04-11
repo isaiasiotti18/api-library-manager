@@ -1,3 +1,5 @@
+import { NivelAcesso } from './../enums/nivel_acesso.enum';
+import { NivelLeitor } from './../enums/nivel_leitor.enum';
 import { Aluguel } from 'src/modules/aluguel/model/aluguel.model';
 import { Endereco } from 'src/modules/endereco/model/endereco.model';
 
@@ -17,16 +19,22 @@ export class Usuario {
   @Column()
   nome: string;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   email: string;
 
   @Column()
   password: string;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   cpf: string;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   telefone: string;
 
   @Column()
@@ -42,4 +50,18 @@ export class Usuario {
   @OneToOne(() => Endereco)
   @JoinColumn({ name: 'endereco_id' })
   endereco: Endereco;
+
+  @Column({
+    type: 'enum',
+    enum: NivelLeitor,
+    default: NivelLeitor.BRONZE,
+  })
+  nivel_leitor: NivelLeitor;
+
+  @Column({
+    type: 'enum',
+    enum: NivelAcesso,
+    default: NivelAcesso.USUARIO,
+  })
+  nivel_acesso: NivelAcesso;
 }

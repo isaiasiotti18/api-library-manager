@@ -8,6 +8,8 @@ import { AluguelController } from './aluguel.controller';
 import { AluguelRepository, CodigoRepository } from './aluguel.repository';
 import { RealizarAluguelService } from './services/realizar-aluguel.service';
 import { ValidarCodigoAluguelService } from './services/validar-codigo-aluguel.service';
+import { VerificaAluguelAtivoEDeletaAluguelService } from './services/verifica-aluguel-ativo-e-deleta-aluguel.service';
+import { FinalizarAluguelEDevolverLivrosService } from './services/finalizar-aluguel.service';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { ValidarCodigoAluguelService } from './services/validar-codigo-aluguel.s
     RealizarAluguelService,
     ValidarCodigoAluguelService,
     ValidarAluguelService,
+    VerificaAluguelAtivoEDeletaAluguelService,
+    FinalizarAluguelEDevolverLivrosService,
   ],
   exports: [TypeOrmModule],
 })

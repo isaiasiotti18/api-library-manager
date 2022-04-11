@@ -7,5 +7,5 @@ export interface AluguelRepositoryInterface {
     criarAluguelDTO: CriarAluguelDTO,
   ): Promise<Aluguel>;
 
-  consultaLivrosDoAluguel(aluguel_id: string): Promise<any>;
+  consultaLivrosDoAluguel(aluguel_id: string): Promise<string[]>;
 }

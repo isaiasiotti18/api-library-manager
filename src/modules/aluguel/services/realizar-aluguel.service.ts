@@ -5,15 +5,17 @@ import { ConsultarUsuarioPorIdService } from './../../usuario/services/consultar
 import { AluguelRepository, CodigoRepository } from './../aluguel.repository';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CriarAluguelDTO } from '../dtos/criar-aluguel.dto';
-import { Aluguel } from '../model/aluguel.model';
 import { Livro } from 'src/modules/livro/model/livro.model';
 import * as moment from 'moment';
+import { NivelLeitor } from 'src/modules/usuario/enums/nivel_leitor.enum';
+import { VerificaAluguelAtivoEDeletaAluguelService } from './verifica-aluguel-ativo-e-deleta-aluguel.service';
 
 @Injectable()
 export class RealizarAluguelService {
   constructor(
     private readonly atribuirAluguelAoUsuarioService: AtribuirAluguelAoUsuarioService,
     private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
+    private readonly verificaAluguelAtivoEDeletaAluguelService: VerificaAluguelAtivoEDeletaAluguelService,
     private readonly consultarLivroService: ConsultarLivroService,
     private readonly aluguelRepository: AluguelRepository,
     private readonly codigoRepository: CodigoRepository,
@@ -30,20 +32,10 @@ export class RealizarAluguelService {
 
       if (!usuarioJaCadastrado) throw new BadRequestException();
 
-      //Verificando se já tem um aluguel ativo
-      if (usuarioJaCadastrado.aluguel_id) {
-        //Se tiver...Irá deletar
-        this.aluguelRepository
-          .createQueryBuilder()
-          .delete()
-          .from(Aluguel)
-          .where('aluguel_id = :aluguel_id', {
-            aluguel_id: usuarioJaCadastrado.aluguel_id,
-          })
-          .execute();
-
-        usuarioJaCadastrado.aluguel_id = null;
-      }
+      //Verificando se já tem um aluguel ativo, se existir irá deletar
+      this.verificaAluguelAtivoEDeletaAluguelService.execute(
+        usuarioJaCadastrado.aluguel_id,
+      );
 
       //Validar os livros alugados
       if (isbns_passados.length === 0)
@@ -69,10 +61,28 @@ export class RealizarAluguelService {
       const novoCodigoAluguel =
         await this.codigoRepository.gerarCodigoAluguel();
 
-      //Gerar Aluguel
+      //Verificando o nível do leitor para a data de devolução do livro
+      let duracaoAluguel = 0;
+      switch (usuarioJaCadastrado.nivel_leitor) {
+        case NivelLeitor.BRONZE:
+          duracaoAluguel = 17;
+          break;
+        case NivelLeitor.PRATA:
+          duracaoAluguel = 24;
+          break;
+        case NivelLeitor.OURO:
+          duracaoAluguel = 31;
+          break;
+        case NivelLeitor.DIAMANTE:
+          duracaoAluguel = 38;
+          break;
+      }
       let dataAtual = moment();
-      let dataDevolucao = dataAtual.add(17, 'days').format('YYYY-MM-DD');
+      let dataDevolucao = dataAtual
+        .add(duracaoAluguel, 'days')
+        .format('YYYY-MM-DD');
 
+      //Gerar Aluguel
       const novoAluguel = await this.aluguelRepository.criarAluguel(
         usuario_id,
         {
