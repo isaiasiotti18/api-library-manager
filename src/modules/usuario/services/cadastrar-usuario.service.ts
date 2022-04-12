@@ -19,13 +19,18 @@ export class CadastrarUsuarioService {
     enderecoBodyJson: EnderecoBodyJson,
   ): Promise<Usuario> {
     try {
-      const { cpf, email, nome, telefone, senha } = criarUsuarioDTO;
+      const { cpf, email, nome, telefone, password } = criarUsuarioDTO;
       const { cep, numero } = enderecoBodyJson;
 
       const cpfFormatado = cpf.replace(/[^\d]+/g, '');
       const telefoneFormatado = telefone.replace(/[^\d]+/g, '');
 
-      await this.consultarUsuarioPorEmailService.execute(email);
+      const verificandoUsuario =
+        await this.consultarUsuarioPorEmailService.execute(email);
+
+      if (verificandoUsuario) {
+        throw new BadRequestException('Usuario já existe na base de dados.');
+      }
 
       const novoEndereco = await this.cadastrarEnderecoService.execute({
         cep,
@@ -35,7 +40,7 @@ export class CadastrarUsuarioService {
       const novoUsuario = await this.usuarioRepository.criarUsuario({
         nome,
         email,
-        senha: await bcrypt.hash(senha, 10),
+        password: await bcrypt.hash(password, 10),
         cpf: cpfFormatado,
         telefone: telefoneFormatado,
         endereco_id: novoEndereco.endereco_id,

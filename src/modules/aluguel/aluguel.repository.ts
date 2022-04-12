@@ -38,9 +38,13 @@ export class AluguelRepository
       select: ['livros'],
     });
 
-    return consultaLivrosDoAluguel.livros.map((livro) => {
-      return livro.livro_id;
-    });
+    if (consultaLivrosDoAluguel) {
+      return consultaLivrosDoAluguel.livros.map((livro) => {
+        return livro.livro_id !== undefined ? livro.livro_id : undefined;
+      });
+    }
+
+    return;
   }
 }
 

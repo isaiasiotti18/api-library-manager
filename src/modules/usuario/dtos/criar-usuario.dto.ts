@@ -13,12 +13,10 @@ import {
 
 export class CriarUsuarioDTO {
   @IsNotEmpty({ message: 'Campo nome não pode estar vazio.' })
-  @ApiProperty()
   nome: string;
 
   @IsEmail({ message: 'E-mail inválido.' })
   @IsNotEmpty({ message: 'Campo email não pode estar vazio.' })
-  @ApiProperty()
   email: string;
 
   @IsString()
@@ -27,17 +25,14 @@ export class CriarUsuarioDTO {
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: 'password too weak',
   })
-  @ApiProperty()
-  senha: string;
+  password: string;
 
   @IsNotEmpty({ message: 'Campo cpf não pode estar vazio.' })
   @IsCPF({ message: 'CPF inválido.' })
-  @ApiProperty()
   cpf: string;
 
   @IsNotEmpty({ message: 'Campo telefone não pode estar vazio.' })
   @IsPhoneNumber('BR', { message: 'Telefone inválido.' })
-  @ApiProperty()
   telefone: string;
 
   @IsOptional()

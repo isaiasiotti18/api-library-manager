@@ -32,12 +32,10 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-      whitelist: true,
-      forbidNonWhitelisted: true,
     }),
   );
 
-  //app.useGlobalFilters(new AllExceptionFilter());
+  app.useGlobalFilters(new AllExceptionFilter());
 
   Date.prototype.toJSON = function (): any {
     return momentTimezone(this)

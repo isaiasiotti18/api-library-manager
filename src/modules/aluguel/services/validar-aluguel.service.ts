@@ -3,6 +3,7 @@ import { AluguelRepository, CodigoRepository } from './../aluguel.repository';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ValidarCodigoAluguelService } from './validar-codigo-aluguel.service';
 import { DebitaEstoqueLivroService } from 'src/modules/estoque/services/debita-estoque-livro.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class ValidarAluguelService {
@@ -17,6 +18,20 @@ export class ValidarAluguelService {
     try {
       const consultarUsuarioComAluguel =
         await this.consultarUsuarioPorIdService.execute(usuario_id);
+
+      //Verificando se a data de devolução e a data atual são iguais
+      const consultaAluguel = await this.aluguelRepository.findOne({
+        where: { aluguel_id: consultarUsuarioComAluguel.aluguel_id },
+      });
+
+      const dataAtual = moment();
+      const dataDevolucao = moment(consultaAluguel.data_devolucao);
+
+      if (dataDevolucao.isSame(dataAtual)) {
+        throw new BadRequestException(
+          'Data de devolução e data atual são iguais, informe ao leitor para realizar um novo aluguel',
+        );
+      }
 
       const consultaLivrosAluguel =
         await this.aluguelRepository.consultaLivrosDoAluguel(

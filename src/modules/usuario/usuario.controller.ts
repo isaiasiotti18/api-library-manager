@@ -33,7 +33,6 @@ export class UsuarioController {
   @IsPublic()
   @Post('cadastrar')
   @ApiBody({ type: CriarUsuarioComEnderecoBodyJson })
-  @UsePipes(ValidationPipe)
   async cadastrarUsuario(
     @Body() criarUsuarioDTO: CriarUsuarioDTO,
     @Body() enderecoBodyJson: EnderecoBodyJson,

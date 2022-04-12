@@ -11,7 +11,7 @@ export class ConsultaEstoqueService {
       livro_id,
     );
 
-    console.log(consultaEstoque);
+    console.log('consultaEstoque', consultaEstoque);
     return consultaEstoque;
   }
 }

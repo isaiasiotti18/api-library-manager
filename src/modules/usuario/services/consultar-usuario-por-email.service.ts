@@ -12,6 +12,7 @@ export class ConsultarUsuarioPorEmailService {
 
       if (consultaEmail) return consultaEmail;
     }
-    throw new BadRequestException('Email não pode estar vazio.');
+
+    return;
   }
 }

@@ -1,3 +1,4 @@
+import { ConsultaEstoqueService } from './../../estoque/services/consulta-estoque.service';
 import { AtribuirAluguelAoUsuarioService } from './../../usuario/services/atribuir-aluguel.service';
 import { ConsultarLivroService } from './../../livro/services/consultar-livro.service';
 import { ConsultarUsuarioPorIdService } from './../../usuario/services/consultar-usuario-porId.service';
@@ -8,17 +9,18 @@ import { CriarAluguelDTO } from '../dtos/criar-aluguel.dto';
 import { Livro } from 'src/modules/livro/model/livro.model';
 import * as moment from 'moment';
 import { NivelLeitor } from 'src/modules/usuario/enums/nivel_leitor.enum';
-import { VerificaAluguelAtivoEDeletaAluguelService } from './verifica-aluguel-ativo-e-deleta-aluguel.service';
+import { VerificaAluguelEDeletaAluguelService } from './verifica-aluguel-e-deleta-aluguel.service';
 
 @Injectable()
 export class RealizarAluguelService {
   constructor(
     private readonly atribuirAluguelAoUsuarioService: AtribuirAluguelAoUsuarioService,
     private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
-    private readonly verificaAluguelAtivoEDeletaAluguelService: VerificaAluguelAtivoEDeletaAluguelService,
+    private readonly verificaAluguelEDeletaAluguelService: VerificaAluguelEDeletaAluguelService,
     private readonly consultarLivroService: ConsultarLivroService,
     private readonly aluguelRepository: AluguelRepository,
     private readonly codigoRepository: CodigoRepository,
+    private readonly consultaEstoqueService: ConsultaEstoqueService,
   ) {}
 
   async realizarAluguel(
@@ -30,12 +32,12 @@ export class RealizarAluguelService {
       const usuarioJaCadastrado =
         await this.consultarUsuarioPorIdService.execute(usuario_id);
 
-      if (!usuarioJaCadastrado) throw new BadRequestException();
-
-      //Verificando se já tem um aluguel ativo, se existir irá deletar
-      this.verificaAluguelAtivoEDeletaAluguelService.execute(
-        usuarioJaCadastrado.aluguel_id,
-      );
+      //Verificando se já tem um aluguel, se existir irá deletar
+      if (usuarioJaCadastrado.aluguel_id) {
+        await this.verificaAluguelEDeletaAluguelService.execute(
+          usuarioJaCadastrado.aluguel_id,
+        );
+      }
 
       //Validar os livros alugados
       if (isbns_passados.length === 0)
@@ -50,6 +52,13 @@ export class RealizarAluguelService {
           const livroJaCadastrado = await this.consultarLivroService.execute(
             isbn,
           );
+
+          const verificaEstoque = await this.consultaEstoqueService.execute(
+            livroJaCadastrado.livro_id,
+          );
+
+          if (!verificaEstoque)
+            throw new BadRequestException('Estoque zerado!');
 
           return livros_alugados.push(livroJaCadastrado);
         } catch (error) {
