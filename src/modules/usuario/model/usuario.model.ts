@@ -10,6 +10,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { StatusAcesso } from '../enums/status_acesso.enum';
 
 @Entity('usuario')
 export class Usuario {
@@ -64,4 +65,11 @@ export class Usuario {
     default: NivelAcesso.USUARIO,
   })
   nivel_acesso: NivelAcesso;
+
+  @Column({
+    type: 'enum',
+    enum: StatusAcesso,
+    default: StatusAcesso.DESBLOQUEADO,
+  })
+  status_acesso: StatusAcesso;
 }
