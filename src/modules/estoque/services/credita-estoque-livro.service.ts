@@ -1,5 +1,5 @@
 import { EstoqueRepository } from './../estoque.repository';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CreditaEstoqueLivroService {

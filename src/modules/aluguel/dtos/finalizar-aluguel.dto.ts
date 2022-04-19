@@ -13,20 +13,6 @@ export class FinalizarAluguelDTO {
   @ArrayNotEmpty()
   @IsArray()
   @ArrayMinSize(1)
-  livros_devolvidos: Livro[];
-
-  @IsNotEmpty()
-  @IsDateString()
   @ApiProperty()
-  usuario_id: string;
-
-  @IsNotEmpty()
-  @IsDateString()
-  @ApiProperty()
-  data_devolucao: string;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  @ApiProperty()
-  foi_devolvido: boolean;
+  livros_devolvidos: string[];
 }

@@ -10,6 +10,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { StatusAluguel } from '../enums/status_aluguel';
+
 import { Codigo } from './codigo.model';
 
 @Entity('aluguel')
@@ -48,6 +50,10 @@ export class Aluguel {
   })
   livros: Livro[];
 
-  @Column('boolean')
-  foi_devolvido: boolean;
+  @Column({
+    type: 'enum',
+    enum: StatusAluguel,
+    default: StatusAluguel.NAO_VALIDADO,
+  })
+  status_aluguel: StatusAluguel;
 }

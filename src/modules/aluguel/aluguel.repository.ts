@@ -12,6 +12,12 @@ export class AluguelRepository
   extends Repository<Aluguel>
   implements AluguelRepositoryInterface
 {
+  async consultarAluguel(aluguel_id: string): Promise<Aluguel> {
+    return await this.findOne({
+      where: { aluguel_id },
+    });
+  }
+
   async criarAluguel(
     usuario_id: string,
     criarAluguelDTO: CriarAluguelDTO,

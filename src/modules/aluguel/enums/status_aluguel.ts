@@ -1,0 +1,5 @@
+export enum StatusAluguel {
+  NAO_VALIDADO = 'NAO_VALIDADO',
+  EM_ANDAMENTO = 'EM_ANDAMENTO',
+  FINALIZADO = 'FINALIZADO',
+}

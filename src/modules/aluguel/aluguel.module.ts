@@ -10,6 +10,8 @@ import { RealizarAluguelService } from './services/realizar-aluguel.service';
 import { ValidarCodigoAluguelService } from './services/validar-codigo-aluguel.service';
 import { VerificaAluguelEDeletaAluguelService } from './services/verifica-aluguel-e-deleta-aluguel.service';
 import { FinalizarAluguelEDevolverLivrosService } from './services/finalizar-aluguel.service';
+import { InserirAluguelFinalizadoNaTabelaAlugueisFinalizadosService } from './services/inserir-aluguel-finalizado-tabela-alugueis-finalizados.service';
+import { InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosService } from './services/inserir-livro-aluguel-finalizado-tabela-livros-alugados-finalizados.service';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { FinalizarAluguelEDevolverLivrosService } from './services/finalizar-alu
     ValidarAluguelService,
     VerificaAluguelEDeletaAluguelService,
     FinalizarAluguelEDevolverLivrosService,
+    InserirAluguelFinalizadoNaTabelaAlugueisFinalizadosService,
+    InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosService,
   ],
   exports: [TypeOrmModule],
 })

@@ -1,8 +1,11 @@
+import { FinalizarAluguelDTO } from './dtos/finalizar-aluguel.dto';
 import { ValidarAluguelService } from './services/validar-aluguel.service';
 import { AuthRequest } from './../auth/models/AuthRequest';
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   Request,
   UsePipes,
@@ -12,6 +15,7 @@ import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CriarAluguelDTO } from './dtos/criar-aluguel.dto';
 import { Aluguel } from './model/aluguel.model';
 import { RealizarAluguelService } from './services/realizar-aluguel.service';
+import { FinalizarAluguelEDevolverLivrosService } from './services/finalizar-aluguel.service';
 
 @Controller('aluguel')
 @ApiTags('aluguel')
@@ -20,6 +24,7 @@ export class AluguelController {
   constructor(
     private readonly realizarAluguelService: RealizarAluguelService,
     private readonly validarAluguelService: ValidarAluguelService,
+    private readonly finalizarAluguelEDevolverLivrosService: FinalizarAluguelEDevolverLivrosService,
   ) {}
 
   @Post('/realizar-aluguel')
@@ -50,5 +55,17 @@ export class AluguelController {
     @Request() req: AuthRequest,
   ): Promise<any> {
     return await this.validarAluguelService.validarAluguel(req.user.id, codigo);
+  }
+
+  @Post(':aluguel_id/finalizar-aluguel')
+  @ApiBody({ type: FinalizarAluguelDTO })
+  async finalizarAluguel(
+    @Param('aluguel_id') aluguel_id: string,
+    @Body() finalizarAluguelDTO: FinalizarAluguelDTO,
+  ) {
+    await this.finalizarAluguelEDevolverLivrosService.execute(
+      aluguel_id,
+      finalizarAluguelDTO,
+    );
   }
 }

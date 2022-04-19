@@ -8,4 +8,6 @@ export interface AluguelRepositoryInterface {
   ): Promise<Aluguel>;
 
   consultaLivrosDoAluguel(aluguel_id: string): Promise<string[]>;
+
+  consultarAluguel(aluguel_id: string): Promise<Aluguel>;
 }
