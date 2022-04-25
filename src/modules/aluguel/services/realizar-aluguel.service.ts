@@ -9,14 +9,15 @@ import { CriarAluguelDTO } from '../dtos/criar-aluguel.dto';
 import { Livro } from 'src/modules/livro/model/livro.model';
 import * as moment from 'moment';
 import { NivelLeitor } from 'src/modules/usuario/enums/nivel_leitor.enum';
-import { VerificaAluguelEDeletaAluguelService } from './verifica-aluguel-e-deleta-aluguel.service';
+
+import { sumBooksValues } from 'src/shared/functions/sumBooksValues';
+import { currencyFormat } from 'src/shared/functions/currencyFormat';
 
 @Injectable()
 export class RealizarAluguelService {
   constructor(
     private readonly atribuirAluguelAoUsuarioService: AtribuirAluguelAoUsuarioService,
     private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
-    private readonly verificaAluguelEDeletaAluguelService: VerificaAluguelEDeletaAluguelService,
     private readonly consultarLivroService: ConsultarLivroService,
     private readonly aluguelRepository: AluguelRepository,
     private readonly codigoRepository: CodigoRepository,
@@ -34,7 +35,7 @@ export class RealizarAluguelService {
 
       //Verificando se já tem um aluguel, se existir irá deletar
       if (usuarioJaCadastrado.aluguel_id) {
-        await this.verificaAluguelEDeletaAluguelService.execute(
+        await this.aluguelRepository.verificaAluguelEDeletaAluguelSeNaoFoiValidado(
           usuarioJaCadastrado.aluguel_id,
         );
       }
@@ -47,24 +48,19 @@ export class RealizarAluguelService {
 
       let livros_alugados: Livro[] = [];
 
-      isbns_passados.map(async (isbn) => {
-        try {
-          const livroJaCadastrado = await this.consultarLivroService.execute(
-            isbn,
-          );
+      for await (const isbn_passado of isbns_passados) {
+        const livroJaCadastrado = await this.consultarLivroService.execute(
+          isbn_passado,
+        );
 
-          const verificaEstoque = await this.consultaEstoqueService.execute(
-            livroJaCadastrado.livro_id,
-          );
+        const verificaEstoque = await this.consultaEstoqueService.execute(
+          livroJaCadastrado.livro_id,
+        );
 
-          if (!verificaEstoque)
-            throw new BadRequestException('Estoque zerado!');
+        if (!verificaEstoque) throw new BadRequestException('Estoque zerado!');
 
-          return livros_alugados.push(livroJaCadastrado);
-        } catch (error) {
-          throw new BadRequestException(error);
-        }
-      });
+        livros_alugados.push(livroJaCadastrado);
+      }
 
       //Gerar código de aluguel
       const novoCodigoAluguel =
@@ -91,6 +87,10 @@ export class RealizarAluguelService {
         .add(duracaoAluguel, 'days')
         .format('YYYY-MM-DD');
 
+      const valores_livros = livros_alugados.map((livro) => livro);
+
+      const valor_total = sumBooksValues(valores_livros);
+
       //Gerar Aluguel
       const novoAluguel = await this.aluguelRepository.criarAluguel(
         usuario_id,
@@ -100,6 +100,7 @@ export class RealizarAluguelService {
           data_alugacao: moment().format('YYYY-MM-DD'),
           data_devolucao: dataDevolucao,
           codigo: novoCodigoAluguel.codigo,
+          valor_total,
         },
       );
 
@@ -111,15 +112,6 @@ export class RealizarAluguelService {
       const { codigo, data_alugacao, data_devolucao, aluguel_id, livros } =
         novoAluguel;
 
-      const valor_total = livros.reduce((accum, curr) => {
-        return Number(curr.preco) + accum;
-      }, 0);
-
-      const currencyFormat = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-      });
-
       const retornoAluguel = {
         usuario_id,
         informacoes_aluguel: {
@@ -129,7 +121,7 @@ export class RealizarAluguelService {
           data_devolucao,
         },
         livros: livros.map((livro) => livro.titulo),
-        valor_total: currencyFormat.format(valor_total),
+        valor_total: currencyFormat(valor_total),
       };
 
       return retornoAluguel;

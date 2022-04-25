@@ -56,4 +56,7 @@ export class Aluguel {
     default: StatusAluguel.NAO_VALIDADO,
   })
   status_aluguel: StatusAluguel;
+
+  @Column()
+  valor_total: number;
 }

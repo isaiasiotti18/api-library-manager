@@ -22,14 +22,20 @@ export class AluguelRepository
     usuario_id: string,
     criarAluguelDTO: CriarAluguelDTO,
   ): Promise<Aluguel> {
-    const { livros_alugados, codigo, data_alugacao, data_devolucao } =
-      criarAluguelDTO;
+    const {
+      livros_alugados,
+      codigo,
+      data_alugacao,
+      data_devolucao,
+      valor_total,
+    } = criarAluguelDTO;
 
     const novoAluguel = this.create({
       usuario_id,
       codigo,
       data_alugacao,
       data_devolucao,
+      valor_total,
     });
 
     novoAluguel.livros = livros_alugados;
@@ -51,6 +57,58 @@ export class AluguelRepository
     }
 
     return;
+  }
+
+  async verificaAluguelEDeletaAluguelSeNaoFoiValidado(aluguel_id: string) {
+    if (aluguel_id) {
+      //Se tiver...Irá deletar
+      await this.createQueryBuilder()
+        .delete()
+        .from(Aluguel)
+        .where('aluguel_id = :aluguel_id', {
+          aluguel_id,
+        })
+        .andWhere('status_aluguel = "NAO_VALIDADO"')
+        .execute();
+
+      aluguel_id = null;
+    }
+  }
+
+  async inserirLivrosNaTabelaLivrosAlugadosFinalizados(
+    aluguel_id: string,
+    livro_id: string,
+  ): Promise<void> {
+    await this.query(`
+      INSERT INTO livros_alugados_finalizados(aluguel_id, livro_id) VALUES (
+        "${aluguel_id}",
+        "${livro_id}"
+      );
+    `);
+  }
+  async inserirAluguelFinalizadoNaTabelaAlugueisFinalizados(
+    aluguel_id: string,
+    dia_finalizado: string,
+  ): Promise<void> {
+    const aluguel = await this.consultarAluguel(aluguel_id);
+
+    await this.query(`
+      INSERT INTO alugueis_finalizados(aluguel_id, usuario_id, dia_finalizado) VALUES (
+        "${aluguel.aluguel_id}",
+        "${aluguel.usuario_id}",
+        "${dia_finalizado}"
+      );
+    `);
+  }
+
+  async removerLivrosDaTabelaLivrosAlugados(
+    aluguel_id: string,
+    livro_id: string,
+  ): Promise<void> {
+    await this.query(`
+      DELETE FROM livros_alugados
+      WHERE livro_id="${livro_id}" AND aluguel_id="${aluguel_id}"
+    `);
   }
 }
 

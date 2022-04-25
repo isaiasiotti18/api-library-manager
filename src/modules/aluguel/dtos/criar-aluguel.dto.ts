@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  ArrayMinSize,
-  ArrayNotEmpty,
-  IsArray,
-  IsNotEmpty,
-  IsString,
-} from 'class-validator';
+import { ArrayMinSize, ArrayNotEmpty, IsArray } from 'class-validator';
 import { Livro } from 'src/modules/livro/model/livro.model';
 
 export class CriarAluguelDTO {
@@ -19,4 +13,5 @@ export class CriarAluguelDTO {
   data_alugacao: string;
   data_devolucao: string;
   codigo: number;
+  valor_total: number;
 }

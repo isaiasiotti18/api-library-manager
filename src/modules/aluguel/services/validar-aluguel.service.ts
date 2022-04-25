@@ -4,7 +4,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ValidarCodigoAluguelService } from './validar-codigo-aluguel.service';
 import { DebitaEstoqueLivroService } from 'src/modules/estoque/services/debita-estoque-livro.service';
 import * as moment from 'moment';
-import { VerificaAluguelEDeletaAluguelService } from './verifica-aluguel-e-deleta-aluguel.service';
+import { StatusAluguel } from '../enums/status_aluguel';
 
 @Injectable()
 export class ValidarAluguelService {
@@ -13,7 +13,6 @@ export class ValidarAluguelService {
     private readonly validarCodigoAluguelService: ValidarCodigoAluguelService,
     private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
     private readonly debitaEstoqueLivroService: DebitaEstoqueLivroService,
-    private readonly verificaAluguelEDeletaAluguelService: VerificaAluguelEDeletaAluguelService,
   ) {}
 
   async validarAluguel(usuario_id: string, codigo: number): Promise<any> {
@@ -30,7 +29,7 @@ export class ValidarAluguelService {
       const dataDevolucao = moment(consultaAluguel.data_devolucao);
 
       if (dataDevolucao.isSame(dataAtual)) {
-        await this.verificaAluguelEDeletaAluguelService.execute(
+        await this.aluguelRepository.verificaAluguelEDeletaAluguelSeNaoFoiValidado(
           consultaAluguel.aluguel_id,
         );
 
@@ -53,6 +52,7 @@ export class ValidarAluguelService {
       await this.aluguelRepository.save({
         aluguel_id: consultaAluguel.aluguel_id,
         aluguel_validado: true,
+        status_aluguel: StatusAluguel.EM_ANDAMENTO,
       });
 
       return {

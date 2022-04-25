@@ -1,3 +1,4 @@
+import { BloquearUsuarioService } from './../../usuario/services/bloquear-usuario.service';
 import { FinalizarAluguelDTO } from './../dtos/finalizar-aluguel.dto';
 import { ConsultarUsuarioPorIdService } from './../../usuario/services/consultar-usuario-porId.service';
 import { CreditaEstoqueLivroService } from './../../estoque/services/credita-estoque-livro.service';
@@ -5,8 +6,9 @@ import { AluguelRepository } from './../aluguel.repository';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import * as moment from 'moment';
 import { compareArrays } from '../../../shared/functions/compareArrays';
-import { InserirAluguelFinalizadoNaTabelaAlugueisFinalizadosService } from './inserir-aluguel-finalizado-tabela-alugueis-finalizados.service';
 import { InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosService } from './inserir-livro-aluguel-finalizado-tabela-livros-alugados-finalizados.service';
+import { StatusAluguel } from '../enums/status_aluguel';
+import { RetornoAluguelFinalizado } from '../interfaces/retorno-aluguel-finalizado';
 
 @Injectable()
 export class FinalizarAluguelEDevolverLivrosService {
@@ -14,8 +16,8 @@ export class FinalizarAluguelEDevolverLivrosService {
     private readonly aluguelRepository: AluguelRepository,
     private readonly creditaEstoqueLivroService: CreditaEstoqueLivroService,
     private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
-    private readonly inserirAluguelFinalizadoNaTabelaAlugueisFinalizados: InserirAluguelFinalizadoNaTabelaAlugueisFinalizadosService,
     private readonly inserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizados: InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosService,
+    private readonly bloquearUsuarioService: BloquearUsuarioService,
   ) {}
 
   async execute(aluguel_id: string, finalizarAluguelDTO: FinalizarAluguelDTO) {
@@ -32,7 +34,7 @@ export class FinalizarAluguelEDevolverLivrosService {
     );
 
     if (!usuario) {
-      throw new BadRequestException('Aluguel inexistente.');
+      throw new BadRequestException('Usuário não encontrado.');
     }
 
     //Verificar se os livros foram devolvidos até a data de devolução
@@ -45,21 +47,30 @@ export class FinalizarAluguelEDevolverLivrosService {
 
     // Verificar a diferença entre as datas supera mais de 5 dias
     if (diferencaDias <= 5) {
-      console.log('Ainda está dentro do aceitável');
+      // AQUI VOU MANDAR MENSAGENS PARA
+      // O USUARIO FALANDO QUE JÁ PASSOU DA DATA DE DEVOLVER
     } else if (diferencaDias >= 10) {
-      console.log('Bloquear usuário, mudando o status dele');
-    } else {
-      console.log('Excedeu o tempo permitido. Haverá multa');
+      // AQUI VOU MANDAR MENSAGEM PARA O USUÁRIO FALANDO QUE JÁ EXCEDEU O LIMITE
+
+      // SERÁ GERADO UM LINK PARA PAGAR A MULTA
+
+      // O USUÁRIO TERA A CONTA BLOQUEADA
+      await this.bloquearUsuarioService.execute(usuario.id);
     }
 
     //Verificando os livros devolvidos
     const livrosDevolvidos = finalizarAluguelDTO.livros_devolvidos;
 
-    const consultaLivrosAluguel =
+    const livrosDoAluguel =
       await this.aluguelRepository.consultaLivrosDoAluguel(aluguel.aluguel_id);
 
-    if (compareArrays(livrosDevolvidos, consultaLivrosAluguel)) {
-      consultaLivrosAluguel.map(async (livro_id: string) => {
+    const verificandoOsLivrosDevolvidosBatem = compareArrays(
+      livrosDevolvidos,
+      livrosDoAluguel,
+    );
+
+    if (verificandoOsLivrosDevolvidosBatem) {
+      livrosDoAluguel.map(async (livro_id: string) => {
         await this.creditaEstoqueLivroService.execute(livro_id);
       });
     } else {
@@ -68,8 +79,7 @@ export class FinalizarAluguelEDevolverLivrosService {
       );
     }
 
-    //Mandando o aluguel finalizado para a tabela alugueis_finalizados
-    await this.inserirAluguelFinalizadoNaTabelaAlugueisFinalizados.execute(
+    await this.aluguelRepository.inserirAluguelFinalizadoNaTabelaAlugueisFinalizados(
       aluguel.aluguel_id,
       dataQueOUsuarioEstaDevolvendo.format('YYYY-MM-DD'),
     );
@@ -77,7 +87,22 @@ export class FinalizarAluguelEDevolverLivrosService {
     //Mandando os livros do aluguel finalizado para a tabela livros_alugados_finalizados
     await this.inserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizados.execute(
       aluguel.aluguel_id,
-      consultaLivrosAluguel,
+      livrosDoAluguel,
     );
+
+    await this.aluguelRepository.save({
+      aluguel_id: aluguel.aluguel_id,
+      status_aluguel: StatusAluguel.FINALIZADO,
+    });
+
+    const retornoAluguelFinalizado: RetornoAluguelFinalizado = {
+      data_devolucao: dataDevoluçãoAluguel,
+      link_multa: '',
+      valor_total_pago: aluguel.valor_total,
+      valor_da_multa: 0.1 * aluguel.valor_total,
+      valor_total_com_multa: 0.1 * aluguel.valor_total + aluguel.valor_total,
+    };
+
+    return retornoAluguelFinalizado;
   }
 }
