@@ -5,8 +5,9 @@ import { Usuario } from '../model/usuario.model';
 export interface UsuarioRepositoryInterface {
   criarUsuario(criarUsuarioDTO: CriarUsuarioDTO): Promise<Usuario>;
   alterarUsuario(
-    id_usuario: string,
+    usuario_id: string,
     alterarUsuarioDTO: AlterarUsuarioDTO,
   ): Promise<void>;
-  consultarUsuarioPorId(id_usuario: string): Promise<Usuario>;
+  consultarUsuarioPorId(usuario_id: string): Promise<Usuario>;
+  bloquearUsuario(usuario_id: string): Promise<void>;
 }

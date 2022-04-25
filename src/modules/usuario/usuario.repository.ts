@@ -1,3 +1,4 @@
+import { StatusAcesso } from './enums/status_acesso.enum';
 import { EntityRepository, Repository } from 'typeorm';
 import { AlterarUsuarioDTO } from './dtos/alterar-usuario.dto';
 import { CriarUsuarioDTO } from './dtos/criar-usuario.dto';
@@ -35,15 +36,22 @@ export class UsuarioRepository
     });
   }
 
-  async consultarUsuarioPorId(id_usuario: string): Promise<Usuario> {
+  async consultarUsuarioPorId(usuario_id: string): Promise<Usuario> {
     return await this.findOne({
-      where: { id: id_usuario },
+      where: { id: usuario_id },
     });
   }
 
   async consultarUsuarioPorEmail(email: string): Promise<Usuario> {
     return await this.findOne({
       where: { email },
+    });
+  }
+
+  async bloquearUsuario(usuario_id: string): Promise<void> {
+    await this.save({
+      id: usuario_id,
+      status_acesso: StatusAcesso.BLOQUEADO,
     });
   }
 }
