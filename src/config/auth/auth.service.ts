@@ -1,12 +1,12 @@
-import { ConsultarUsuarioPorIdService } from './../usuario/services/consultar-usuario-porId.service';
-import { ConsultarUsuarioPorEmailService } from './../usuario/services/consultar-usuario-por-email.service';
+import { ConsultarUsuarioPorIdService } from 'src/modules/usuario/services/consultar-usuario-porId.service';
+import { ConsultarUsuarioPorEmailService } from 'src/modules/usuario/services/consultar-usuario-por-email.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { Usuario } from '../usuario/model/usuario.model';
+import { Usuario } from 'src/modules/usuario/model/usuario.model';
 import { UserPayload } from './models/UserPayload';
 import { JwtService } from '@nestjs/jwt';
 import { UserToken } from './models/UserToken';
-import { StatusAcesso } from '../usuario/enums/status_acesso.enum';
+import { StatusAcesso } from 'src/modules/usuario/enums/status_acesso.enum';
 
 @Injectable()
 export class AuthService {

@@ -1,4 +1,4 @@
-import { Livro } from './../../modules/livro/model/livro.model';
+import { Livro } from 'src/modules/livro/model/livro.model';
 
 export function sumBooksValues(livros: Livro[]): number {
   return livros.reduce((accum, curr) => {

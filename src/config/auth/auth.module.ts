@@ -1,4 +1,4 @@
-import { UsuarioModule } from './../usuario/usuario.module';
+import { UsuarioModule } from 'src/modules/usuario/usuario.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';

@@ -10,8 +10,8 @@ import { Livro } from 'src/modules/livro/model/livro.model';
 import * as moment from 'moment';
 import { NivelLeitor } from 'src/modules/usuario/enums/nivel_leitor.enum';
 
-import { sumBooksValues } from 'src/shared/functions/sumBooksValues';
-import { currencyFormat } from 'src/shared/functions/currencyFormat';
+import { sumBooksValues } from 'src/config/shared/functions/sumBooksValues';
+import { currencyFormat } from 'src/config/shared/functions/currencyFormat';
 
 @Injectable()
 export class RealizarAluguelService {

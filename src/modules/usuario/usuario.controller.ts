@@ -1,4 +1,4 @@
-import { AuthRequest } from './../auth/models/AuthRequest';
+import { AuthRequest } from '../../config/auth/models/AuthRequest';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import {
   Body,
@@ -16,7 +16,7 @@ import { Usuario } from './model/usuario.model';
 import { EnderecoBodyJson } from '../endereco/interfaces/endereco-body-json.interface';
 import { CriarUsuarioComEnderecoBodyJson } from './interfaces/criar-usuario-endereco-bodyjson';
 import { AlterarUsuarioDTO } from './dtos/alterar-usuario.dto';
-import { IsPublic } from '../auth/decorators/is-public.decorator';
+import { IsPublic } from '../../config/auth/decorators/is-public.decorator';
 import { CadastrarUsuarioService } from './services/cadastrar-usuario.service';
 import { AlterarUsuarioService } from './services/alterar-usuario.service';
 import { ConsultarUsuarioPorIdService } from './services/consultar-usuario-porId.service';

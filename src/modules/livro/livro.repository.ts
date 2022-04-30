@@ -3,9 +3,9 @@ import { LivroDTO } from './dtos/livro.dto';
 import { LivroRepositoryInterface } from './interfaces/livro-repository.interface';
 import { LivroResultado } from './interfaces/livro-resultado.interface';
 import { Livro } from './model/livro.model';
-import { PageDto } from 'src/shared/pagination/page.dto';
-import { PageOptionsDto } from 'src/shared/pagination/page-options.dto';
-import { PageMetaDto } from 'src/shared/pagination/page-meta.dto';
+import { PageDto } from 'src/config/shared/pagination/page.dto';
+import { PageOptionsDto } from 'src/config/shared/pagination/page-options.dto';
+import { PageMetaDto } from 'src/config/shared/pagination/page-meta.dto';
 import { AtualizarLivroDTO } from './dtos/atualizar-livro.dto';
 
 @EntityRepository(Livro)

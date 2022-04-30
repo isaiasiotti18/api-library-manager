@@ -30,15 +30,15 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { PageOptionsDto } from 'src/shared/pagination/page-options.dto';
-import { PageDto } from 'src/shared/pagination/page.dto';
+import { PageOptionsDto } from 'src/config/shared/pagination/page-options.dto';
+import { PageDto } from 'src/config/shared/pagination/page.dto';
 import { AtualizarLivroDTO } from './dtos/atualizar-livro.dto';
 import { LivroBodyJSON } from './interfaces/livro-body-json';
 import { LivroResultado } from './interfaces/livro-resultado.interface';
 import { Livro } from './model/livro.model';
 import { Express } from 'express';
-import { FastifyFileInterceptor } from 'src/shared/interceptors/fastify-file-interceptor';
-import { IsPublic } from '../auth/decorators/is-public.decorator';
+import { FastifyFileInterceptor } from 'src/config/shared/interceptors/fastify-file-interceptor';
+import { IsPublic } from 'src/config/auth/decorators/is-public.decorator';
 
 @Controller('api/v1/livros')
 @ApiTags('livros')
