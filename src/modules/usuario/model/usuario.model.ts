@@ -1,4 +1,4 @@
-import { NivelAcesso } from './../enums/nivel_acesso.enum';
+import { Role } from './../enums/role.enum';
 import { NivelLeitor } from './../enums/nivel_leitor.enum';
 import { Aluguel } from 'src/modules/aluguel/model/aluguel.model';
 import { Endereco } from 'src/modules/endereco/model/endereco.model';
@@ -61,10 +61,10 @@ export class Usuario {
 
   @Column({
     type: 'enum',
-    enum: NivelAcesso,
-    default: NivelAcesso.USUARIO,
+    enum: Role,
+    default: Role.USUARIO,
   })
-  nivel_acesso: NivelAcesso;
+  role: Role;
 
   @Column({
     type: 'enum',

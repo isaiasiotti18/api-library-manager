@@ -1,4 +1,6 @@
-import { ApiBody } from '@nestjs/swagger';
+import { Role } from './../../modules/usuario/enums/role.enum';
+import { Roles } from 'src/config/auth/decorators/roles.decorator';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   HttpCode,
@@ -13,17 +15,17 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthRequest } from './models/AuthRequest';
 import { LoginRequestBody } from './models/LoginRequestBody';
 
-@Controller()
+@Controller('controle-acesso')
+@ApiTags('acesso')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @IsPublic()
-  @Post('login')
+  @Post('login/usuario')
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginRequestBody })
   login(@Request() req: AuthRequest) {
-    console.log(req.user);
     return this.authService.login(req.user);
   }
 }

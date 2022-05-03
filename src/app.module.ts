@@ -1,3 +1,4 @@
+import { RolesGuard } from './config/auth/guards/roles.guard';
 import { JwtAuthGuard } from './config/auth/guards/jwt-auth.guard';
 import { Module } from '@nestjs/common';
 import { ConnectionModule } from './config/database/typeorm/connection.module';
@@ -36,6 +37,10 @@ import { APP_GUARD } from '@nestjs/core';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

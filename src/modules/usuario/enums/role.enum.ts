@@ -1,5 +1,4 @@
-export enum NivelAcesso {
+export enum Role {
   USUARIO = 'USUARIO',
   ADMINISTRADOR = 'ADMINISTRADOR',
-  MASTER = 'MASTER',
 }

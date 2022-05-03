@@ -1,4 +1,3 @@
-import { RoleGuard } from './../../config/auth/guards/role.guard';
 import { FinalizarAluguelDTO } from './dtos/finalizar-aluguel.dto';
 import { ValidarAluguelService } from './services/validar-aluguel.service';
 import { AuthRequest } from '../../config/auth/models/AuthRequest';
@@ -13,12 +12,11 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CriarAluguelDTO } from './dtos/criar-aluguel.dto';
 import { Aluguel } from './model/aluguel.model';
 import { RealizarAluguelService } from './services/realizar-aluguel.service';
 import { FinalizarAluguelEDevolverLivrosService } from './services/finalizar-aluguel.service';
-import { NivelAcesso } from '../usuario/enums/nivel_acesso.enum';
 
 @Controller('aluguel')
 @ApiTags('aluguel')
@@ -62,7 +60,6 @@ export class AluguelController {
 
   @Post(':aluguel_id/finalizar-aluguel')
   @ApiBody({ type: FinalizarAluguelDTO })
-  @UseGuards(RoleGuard(NivelAcesso.ADMINISTRADOR))
   async finalizarAluguel(
     @Param('aluguel_id') aluguel_id: string,
     @Body() finalizarAluguelDTO: FinalizarAluguelDTO,

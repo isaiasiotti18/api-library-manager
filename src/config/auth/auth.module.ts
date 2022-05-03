@@ -26,6 +26,6 @@ const JWT_KEY = configService.get<string>('JWT_KEY');
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoginValidationMiddleware).forRoutes('login');
+    consumer.apply(LoginValidationMiddleware).forRoutes('login/usuario');
   }
 }

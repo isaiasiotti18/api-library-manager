@@ -7,6 +7,7 @@ import { UserPayload } from './models/UserPayload';
 import { JwtService } from '@nestjs/jwt';
 import { UserToken } from './models/UserToken';
 import { StatusAcesso } from 'src/modules/usuario/enums/status_acesso.enum';
+import { ConsultarUsuarioBloqueadoService } from 'src/modules/usuario/services/consultar-usuario-bloqueado.service';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
     private readonly consultarUsuarioPorEmailService: ConsultarUsuarioPorEmailService,
     private readonly jwtService: JwtService,
     private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
+    private readonly consultarUsuarioBloqueadoService: ConsultarUsuarioBloqueadoService,
   ) {}
 
   async login(usuario: Usuario): Promise<UserToken> {
@@ -22,22 +24,22 @@ export class AuthService {
       sub: usuario.id,
       email: usuario.email,
       name: usuario.nome,
+      role: usuario.role,
     };
 
-    const consultarUsuario = await this.consultarUsuarioPorIdService.execute(
-      usuario.id,
-    );
+    const verificaStatusAcessoUsuario =
+      await this.consultarUsuarioBloqueadoService.execute(usuario.id);
 
-    if (consultarUsuario.status_acesso === StatusAcesso.BLOQUEADO) {
+    if (verificaStatusAcessoUsuario?.bloqueado) {
       throw new BadRequestException(
-        'Usuario BLOQUEADO. Contate um Administrador ou Suporte.',
+        'Usuario BLOQUEADO. Contate o Administrador ou Suporte.',
       );
     }
 
     const jwtToken = this.jwtService.sign(payload);
 
     return {
-      access_token: jwtToken,
+      TOKEN: jwtToken,
     };
   }
 

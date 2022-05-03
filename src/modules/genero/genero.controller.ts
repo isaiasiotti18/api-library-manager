@@ -1,3 +1,4 @@
+import { RolesGuard } from './../../config/auth/guards/roles.guard';
 import { CadastrarGeneroService } from './services/cadastrar-genero.service';
 import { ConsultarGeneroService } from './services/consultar-genero.service';
 import {
@@ -6,12 +7,16 @@ import {
   Get,
   Param,
   Post,
+  SetMetadata,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CriarGeneroDTO } from './dtos/criar-genero.dto';
 import { Genero } from './model/genero.model';
+import { Roles } from 'src/config/auth/decorators/roles.decorator';
+import { Role } from '../usuario/enums/role.enum';
 
 @Controller('/api/v1/generos')
 @ApiTags('generos')
@@ -23,6 +28,7 @@ export class GeneroController {
   ) {}
 
   @Post('cadastrar')
+  @Roles(Role.ADMINISTRADOR)
   @UsePipes(ValidationPipe)
   @ApiBody({ type: CriarGeneroDTO })
   async cadastrar(@Body() genero: CriarGeneroDTO): Promise<Genero> {
