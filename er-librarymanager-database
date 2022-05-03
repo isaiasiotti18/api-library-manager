@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-04-10T11:49:24.855Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36" etag="JZYDOkNWaUOArwy-lSsC" version="17.2.5" type="github">
+<mxfile host="app.diagrams.net" modified="2022-05-01T13:21:43.447Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36" etag="LQRyVnuWbZwILfv5xVUK" version="17.4.2" type="github">
   <diagram id="9UsEhW5QkOTx9-0hjYZ5" name="Library Manager Database">
     <mxGraphModel dx="1695" dy="1626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -239,15 +239,15 @@
             <mxRectangle width="150" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="yg-Bjp6DXlqItBRgTCBy-1" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;top=0;left=0;bottom=0;right=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="XIHwOgPd7TETNURHoEdX-27">
+        <mxCell id="yg-Bjp6DXlqItBRgTCBy-1" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;top=0;left=0;bottom=0;right=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="XIHwOgPd7TETNURHoEdX-27" vertex="1">
           <mxGeometry y="270" width="180" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="yg-Bjp6DXlqItBRgTCBy-2" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;" vertex="1" parent="yg-Bjp6DXlqItBRgTCBy-1">
+        <mxCell id="yg-Bjp6DXlqItBRgTCBy-2" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;" parent="yg-Bjp6DXlqItBRgTCBy-1" vertex="1">
           <mxGeometry width="30" height="30" as="geometry">
             <mxRectangle width="30" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="yg-Bjp6DXlqItBRgTCBy-3" value="nivel_acesso" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;" vertex="1" parent="yg-Bjp6DXlqItBRgTCBy-1">
+        <mxCell id="yg-Bjp6DXlqItBRgTCBy-3" value="role" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;" parent="yg-Bjp6DXlqItBRgTCBy-1" vertex="1">
           <mxGeometry x="30" width="150" height="30" as="geometry">
             <mxRectangle width="150" height="30" as="alternateBounds" />
           </mxGeometry>
