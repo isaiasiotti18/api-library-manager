@@ -1,3 +1,4 @@
+import { Role } from './enums/role.enum';
 import { AuthRequest } from '../../config/auth/models/AuthRequest';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import {
@@ -20,6 +21,7 @@ import { IsPublic } from '../../config/auth/decorators/is-public.decorator';
 import { CadastrarUsuarioService } from './services/cadastrar-usuario.service';
 import { AlterarUsuarioService } from './services/alterar-usuario.service';
 import { ConsultarUsuarioPorIdService } from './services/consultar-usuario-porId.service';
+import { Roles } from 'src/config/auth/decorators/roles.decorator';
 
 @Controller('api/v1/usuarios')
 @ApiTags('usuarios')
@@ -59,6 +61,7 @@ export class UsuarioController {
 
   @Get('/:id_usuario/consultar')
   @ApiParam({ name: 'id_usuario' })
+  @Roles(Role.ADMINISTRADOR)
   async consultarUsuarioPorId(
     @Param('id_usuario') id_usuario: string,
   ): Promise<Usuario> {

@@ -16,7 +16,8 @@ import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CriarGeneroDTO } from './dtos/criar-genero.dto';
 import { Genero } from './model/genero.model';
 import { Roles } from 'src/config/auth/decorators/roles.decorator';
-import { Role } from '../usuario/enums/role.enum';
+import { Role } from 'src/modules/usuario/enums/role.enum';
+import { IsPublic } from 'src/config/auth/decorators/is-public.decorator';
 
 @Controller('/api/v1/generos')
 @ApiTags('generos')
@@ -35,6 +36,7 @@ export class GeneroController {
     return await this.cadastrarGeneroService.execute(genero);
   }
 
+  @IsPublic()
   @Get('/:genero')
   async consultarGenero(@Param('genero') genero: string): Promise<Genero> {
     console.log(genero);

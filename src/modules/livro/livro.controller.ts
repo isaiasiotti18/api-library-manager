@@ -1,3 +1,4 @@
+import { Roles } from 'src/config/auth/decorators/roles.decorator';
 import { AtribuirGeneroALivro } from './services/atribuir-genero-a-livro.service';
 import { ConsultarLivrosPorGeneroService } from './services/consultar-livros-por-genero.service';
 import { ConsultarLivroService } from './services/consultar-livro.service';
@@ -39,6 +40,7 @@ import { Livro } from './model/livro.model';
 import { Express } from 'express';
 import { FastifyFileInterceptor } from 'src/config/shared/interceptors/fastify-file-interceptor';
 import { IsPublic } from 'src/config/auth/decorators/is-public.decorator';
+import { Role } from '../usuario/enums/role.enum';
 
 @Controller('api/v1/livros')
 @ApiTags('livros')
@@ -60,6 +62,7 @@ export class LivroController {
   @Post('cadastrar')
   @ApiBody({ type: LivroBodyJSON })
   @UsePipes(ValidationPipe)
+  @Roles(Role.ADMINISTRADOR)
   async cadastrarLivro(@Body() livro: LivroBodyJSON): Promise<Livro> {
     return await this.cadastrarLivroService.execute(livro);
   }
@@ -68,6 +71,7 @@ export class LivroController {
   @ApiParam({ name: 'isbn_livro' })
   @ApiBody({ type: AtualizarLivroDTO })
   @UsePipes(ValidationPipe)
+  @Roles(Role.ADMINISTRADOR)
   async atualizarLivro(
     @Param('isbn_livro') isbn_livro: string,
     @Body() atualizarLivroDTO: AtualizarLivroDTO,
@@ -94,6 +98,7 @@ export class LivroController {
       },
     },
   })
+  @Roles(Role.ADMINISTRADOR)
   async uploadCapaLivro(
     @UploadedFile() file: Express.Multer.File,
     @Param('isbn_livro') isbn_livro: string,
@@ -162,6 +167,7 @@ export class LivroController {
 
   @Post(':isbn_livro/genero/:genero')
   @UsePipes(ValidationPipe)
+  @Roles(Role.ADMINISTRADOR)
   async atribuirGeneroALivro(@Param() params: string): Promise<void> {
     const isbn_livro = params['isbn_livro'];
     const genero = params['genero'];
