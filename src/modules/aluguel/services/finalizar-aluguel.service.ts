@@ -5,7 +5,7 @@ import { CreditaEstoqueLivroService } from './../../estoque/services/credita-est
 import { AluguelRepository } from './../aluguel.repository';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import * as moment from 'moment';
-import { compareArrays } from 'src/config/shared/functions/compareArrays';
+import { compareArrays } from 'src/config/utils/functions/compareArrays';
 import { InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosService } from './inserir-livro-aluguel-finalizado-tabela-livros-alugados-finalizados.service';
 import { StatusAluguel } from '../enums/status_aluguel';
 import { RetornoAluguelFinalizado } from '../interfaces/retorno-aluguel-finalizado';

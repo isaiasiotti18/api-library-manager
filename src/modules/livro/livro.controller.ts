@@ -31,8 +31,8 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { PageOptionsDto } from 'src/config/shared/pagination/page-options.dto';
-import { PageDto } from 'src/config/shared/pagination/page.dto';
+import { PageOptionsDto } from 'src/config/utils/pagination/page-options.dto';
+import { PageDto } from 'src/config/utils/pagination/page.dto';
 import { AtualizarLivroDTO } from './dtos/atualizar-livro.dto';
 import { LivroBodyJSON } from './interfaces/livro-body-json';
 import { LivroResultado } from './interfaces/livro-resultado.interface';
