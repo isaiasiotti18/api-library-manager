@@ -1,5 +1,5 @@
-import { RolesGuard } from './config/auth/guards/roles.guard';
-import { JwtAuthGuard } from './config/auth/guards/jwt-auth.guard';
+import { RolesGuard } from './config/utils/auth/guards/roles.guard';
+import { JwtAuthGuard } from 'src/config/utils/auth/guards/jwt-auth.guard';
 import { Module } from '@nestjs/common';
 import { ConnectionModule } from './config/database/typeorm/connection.module';
 import { LivroModule } from './modules/livro/livro.module';
@@ -13,7 +13,7 @@ import { AluguelModule } from './modules/aluguel/aluguel.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TaskModule } from './modules/aluguel/tasks/task.module';
 import { EstoqueModule } from './modules/estoque/estoque.module';
-import { AuthModule } from './config/auth/auth.module';
+import { AuthModule } from 'src/config/utils/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 
 @Module({

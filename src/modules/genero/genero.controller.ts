@@ -1,4 +1,3 @@
-import { RolesGuard } from './../../config/auth/guards/roles.guard';
 import { CadastrarGeneroService } from './services/cadastrar-genero.service';
 import { ConsultarGeneroService } from './services/consultar-genero.service';
 import {
@@ -7,17 +6,15 @@ import {
   Get,
   Param,
   Post,
-  SetMetadata,
-  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CriarGeneroDTO } from './dtos/criar-genero.dto';
 import { Genero } from './model/genero.model';
-import { Roles } from 'src/config/auth/decorators/roles.decorator';
+import { Roles } from 'src/config/utils/auth/decorators/roles.decorator';
 import { Role } from 'src/modules/usuario/enums/role.enum';
-import { IsPublic } from 'src/config/auth/decorators/is-public.decorator';
+import { IsPublic } from 'src/config/utils/auth/decorators/is-public.decorator';
 
 @Controller('/api/v1/generos')
 @ApiTags('generos')

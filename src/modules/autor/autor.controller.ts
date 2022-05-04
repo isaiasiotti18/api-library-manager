@@ -7,7 +7,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/config/auth/decorators/roles.decorator';
+import { Roles } from 'src/config/utils/auth/decorators/roles.decorator';
 import { CriarAutorDTO } from './dtos/criar-autor.dto';
 import { Autor } from './model/autor.model';
 import { CadastrarAutorService } from './services/cadastrar-autor.service';

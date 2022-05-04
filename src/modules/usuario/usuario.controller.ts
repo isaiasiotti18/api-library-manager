@@ -1,6 +1,3 @@
-import { Role } from './enums/role.enum';
-import { AuthRequest } from '../../config/auth/models/AuthRequest';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -12,16 +9,19 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Role } from './enums/role.enum';
+import { AuthRequest } from 'src/config/utils/auth/models/AuthRequest';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CriarUsuarioDTO } from './dtos/criar-usuario.dto';
 import { Usuario } from './model/usuario.model';
 import { EnderecoBodyJson } from '../endereco/interfaces/endereco-body-json.interface';
 import { CriarUsuarioComEnderecoBodyJson } from './interfaces/criar-usuario-endereco-bodyjson';
 import { AlterarUsuarioDTO } from './dtos/alterar-usuario.dto';
-import { IsPublic } from '../../config/auth/decorators/is-public.decorator';
+import { IsPublic } from 'src/config/utils/auth/decorators/is-public.decorator';
 import { CadastrarUsuarioService } from './services/cadastrar-usuario.service';
 import { AlterarUsuarioService } from './services/alterar-usuario.service';
 import { ConsultarUsuarioPorIdService } from './services/consultar-usuario-porId.service';
-import { Roles } from 'src/config/auth/decorators/roles.decorator';
+import { Roles } from 'src/config/utils/auth/decorators/roles.decorator';
 
 @Controller('api/v1/usuarios')
 @ApiTags('usuarios')

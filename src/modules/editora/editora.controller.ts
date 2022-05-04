@@ -10,7 +10,7 @@ import {
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CriarEditoraDTO } from './dtos/criar-editora.dto';
 import { Editora } from './model/editora.model';
-import { Roles } from 'src/config/auth/decorators/roles.decorator';
+import { Roles } from 'src/config/utils/auth/decorators/roles.decorator';
 
 @Controller('/api/v1/editoras')
 @ApiTags('editoras')

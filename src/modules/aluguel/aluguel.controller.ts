@@ -1,6 +1,6 @@
 import { FinalizarAluguelDTO } from './dtos/finalizar-aluguel.dto';
 import { ValidarAluguelService } from './services/validar-aluguel.service';
-import { AuthRequest } from '../../config/auth/models/AuthRequest';
+import { AuthRequest } from 'src/config/utils/auth/models/AuthRequest';
 import {
   Body,
   Controller,

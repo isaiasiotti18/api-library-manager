@@ -1,4 +1,4 @@
-import { AuthRequest } from 'src/config/auth/models/AuthRequest';
+import { AuthRequest } from 'src/config/utils/auth/models/AuthRequest';
 import { User } from './../models/user.class';
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';

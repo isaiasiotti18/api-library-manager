@@ -1,15 +1,3 @@
-import { Roles } from 'src/config/auth/decorators/roles.decorator';
-import { AtribuirGeneroALivro } from './services/atribuir-genero-a-livro.service';
-import { ConsultarLivrosPorGeneroService } from './services/consultar-livros-por-genero.service';
-import { ConsultarLivroService } from './services/consultar-livro.service';
-import { ConsultarLivrosService } from './services/consultar-livros.service';
-import { CadastrarLivroService } from './services/cadastrar-livro.service';
-import { AtualizarLivroService } from './services/atualizar-livro.service';
-import { UploadCapaLivroService } from './services/upload-capa-livro.service';
-import { ConsultarLivrosPorTituloService } from './services/consultar-livros-por-titulo.service';
-import { ConsultarLivrosPorAutorService } from './services/consultar-livros-por-autor.service';
-import { ConsultarLivrosPorEditoraService } from './services/consultar-livros-por-editora.service';
-
 import {
   Body,
   Controller,
@@ -31,6 +19,17 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { Roles } from 'src/config/utils/auth/decorators/roles.decorator';
+import { AtribuirGeneroALivro } from './services/atribuir-genero-a-livro.service';
+import { ConsultarLivrosPorGeneroService } from './services/consultar-livros-por-genero.service';
+import { ConsultarLivroService } from './services/consultar-livro.service';
+import { ConsultarLivrosService } from './services/consultar-livros.service';
+import { CadastrarLivroService } from './services/cadastrar-livro.service';
+import { AtualizarLivroService } from './services/atualizar-livro.service';
+import { UploadCapaLivroService } from './services/upload-capa-livro.service';
+import { ConsultarLivrosPorTituloService } from './services/consultar-livros-por-titulo.service';
+import { ConsultarLivrosPorAutorService } from './services/consultar-livros-por-autor.service';
+import { ConsultarLivrosPorEditoraService } from './services/consultar-livros-por-editora.service';
 import { PageOptionsDto } from 'src/config/utils/pagination/page-options.dto';
 import { PageDto } from 'src/config/utils/pagination/page.dto';
 import { AtualizarLivroDTO } from './dtos/atualizar-livro.dto';
@@ -38,8 +37,8 @@ import { LivroBodyJSON } from './interfaces/livro-body-json';
 import { LivroResultado } from './interfaces/livro-resultado.interface';
 import { Livro } from './model/livro.model';
 import { Express } from 'express';
-import { FastifyFileInterceptor } from 'src/config/shared/interceptors/fastify-file-interceptor';
-import { IsPublic } from 'src/config/auth/decorators/is-public.decorator';
+import { FastifyFileInterceptor } from 'src/config/utils/interceptors/fastify-file-interceptor';
+import { IsPublic } from 'src/config/utils/auth/decorators/is-public.decorator';
 import { Role } from '../usuario/enums/role.enum';
 
 @Controller('api/v1/livros')
