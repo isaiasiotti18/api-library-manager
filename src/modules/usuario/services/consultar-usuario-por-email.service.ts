@@ -6,13 +6,13 @@ export class ConsultarUsuarioPorEmailService {
   constructor(private readonly usuarioRepository: UsuarioRepository) {}
 
   async execute(email: string) {
-    if (email.length !== 0) {
+    if (email?.length !== 0) {
       const consultaEmail =
         await this.usuarioRepository.consultarUsuarioPorEmail(email);
 
       if (consultaEmail) return consultaEmail;
     }
 
-    return;
+    return undefined;
   }
 }

@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Request,
@@ -22,6 +23,9 @@ import { CadastrarUsuarioService } from './services/cadastrar-usuario.service';
 import { AlterarUsuarioService } from './services/alterar-usuario.service';
 import { ConsultarUsuarioPorIdService } from './services/consultar-usuario-porId.service';
 import { Roles } from 'src/config/utils/auth/decorators/roles.decorator';
+import { GerarCodigoParaRedefinirSenhaPorEmail } from './services/gerar-codigo-para-redefinir-senha.service';
+import { InserirCodigoEnviadoPorEmailParaCriarNovaSenha } from './services/inserir-codigo-enviado-por-email-nova-senha.service';
+import { AtualizarSenhaDto } from './dtos/atualizar-Senha.dto';
 
 @Controller('api/v1/usuarios')
 @ApiTags('usuarios')
@@ -30,6 +34,8 @@ export class UsuarioController {
     private readonly cadastrarUsuarioService: CadastrarUsuarioService,
     private readonly alterarUsuarioService: AlterarUsuarioService,
     private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
+    private readonly gerarCodigoParaRedefinirSenhaPorEmail: GerarCodigoParaRedefinirSenhaPorEmail,
+    private readonly inserirCodigoEnviadoPorEmailParaCriarNovaSenhaService: InserirCodigoEnviadoPorEmailParaCriarNovaSenha,
   ) {}
 
   @IsPublic()
@@ -66,5 +72,32 @@ export class UsuarioController {
     @Param('id_usuario') id_usuario: string,
   ): Promise<Usuario> {
     return await this.consultarUsuarioPorIdService.execute(id_usuario);
+  }
+
+  @IsPublic()
+  @Get('/:email_usuario/gerar-codigo-redefinir-senha')
+  @ApiParam({ name: 'email_usuario' })
+  async gerarCodigoParaRedefinirSenha(
+    @Param('email_usuario')
+    email_usuario: string,
+  ) {
+    console.log(email_usuario);
+    return await this.gerarCodigoParaRedefinirSenhaPorEmail.execute(
+      email_usuario,
+    );
+  }
+
+  @IsPublic()
+  @Patch('/:codigo/inserir-codigo-nova-senha')
+  @ApiParam({ name: 'codigo' })
+  @ApiBody({ type: AtualizarSenhaDto })
+  async inserirCodigoEnviadoPorEmailParaCriarNovaSenha(
+    @Param('codigo') codigo: string,
+    @Body() atualizarSenhaDto: AtualizarSenhaDto,
+  ) {
+    return await this.inserirCodigoEnviadoPorEmailParaCriarNovaSenhaService.execute(
+      codigo,
+      atualizarSenhaDto,
+    );
   }
 }

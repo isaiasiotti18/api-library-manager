@@ -15,6 +15,8 @@ import { TaskModule } from './modules/aluguel/tasks/task.module';
 import { EstoqueModule } from './modules/estoque/estoque.module';
 import { AuthModule } from 'src/config/utils/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
+import { CodigoRecuperarSenhaModule } from './modules/codigo_recuperar_senha/codigo_recuperar_senha.module';
+import { MailModule } from './config/utils/mail/mail.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { APP_GUARD } from '@nestjs/core';
     AluguelModule,
     EstoqueModule,
     AuthModule,
+    CodigoRecuperarSenhaModule,
+    MailModule,
   ],
   controllers: [],
   providers: [
