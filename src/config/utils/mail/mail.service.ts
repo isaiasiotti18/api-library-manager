@@ -15,4 +15,23 @@ export class MailService {
       },
     });
   }
+
+  async sendEmailWithLinkAndCode(
+    to,
+    subject,
+    nome,
+    link_para_pagamento,
+    codigo,
+  ) {
+    await this.mailerService.sendMail({
+      to,
+      subject,
+      template: 'sendEmailWithLinkAndCode',
+      context: {
+        nome,
+        link_para_pagamento,
+        codigo,
+      },
+    });
+  }
 }

@@ -6,6 +6,7 @@ import {
   Patch,
   Post,
   Put,
+  Req,
   Request,
   UsePipes,
   ValidationPipe,
@@ -44,7 +45,9 @@ export class UsuarioController {
   async cadastrarUsuario(
     @Body() criarUsuarioDTO: CriarUsuarioDTO,
     @Body() enderecoBodyJson: EnderecoBodyJson,
+    @Req() req: Request,
   ): Promise<Usuario> {
+    console.log(req.body);
     return await this.cadastrarUsuarioService.execute(
       criarUsuarioDTO,
       enderecoBodyJson,

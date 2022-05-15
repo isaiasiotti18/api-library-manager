@@ -11,17 +11,16 @@ import { EnderecoModule } from './modules/endereco/endereco.module';
 import { ConfigModule } from '@nestjs/config';
 import { AluguelModule } from './modules/aluguel/aluguel.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TaskModule } from './modules/aluguel/tasks/task.module';
 import { EstoqueModule } from './modules/estoque/estoque.module';
 import { AuthModule } from 'src/config/utils/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { CodigoRecuperarSenhaModule } from './modules/codigo_recuperar_senha/codigo_recuperar_senha.module';
 import { MailModule } from './config/utils/mail/mail.module';
+import { PagamentoModule } from 'src/modules/pagamento/pagamento.module';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    TaskModule,
     ConfigModule.forRoot({ isGlobal: true }),
     ConnectionModule,
     LivroModule,
@@ -35,6 +34,7 @@ import { MailModule } from './config/utils/mail/mail.module';
     AuthModule,
     CodigoRecuperarSenhaModule,
     MailModule,
+    PagamentoModule,
   ],
   controllers: [],
   providers: [

@@ -10,6 +10,7 @@ import { Genero } from 'src/modules/genero/model/genero.model';
 import { Livro } from 'src/modules/livro/model/livro.model';
 import { Usuario } from 'src/modules/usuario/model/usuario.model';
 import { Estoque } from 'src/modules/estoque/model/estoque.model';
+import { Pagamento } from 'src/modules/pagamento/model/pagamento.model';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { Estoque } from 'src/modules/estoque/model/estoque.model';
         Codigo,
         Estoque,
         CodigoRecuperarSenha,
+        Pagamento,
       ],
     }),
   ],

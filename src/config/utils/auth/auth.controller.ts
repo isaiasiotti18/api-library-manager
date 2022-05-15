@@ -15,8 +15,8 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthRequest } from './models/AuthRequest';
 import { LoginRequestBody } from './models/LoginRequestBody';
 
-@Controller('controle-acesso')
-@ApiTags('acesso')
+@Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

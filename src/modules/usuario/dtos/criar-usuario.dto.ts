@@ -37,4 +37,8 @@ export class CriarUsuarioDTO {
 
   @IsOptional()
   endereco_id?: string;
+
+  @IsString()
+  @IsOptional()
+  stripeCustomerId?: string;
 }

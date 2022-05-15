@@ -1,5 +1,12 @@
+import { CadastrarUsuarioMiddleware } from './middlewares/cadastrar-usuario.middleware';
+import { PagamentoModule } from './../pagamento/pagamento.module';
 import { MailModule } from './../../config/utils/mail/mail.module';
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  forwardRef,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CodigoRecuperarSenhaModule } from '../codigo_recuperar_senha/codigo_recuperar_senha.module';
 import { EnderecoModule } from '../endereco/endereco.module';
@@ -21,6 +28,7 @@ import { InserirCodigoEnviadoPorEmailParaCriarNovaSenha } from './services/inser
     EnderecoModule,
     CodigoRecuperarSenhaModule,
     MailModule,
+    forwardRef(() => PagamentoModule),
   ],
   controllers: [UsuarioController],
   providers: [
@@ -35,15 +43,19 @@ import { InserirCodigoEnviadoPorEmailParaCriarNovaSenha } from './services/inser
     InserirCodigoEnviadoPorEmailParaCriarNovaSenha,
   ],
   exports: [
+    ConsultarUsuarioPorEmailService,
     CadastrarUsuarioService,
     AlterarUsuarioService,
     ConsultarUsuarioPorIdService,
     AtribuirAluguelAoUsuarioService,
-    ConsultarUsuarioPorEmailService,
     BloquearUsuarioService,
     ConsultarUsuarioBloqueadoService,
     GerarCodigoParaRedefinirSenhaPorEmail,
     InserirCodigoEnviadoPorEmailParaCriarNovaSenha,
   ],
 })
-export class UsuarioModule {}
+export class UsuarioModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CadastrarUsuarioMiddleware).forRoutes('cadastrar');
+  }
+}

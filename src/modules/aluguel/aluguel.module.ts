@@ -1,5 +1,5 @@
 import { ValidarAluguelService } from './services/validar-aluguel.service';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EstoqueModule } from '../estoque/estoque.module';
 import { LivroModule } from '../livro/livro.module';
@@ -16,7 +16,7 @@ import { InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosSer
     TypeOrmModule.forFeature([AluguelRepository]),
     TypeOrmModule.forFeature([CodigoRepository]),
     LivroModule,
-    UsuarioModule,
+    forwardRef(() => UsuarioModule),
     EstoqueModule,
   ],
   controllers: [AluguelController],
