@@ -1,6 +1,6 @@
+import { MailService } from './../../config/utils/mail/mail.service';
 import { ConsultarUsuarioPorIdService } from './../usuario/services/consultar-usuario-porId.service';
 import { AluguelRepository } from './../aluguel/aluguel.repository';
-import { CheckoutPagamentoDTO } from './dtos/checkout-pagamento.dto';
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectStripe } from 'nestjs-stripe';
 import { currencyFormat } from 'src/config/utils/functions/currencyFormat';
@@ -18,31 +18,9 @@ export class PagamentoService {
 
     @Inject(forwardRef(() => AluguelRepository))
     private readonly aluguelRepository: AluguelRepository,
+
+    private readonly mailService: MailService,
   ) {}
-
-  async criarCustomer(email: string, nome: string) {
-    return await this.stripeClient.customers.create({
-      name: nome,
-      email: email,
-    });
-  }
-
-  async checkoutPagamento(checkoutPagamentoDTO: CheckoutPagamentoDTO) {
-    const { usuario_id, stripeCustomerId } = checkoutPagamentoDTO;
-
-    const usuario = await this.consultarUsuarioPorIdService.execute(usuario_id);
-
-    const aluguel = await this.aluguelRepository.consultarAluguel(
-      usuario.aluguel_id,
-    );
-
-    const intent = await this.stripeClient.paymentIntents.create({
-      customer: usuario.stripeCustomerId,
-      amount: aluguel.valor_total,
-      currency: 'brl',
-      payment_method_types: ['card'],
-    });
-  }
 
   async linkPagamento(usuario_id: string) {
     const usuario = await this.consultarUsuarioPorIdService.execute(usuario_id);
@@ -65,7 +43,7 @@ export class PagamentoService {
     }
 
     const produto = await this.stripeClient.products.create({
-      name: `${usuario.stripeCustomerId}-Aluguel`,
+      name: `${aluguel.aluguel_id}-Aluguel`,
       default_price_data: {
         unit_amount: Math.round(aluguel.valor_total * 100),
         currency: 'brl',
@@ -99,6 +77,14 @@ export class PagamentoService {
         pagamento_realizado: novoPagamento.pagamento_realizado,
       },
     };
+
+    await this.mailService.sendEmailWithLinkAndCode({
+      to: usuario.email,
+      subject: 'CODIGO e LINK para Pagamento',
+      nome: usuario.nome,
+      codigo: aluguel.codigo,
+      link_para_pagamento: linkDePagamento.url,
+    });
 
     return retornoLinkDePagamento;
   }

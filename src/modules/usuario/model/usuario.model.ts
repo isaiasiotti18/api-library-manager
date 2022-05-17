@@ -72,7 +72,4 @@ export class Usuario {
     default: StatusAcesso.DESBLOQUEADO,
   })
   status_acesso: StatusAcesso;
-
-  @Column()
-  stripeCustomerId: string;
 }

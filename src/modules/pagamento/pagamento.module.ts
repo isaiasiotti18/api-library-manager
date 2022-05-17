@@ -1,6 +1,5 @@
 import { PagamentoRepository } from './pagamento.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Usuario } from './../usuario/model/usuario.model';
 import { ConfigService } from '@nestjs/config';
 import { forwardRef, Module } from '@nestjs/common';
 import { PagamentoController } from './pagamento.controller';
@@ -8,6 +7,7 @@ import { PagamentoService } from './pagamento.service';
 import { StripeModule } from 'nestjs-stripe';
 import { AluguelModule } from '../aluguel/aluguel.module';
 import { UsuarioModule } from '../usuario/usuario.module';
+import { MailModule } from 'src/config/utils/mail/mail.module';
 
 @Module({
   imports: [
@@ -21,6 +21,7 @@ import { UsuarioModule } from '../usuario/usuario.module';
     }),
     AluguelModule,
     forwardRef(() => UsuarioModule),
+    MailModule,
   ],
   controllers: [PagamentoController],
   providers: [PagamentoService],

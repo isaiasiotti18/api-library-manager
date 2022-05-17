@@ -17,6 +17,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { CodigoRecuperarSenhaModule } from './modules/codigo_recuperar_senha/codigo_recuperar_senha.module';
 import { MailModule } from './config/utils/mail/mail.module';
 import { PagamentoModule } from 'src/modules/pagamento/pagamento.module';
+import { PagamentoService } from './modules/pagamento/pagamento.service';
+import { HttpService } from '@nestjs/axios';
 
 @Module({
   imports: [

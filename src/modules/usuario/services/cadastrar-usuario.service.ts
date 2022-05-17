@@ -1,4 +1,3 @@
-import { PagamentoService } from './../../pagamento/pagamento.service';
 import { UsuarioRepository } from './../usuario.repository';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { EnderecoBodyJson } from 'src/modules/endereco/interfaces/endereco-body-json.interface';
@@ -14,7 +13,6 @@ export class CadastrarUsuarioService {
     private readonly usuarioRepository: UsuarioRepository,
     private readonly cadastrarEnderecoService: CadastrarEnderecoService,
     private readonly consultarUsuarioPorEmailService: ConsultarUsuarioPorEmailService,
-    private readonly pagamentoService: PagamentoService,
   ) {}
   async execute(
     criarUsuarioDTO: CriarUsuarioDTO,
@@ -39,11 +37,6 @@ export class CadastrarUsuarioService {
         numero,
       });
 
-      const stripeCustomer = await this.pagamentoService.criarCustomer(
-        criarUsuarioDTO.email,
-        criarUsuarioDTO.nome,
-      );
-
       const novoUsuario = await this.usuarioRepository.criarUsuario({
         nome,
         email,
@@ -51,7 +44,6 @@ export class CadastrarUsuarioService {
         cpf: cpfFormatado,
         telefone: telefoneFormatado,
         endereco_id: novoEndereco.endereco_id,
-        stripeCustomerId: stripeCustomer.id,
       });
 
       return {

@@ -47,11 +47,11 @@ export class GerarCodigoParaRedefinirSenhaPorEmail {
       novoCodigoParaRecuperarSenha,
     );
 
-    await this.mailService.sendCodeForPasswordRecovery(
-      email_usuario,
-      'Token para recuperação de senha',
-      codigoParaRecuperarSenha,
-    );
+    await this.mailService.sendCodeForPasswordRecovery({
+      to: email_usuario,
+      subject: 'Token para recuperação de senha',
+      codigo: codigoParaRecuperarSenha,
+    });
 
     return {
       message: 'Verifique no seu Email o código para alteração da senha.',
