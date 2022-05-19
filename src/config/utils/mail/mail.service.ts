@@ -2,6 +2,7 @@ import { SendCodeForPasswordRecoveryDTO } from './dtos/send-code-for-password-re
 import { SendEmailWithLinkAndCodeDTO } from './dtos/send-email-with-link-and-code.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+import { SendPaymentLinkForFine } from './dtos/send-payment-link-for-fine.dto';
 
 @Injectable()
 export class MailService {
@@ -37,6 +38,23 @@ export class MailService {
         nome,
         link_para_pagamento,
         codigo,
+      },
+    });
+  }
+
+  async sendPaymentLinkForFine({
+    to,
+    subject,
+    nome,
+    link_para_pagamento,
+  }: SendPaymentLinkForFine) {
+    await this.mailerService.sendMail({
+      to,
+      subject,
+      template: 'sendPaymentLinkForFine',
+      context: {
+        nome,
+        link_para_pagamento,
       },
     });
   }

@@ -122,6 +122,13 @@ export class PagamentoService {
       ],
     });
 
+    await this.mailService.sendPaymentLinkForFine({
+      to: `"${usuario.nome}" ${usuario.email}`,
+      subject: 'LINK para Pagamento de Multa',
+      nome: usuario.nome,
+      link_para_pagamento: linkDePagamento.url,
+    });
+
     return linkDePagamento;
   }
 }
