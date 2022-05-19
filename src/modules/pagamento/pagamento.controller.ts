@@ -14,4 +14,9 @@ export class PagamentoController {
     console.log(req.user);
     return await this.pagamentoService.linkPagamento(req.user.id);
   }
+
+  @Post('criar-link-pagamento-multa')
+  async linkPagamentoMulta(@Req() req: AuthRequest) {
+    return await this.pagamentoService.linkPagamentoMulta(req.user.id);
+  }
 }

@@ -22,6 +22,21 @@ export class PagamentoService {
     private readonly mailService: MailService,
   ) {}
 
+  async criarProduto(
+    nome_produto: string,
+    valor_produto: number,
+  ): Promise<Stripe.Response<Stripe.Product>> {
+    const produto = await this.stripeClient.products.create({
+      name: nome_produto,
+      default_price_data: {
+        unit_amount: Math.round(valor_produto * 100),
+        currency: 'brl',
+      },
+    });
+
+    return produto;
+  }
+
   async linkPagamento(usuario_id: string) {
     const usuario = await this.consultarUsuarioPorIdService.execute(usuario_id);
 
@@ -42,13 +57,10 @@ export class PagamentoService {
       };
     }
 
-    const produto = await this.stripeClient.products.create({
-      name: `${aluguel.aluguel_id}-Aluguel`,
-      default_price_data: {
-        unit_amount: Math.round(aluguel.valor_total * 100),
-        currency: 'brl',
-      },
-    });
+    const produto = await this.criarProduto(
+      `${aluguel.aluguel_id}-Aluguel`,
+      aluguel.valor_total,
+    );
 
     const linkDePagamento = await this.stripeClient.paymentLinks.create({
       line_items: [
@@ -79,7 +91,7 @@ export class PagamentoService {
     };
 
     await this.mailService.sendEmailWithLinkAndCode({
-      to: usuario.email,
+      to: `"${usuario.nome}" ${usuario.email}`,
       subject: 'CODIGO e LINK para Pagamento',
       nome: usuario.nome,
       codigo: aluguel.codigo,
@@ -87,5 +99,29 @@ export class PagamentoService {
     });
 
     return retornoLinkDePagamento;
+  }
+
+  async linkPagamentoMulta(usuario_id: string) {
+    const usuario = await this.consultarUsuarioPorIdService.execute(usuario_id);
+
+    const aluguel = await this.aluguelRepository.consultarAluguel(
+      usuario.aluguel_id,
+    );
+
+    const produto = await this.criarProduto(
+      `${aluguel.aluguel_id}-Multa-Aluguel`,
+      aluguel.valor_total * 0.1,
+    );
+
+    const linkDePagamento = await this.stripeClient.paymentLinks.create({
+      line_items: [
+        {
+          price: produto.default_price.toString(),
+          quantity: 1,
+        },
+      ],
+    });
+
+    return linkDePagamento;
   }
 }

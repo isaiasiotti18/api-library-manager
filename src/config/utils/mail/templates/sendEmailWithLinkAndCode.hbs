@@ -1,16 +1,45 @@
-<p>
-  Olá! Tudo bem Sr(a) {{ nome }}?
-</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100&display=swap" rel="stylesheet">
 
-<p>Para que você possa retirar os livros alugados segue os passos abaixo:</p>
+  </head>
 
-<p> - Primeiro você precisa realizar o pagamento acessando o link abaixo: </p>
-<p> LINK PARA PAGAMENTO {{ link_para_pagamento }}</p>
+  <style>
+    * {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      color: #333;
+    }
 
-<p> - Segundo, após você realizar o pagamento segue ate a livraria com o seguinte código:</p>
-<p> CÓDIGO PARA OS LIVROS SEREM LIBERADOS: {{ codigo }}</p>
+    a { 
+      text-decoration: none;
+      font-weight: 700;
+      color: #264653;
+    }
+  </style>
 
-<p>Assim que você realizar o pagamento o CÓDIGO será validado no nosso sistema</p>
+  <body>
+    <p>
+    Olá! Tudo bem Sr(a) <strong>{{ nome }}</strong>?
+    </p>
 
-<p>Você também pode se sentir a vontade em realizar o pagamento presencialmente!</p>
+    <p><strong>Para que você possa retirar os livros alugados segue os passos abaixo:</strong></p>
 
+    <p> - Primeiro você precisa realizar o pagamento acessando o link abaixo: 
+      <a href="{{ link_para_pagamento }}">LINK PARA PAGAMENTO</a>
+    </p>
+
+    <p> - Segundo, após você realizar o pagamento segue ate a livraria com o seguinte código:</p>
+    <p> - - CÓDIGO: <strong>{{ codigo }}</strong> </p>
+
+    <p>Você também pode se sentir a vontade em realizar o pagamento presencialmente!</p>
+
+  </body>
+
+</html>

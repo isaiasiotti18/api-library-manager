@@ -33,7 +33,8 @@ export class RealizarAluguelService {
       const usuarioJaCadastrado =
         await this.consultarUsuarioPorIdService.execute(usuario_id);
 
-      //Verificando se já tem um aluguel, se existir irá deletar
+      //Verificando se o usuário já tem um aluguel para ser validado,
+      // se existir irá deletar
       if (usuarioJaCadastrado.aluguel_id) {
         await this.aluguelRepository.verificaAluguelEDeletaAluguelSeNaoFoiValidado(
           usuarioJaCadastrado.aluguel_id,
