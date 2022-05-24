@@ -10,4 +10,5 @@ export interface UsuarioRepositoryInterface {
   ): Promise<void>;
   consultarUsuarioPorId(usuario_id: string): Promise<Usuario>;
   bloquearUsuario(usuario_id: string): Promise<void>;
+  listarUsuariosBloqueados(): Promise<Usuario[]>;
 }

@@ -1,3 +1,5 @@
+import { MailModule } from 'src/config/utils/mail/mail.module';
+import { PagamentoModule } from 'src/modules/pagamento/pagamento.module';
 import { ValidarAluguelService } from './services/validar-aluguel.service';
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,6 +12,7 @@ import { RealizarAluguelService } from './services/realizar-aluguel.service';
 import { ValidarCodigoAluguelService } from './services/validar-codigo-aluguel.service';
 import { FinalizarAluguelEDevolverLivrosService } from './services/finalizar-aluguel.service';
 import { InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosService } from './services/inserir-livro-aluguel-finalizado-tabela-livros-alugados-finalizados.service';
+import { MailService } from 'src/config/utils/mail/mail.service';
 
 @Module({
   imports: [
@@ -18,6 +21,8 @@ import { InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosSer
     LivroModule,
     forwardRef(() => UsuarioModule),
     EstoqueModule,
+    forwardRef(() => PagamentoModule),
+    MailModule,
   ],
   controllers: [AluguelController],
   providers: [

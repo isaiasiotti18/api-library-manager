@@ -1,3 +1,4 @@
+import { TasksModule } from './config/utils/tasks/tasks.module';
 import { RolesGuard } from './config/utils/auth/guards/roles.guard';
 import { JwtAuthGuard } from 'src/config/utils/auth/guards/jwt-auth.guard';
 import { Module } from '@nestjs/common';
@@ -17,12 +18,11 @@ import { APP_GUARD } from '@nestjs/core';
 import { CodigoRecuperarSenhaModule } from './modules/codigo_recuperar_senha/codigo_recuperar_senha.module';
 import { MailModule } from './config/utils/mail/mail.module';
 import { PagamentoModule } from 'src/modules/pagamento/pagamento.module';
-import { PagamentoService } from './modules/pagamento/pagamento.service';
-import { HttpService } from '@nestjs/axios';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
+    TasksModule,
     ConfigModule.forRoot({ isGlobal: true }),
     ConnectionModule,
     LivroModule,
@@ -38,7 +38,6 @@ import { HttpService } from '@nestjs/axios';
     MailModule,
     PagamentoModule,
   ],
-  controllers: [],
   providers: [
     {
       provide: APP_GUARD,

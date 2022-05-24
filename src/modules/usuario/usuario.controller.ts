@@ -1,3 +1,4 @@
+import { ListarUsuariosBloqueadosService } from './services/listar-usuarios-bloqueados.service';
 import {
   Body,
   Controller,
@@ -37,6 +38,7 @@ export class UsuarioController {
     private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
     private readonly gerarCodigoParaRedefinirSenhaPorEmail: GerarCodigoParaRedefinirSenhaPorEmail,
     private readonly inserirCodigoEnviadoPorEmailParaCriarNovaSenhaService: InserirCodigoEnviadoPorEmailParaCriarNovaSenha,
+    private readonly listarUsuariosBloqueadosService: ListarUsuariosBloqueadosService,
   ) {}
 
   @IsPublic()
@@ -102,5 +104,11 @@ export class UsuarioController {
       codigo,
       atualizarSenhaDto,
     );
+  }
+
+  @Get('lista-usuarios-bloqueados')
+  @Roles(Role.ADMINISTRADOR)
+  async listaUsuariosBloqueados(): Promise<Usuario[]> {
+    return await this.listarUsuariosBloqueadosService.execute();
   }
 }

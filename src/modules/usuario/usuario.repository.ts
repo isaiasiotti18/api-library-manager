@@ -54,4 +54,14 @@ export class UsuarioRepository
       status_acesso: StatusAcesso.BLOQUEADO,
     });
   }
+
+  async listarUsuariosBloqueados(): Promise<Usuario[]> {
+    const listaUsuariosBloqueados = await this.find({
+      where: {
+        status_acesso: StatusAcesso.BLOQUEADO,
+      },
+    });
+
+    return listaUsuariosBloqueados;
+  }
 }

@@ -21,6 +21,7 @@ import { GerarCodigoParaRedefinirSenhaPorEmail } from './services/gerar-codigo-p
 import { UsuarioController } from './usuario.controller';
 import { UsuarioRepository } from './usuario.repository';
 import { InserirCodigoEnviadoPorEmailParaCriarNovaSenha } from './services/inserir-codigo-enviado-por-email-nova-senha.service';
+import { ListarUsuariosBloqueadosService } from './services/listar-usuarios-bloqueados.service';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { InserirCodigoEnviadoPorEmailParaCriarNovaSenha } from './services/inser
     ConsultarUsuarioBloqueadoService,
     GerarCodigoParaRedefinirSenhaPorEmail,
     InserirCodigoEnviadoPorEmailParaCriarNovaSenha,
+    ListarUsuariosBloqueadosService,
   ],
   exports: [
     ConsultarUsuarioPorEmailService,

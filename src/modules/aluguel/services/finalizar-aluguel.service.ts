@@ -1,14 +1,21 @@
+import { PagamentoService } from './../../pagamento/pagamento.service';
 import { BloquearUsuarioService } from './../../usuario/services/bloquear-usuario.service';
 import { FinalizarAluguelDTO } from './../dtos/finalizar-aluguel.dto';
 import { ConsultarUsuarioPorIdService } from './../../usuario/services/consultar-usuario-porId.service';
 import { CreditaEstoqueLivroService } from './../../estoque/services/credita-estoque-livro.service';
 import { AluguelRepository } from './../aluguel.repository';
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  forwardRef,
+  Inject,
+} from '@nestjs/common';
 import * as moment from 'moment';
 import { compareArrays } from 'src/config/utils/functions/compareArrays';
 import { InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosService } from './inserir-livro-aluguel-finalizado-tabela-livros-alugados-finalizados.service';
 import { StatusAluguel } from '../enums/status_aluguel';
 import { RetornoAluguelFinalizado } from '../interfaces/retorno-aluguel-finalizado';
+import { MailService } from 'src/config/utils/mail/mail.service';
 
 @Injectable()
 export class FinalizarAluguelEDevolverLivrosService {
@@ -18,6 +25,8 @@ export class FinalizarAluguelEDevolverLivrosService {
     private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
     private readonly inserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizados: InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosService,
     private readonly bloquearUsuarioService: BloquearUsuarioService,
+    private readonly pagamentoService: PagamentoService,
+    private readonly mailService: MailService,
   ) {}
 
   async execute(aluguel_id: string, finalizarAluguelDTO: FinalizarAluguelDTO) {
@@ -45,17 +54,23 @@ export class FinalizarAluguelEDevolverLivrosService {
       'days',
     );
 
-    // Verificar a diferença entre as datas supera mais de 5 dias
-    if (diferencaDias <= 5) {
-      // AQUI VOU MANDAR MENSAGENS PARA
-      // O USUARIO FALANDO QUE JÁ PASSOU DA DATA DE DEVOLVER
-    } else if (diferencaDias >= 10) {
-      // AQUI VOU MANDAR MENSAGEM PARA O USUÁRIO FALANDO QUE JÁ EXCEDEU O LIMITE
-
-      // SERÁ GERADO UM LINK PARA PAGAR A MULTA
-
+    if (diferencaDias >= 10) {
       // O USUÁRIO TERA A CONTA BLOQUEADA
       await this.bloquearUsuarioService.execute(usuario.id);
+
+      // SERÁ GERADO UM LINK PARA PAGAR A MULTA e
+      const linkDePagamento = await this.pagamentoService.linkPagamentoMulta(
+        usuario.id,
+      );
+
+      // ENVIADO POR EMAIL
+      await this.mailService.sendPaymentLinkForFine({
+        to: `"${usuario.nome}" ${usuario.email}`,
+        subject: 'LINK para Pagamento de Multa',
+        nome: usuario.nome,
+        link_para_pagamento: linkDePagamento.url_para_pagamento,
+        valor_multa: aluguel.valor_total * 0.1,
+      });
     }
 
     //Verificando os livros devolvidos

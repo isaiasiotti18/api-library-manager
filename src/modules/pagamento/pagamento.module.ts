@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { PagamentoRepository } from './pagamento.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
@@ -19,9 +20,10 @@ import { MailModule } from 'src/config/utils/mail/mail.module';
         apiVersion: configService.get('STRIPE_API_VERSION'),
       }),
     }),
-    AluguelModule,
+    forwardRef(() => AluguelModule),
     forwardRef(() => UsuarioModule),
     MailModule,
+    HttpModule,
   ],
   controllers: [PagamentoController],
   providers: [PagamentoService],

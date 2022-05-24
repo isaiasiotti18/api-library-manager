@@ -1,3 +1,5 @@
+import { HttpService } from '@nestjs/axios';
+import { NovoPagamentoDTO } from './dtos/novo-pagamento.dto';
 import { MailService } from './../../config/utils/mail/mail.service';
 import { ConsultarUsuarioPorIdService } from './../usuario/services/consultar-usuario-porId.service';
 import { AluguelRepository } from './../aluguel/aluguel.repository';
@@ -6,6 +8,7 @@ import { InjectStripe } from 'nestjs-stripe';
 import { currencyFormat } from 'src/config/utils/functions/currencyFormat';
 import Stripe from 'stripe';
 import { PagamentoRepository } from './pagamento.repository';
+import { Pagamento } from './model/pagamento.model';
 
 @Injectable()
 export class PagamentoService {
@@ -20,6 +23,8 @@ export class PagamentoService {
     private readonly aluguelRepository: AluguelRepository,
 
     private readonly mailService: MailService,
+
+    private readonly httpService: HttpService,
   ) {}
 
   async criarProduto(
@@ -69,14 +74,18 @@ export class PagamentoService {
           quantity: 1,
         },
       ],
+      metadata: {
+        usuario_id: usuario.id,
+      },
     });
 
-    const novoPagamento = await this.pagamentoRepository.novoPagamento({
-      id: linkDePagamento.id,
-      usuario_id: usuario.id,
+    // CriarNovoPagamento
+    const novoPagamento = await this.novoPagamento({
       aluguel_id: aluguel.aluguel_id,
-      valor: aluguel.valor_total,
+      usuario_id: usuario.id,
+      id: linkDePagamento.id,
       url_pagamento: linkDePagamento.url,
+      valor: aluguel.valor_total,
     });
 
     const retornoLinkDePagamento = {
@@ -120,15 +129,74 @@ export class PagamentoService {
           quantity: 1,
         },
       ],
+      metadata: {
+        usuario_id: usuario.id,
+      },
     });
 
-    await this.mailService.sendPaymentLinkForFine({
-      to: `"${usuario.nome}" ${usuario.email}`,
-      subject: 'LINK para Pagamento de Multa',
-      nome: usuario.nome,
-      link_para_pagamento: linkDePagamento.url,
+    const consultaPagamentoLinkMulta = await this.pagamentoRepository.findOne({
+      where: {
+        aluguel_id: aluguel.aluguel_id,
+        link_multa: true,
+      },
     });
 
-    return linkDePagamento;
+    if (consultaPagamentoLinkMulta) {
+      return {
+        message: 'Esse Aluguel já possui um link de pagamento para multa.',
+        url_para_pagamento: consultaPagamentoLinkMulta.url_pagamento,
+      };
+    }
+
+    const novoPagamento = await this.novoPagamento({
+      aluguel_id: aluguel.aluguel_id,
+      usuario_id: usuario.id,
+      id: linkDePagamento.id,
+      url_pagamento: linkDePagamento.url,
+      link_multa: true,
+      valor: aluguel.valor_total,
+    });
+
+    const retornoLinkDePagamento = {
+      id: linkDePagamento.id,
+      url_para_pagamento: linkDePagamento.url,
+      valor_total: currencyFormat(aluguel.valor_total),
+      novo_pagamento: {
+        usuario_id: novoPagamento.usuario_id,
+        aluguel_id: novoPagamento.aluguel_id,
+        pagamento_realizado: novoPagamento.pagamento_realizado,
+      },
+    };
+
+    return retornoLinkDePagamento;
+  }
+
+  async novoPagamento({
+    aluguel_id,
+    id,
+    url_pagamento,
+    usuario_id,
+    valor,
+    link_multa,
+  }: NovoPagamentoDTO): Promise<Pagamento> {
+    const novoPagamento = await this.pagamentoRepository.novoPagamento({
+      id,
+      usuario_id,
+      aluguel_id,
+      valor,
+      url_pagamento,
+      link_multa,
+    });
+
+    return novoPagamento;
+  }
+
+  async listaPagamentos() {
+    const balanceTransactions =
+      await this.stripeClient.balanceTransactions.list({
+        limit: 3,
+      });
+
+    return balanceTransactions;
   }
 }

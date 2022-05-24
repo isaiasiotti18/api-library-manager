@@ -34,6 +34,12 @@ export class Pagamento {
   })
   pagamento_realizado: boolean;
 
+  @Column({
+    type: 'bool',
+    default: false,
+  })
+  link_multa: boolean;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',

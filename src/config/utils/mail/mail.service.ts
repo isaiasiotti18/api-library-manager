@@ -47,6 +47,7 @@ export class MailService {
     subject,
     nome,
     link_para_pagamento,
+    valor_multa,
   }: SendPaymentLinkForFine) {
     await this.mailerService.sendMail({
       to,
@@ -55,6 +56,26 @@ export class MailService {
       context: {
         nome,
         link_para_pagamento,
+        valor_multa,
+      },
+    });
+  }
+
+  async sendEmailMessageTimeToReturnTheBooks(args: {
+    to: string;
+    subject: string;
+    nome: string;
+    data_devolucao: string;
+  }) {
+    const { to, subject, nome, data_devolucao } = args;
+
+    await this.mailerService.sendMail({
+      to,
+      subject,
+      template: 'sendEmailMessageTimeToReturnTheBooks',
+      context: {
+        nome,
+        data_devolucao,
       },
     });
   }

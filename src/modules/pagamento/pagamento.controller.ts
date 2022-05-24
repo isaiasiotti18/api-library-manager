@@ -1,6 +1,6 @@
 import { AuthRequest } from 'src/config/utils/auth/models/AuthRequest';
 import { PagamentoService } from './pagamento.service';
-import { Controller, Post, Req } from '@nestjs/common';
+import { Controller, Get, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('pagamento')
@@ -18,5 +18,10 @@ export class PagamentoController {
   @Post('criar-link-pagamento-multa')
   async linkPagamentoMulta(@Req() req: AuthRequest) {
     return await this.pagamentoService.linkPagamentoMulta(req.user.id);
+  }
+
+  @Get('lista-pagamentos')
+  async listaPagamentos() {
+    return await this.pagamentoService.listaPagamentos();
   }
 }

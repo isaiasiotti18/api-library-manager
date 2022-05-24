@@ -3,4 +3,5 @@ export class SendPaymentLinkForFine {
   subject: string;
   nome: string;
   link_para_pagamento: string;
+  valor_multa: number;
 }
