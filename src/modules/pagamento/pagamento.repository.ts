@@ -22,11 +22,38 @@ export class PagamentoRepository extends Repository<Pagamento> {
     return await this.save(novoPagamento);
   }
 
-  async consultarPagamento(aluguel_id: string): Promise<Pagamento> {
+  async consultarPagamento(pagamento_id: string): Promise<Pagamento> {
+    return await this.findOne({
+      where: {
+        id: pagamento_id,
+      },
+    });
+  }
+
+  async consultarPagamentoPorAluguelId(aluguel_id: string): Promise<Pagamento> {
     return await this.findOne({
       where: {
         aluguel_id,
       },
+    });
+  }
+
+  async consultaPagamentoLinkMulta(
+    aluguel_id: string,
+    link_multa: boolean,
+  ): Promise<Pagamento> {
+    return await this.findOne({
+      where: {
+        aluguel_id,
+        link_multa,
+      },
+    });
+  }
+
+  async atualizarPagamento(pagamento_id: string): Promise<void> {
+    await this.save({
+      id: pagamento_id,
+      pagamento_realizado: true,
     });
   }
 }

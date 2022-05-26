@@ -1,6 +1,6 @@
 //import 'reflect-metadata';
 
-import { AllExceptionFilter } from 'src/config/utils/filters/http-exception.filter';
+import { AllExceptionFilter } from 'src/utils/filters/http-exception.filter';
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';

@@ -8,6 +8,4 @@ export class NovoPagamentoDTO {
   valor: number;
 
   url_pagamento: string;
-
-  link_multa?: boolean;
 }

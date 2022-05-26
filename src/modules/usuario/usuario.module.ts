@@ -1,6 +1,6 @@
 import { CadastrarUsuarioMiddleware } from './middlewares/cadastrar-usuario.middleware';
 import { PagamentoModule } from './../pagamento/pagamento.module';
-import { MailModule } from './../../config/utils/mail/mail.module';
+import { MailModule } from '../../utils/mail/mail.module';
 import {
   MiddlewareConsumer,
   Module,
@@ -22,6 +22,7 @@ import { UsuarioController } from './usuario.controller';
 import { UsuarioRepository } from './usuario.repository';
 import { InserirCodigoEnviadoPorEmailParaCriarNovaSenha } from './services/inserir-codigo-enviado-por-email-nova-senha.service';
 import { ListarUsuariosBloqueadosService } from './services/listar-usuarios-bloqueados.service';
+import { DesbloquearUsuarioService } from './services/desbloquear-usuario.service';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ListarUsuariosBloqueadosService } from './services/listar-usuarios-bloq
     GerarCodigoParaRedefinirSenhaPorEmail,
     InserirCodigoEnviadoPorEmailParaCriarNovaSenha,
     ListarUsuariosBloqueadosService,
+    DesbloquearUsuarioService,
   ],
   exports: [
     ConsultarUsuarioPorEmailService,
@@ -54,6 +56,7 @@ import { ListarUsuariosBloqueadosService } from './services/listar-usuarios-bloq
     ConsultarUsuarioBloqueadoService,
     GerarCodigoParaRedefinirSenhaPorEmail,
     InserirCodigoEnviadoPorEmailParaCriarNovaSenha,
+    DesbloquearUsuarioService,
   ],
 })
 export class UsuarioModule implements NestModule {

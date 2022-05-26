@@ -1,7 +1,7 @@
-import { MailService } from './../../../config/utils/mail/mail.service';
+import { MailService } from '../../../utils/mail/mail.service';
 import { ConsultarUsuarioPorEmailService } from 'src/modules/usuario/services/consultar-usuario-por-email.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { getRandomInt } from 'src/config/utils/functions/getRandomInt';
+import { getRandomInt } from 'src/utils/functions/getRandomInt';
 import { CodigoRecuperarSenhaRepository } from 'src/modules/codigo_recuperar_senha/Codigorecuperar-senha.repository';
 
 @Injectable()

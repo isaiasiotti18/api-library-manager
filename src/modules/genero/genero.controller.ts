@@ -12,9 +12,9 @@ import {
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CriarGeneroDTO } from './dtos/criar-genero.dto';
 import { Genero } from './model/genero.model';
-import { Roles } from 'src/config/utils/auth/decorators/roles.decorator';
+import { Roles } from 'src/utils/auth/decorators/roles.decorator';
 import { Role } from 'src/modules/usuario/enums/role.enum';
-import { IsPublic } from 'src/config/utils/auth/decorators/is-public.decorator';
+import { IsPublic } from 'src/utils/auth/decorators/is-public.decorator';
 
 @Controller('/api/v1/generos')
 @ApiTags('generos')

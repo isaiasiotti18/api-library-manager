@@ -13,18 +13,18 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { Role } from './enums/role.enum';
-import { AuthRequest } from 'src/config/utils/auth/models/AuthRequest';
+import { AuthRequest } from 'src/utils/auth/models/AuthRequest';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CriarUsuarioDTO } from './dtos/criar-usuario.dto';
 import { Usuario } from './model/usuario.model';
 import { EnderecoBodyJson } from '../endereco/interfaces/endereco-body-json.interface';
 import { CriarUsuarioComEnderecoBodyJson } from './interfaces/criar-usuario-endereco-bodyjson';
 import { AlterarUsuarioDTO } from './dtos/alterar-usuario.dto';
-import { IsPublic } from 'src/config/utils/auth/decorators/is-public.decorator';
+import { IsPublic } from 'src/utils/auth/decorators/is-public.decorator';
 import { CadastrarUsuarioService } from './services/cadastrar-usuario.service';
 import { AlterarUsuarioService } from './services/alterar-usuario.service';
 import { ConsultarUsuarioPorIdService } from './services/consultar-usuario-porId.service';
-import { Roles } from 'src/config/utils/auth/decorators/roles.decorator';
+import { Roles } from 'src/utils/auth/decorators/roles.decorator';
 import { GerarCodigoParaRedefinirSenhaPorEmail } from './services/gerar-codigo-para-redefinir-senha.service';
 import { InserirCodigoEnviadoPorEmailParaCriarNovaSenha } from './services/inserir-codigo-enviado-por-email-nova-senha.service';
 import { AtualizarSenhaDto } from './dtos/atualizar-Senha.dto';

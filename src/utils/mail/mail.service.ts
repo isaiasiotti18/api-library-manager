@@ -61,7 +61,7 @@ export class MailService {
     });
   }
 
-  async sendEmailMessageTimeToReturnTheBooks(args: {
+  async sendEmailTimeToReturnTheBooks(args: {
     to: string;
     subject: string;
     nome: string;
@@ -76,6 +76,23 @@ export class MailService {
       context: {
         nome,
         data_devolucao,
+      },
+    });
+  }
+
+  async sendEmailToUsersBeingUnblockedFromTheSystem(args: {
+    to: string;
+    subject: string;
+    nome: string;
+  }) {
+    const { to, subject, nome } = args;
+
+    await this.mailerService.sendMail({
+      to,
+      subject,
+      template: 'sendEmailToUsersBeingUnblockedFromTheSystem',
+      context: {
+        nome,
       },
     });
   }

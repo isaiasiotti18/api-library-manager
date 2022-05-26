@@ -1,5 +1,5 @@
 import { Role } from './../usuario/enums/role.enum';
-import { Roles } from 'src/config/utils/auth/decorators/roles.decorator';
+import { Roles } from 'src/utils/auth/decorators/roles.decorator';
 import { CreditaEstoqueLivroService } from './services/credita-estoque-livro.service';
 import { EntradaEstoqueLivroService } from './services/entrada-estoque-livro.service';
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';

@@ -1,9 +1,12 @@
-import { AuthRequest } from 'src/config/utils/auth/models/AuthRequest';
+import { AuthRequest } from 'src/utils/auth/models/AuthRequest';
 import { PagamentoService } from './pagamento.service';
 import { Controller, Get, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/utils/auth/decorators/roles.decorator';
+import { Role } from '../usuario/enums/role.enum';
 
 @Controller('pagamento')
+@Roles(Role.ADMINISTRADOR)
 @ApiTags('pagamento')
 @ApiBearerAuth('defaultBearerAuth')
 export class PagamentoController {
@@ -23,5 +26,10 @@ export class PagamentoController {
   @Get('lista-pagamentos')
   async listaPagamentos() {
     return await this.pagamentoService.listaPagamentos();
+  }
+
+  @Get('lista-pagamentos-multas')
+  async listaPagamentosMultas() {
+    return await this.pagamentoService.listaPagamentosMultas();
   }
 }

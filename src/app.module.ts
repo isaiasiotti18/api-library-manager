@@ -1,6 +1,6 @@
-import { TasksModule } from './config/utils/tasks/tasks.module';
-import { RolesGuard } from './config/utils/auth/guards/roles.guard';
-import { JwtAuthGuard } from 'src/config/utils/auth/guards/jwt-auth.guard';
+import { TasksModule } from './utils/tasks/tasks.module';
+import { RolesGuard } from './utils/auth/guards/roles.guard';
+import { JwtAuthGuard } from 'src/utils/auth/guards/jwt-auth.guard';
 import { Module } from '@nestjs/common';
 import { ConnectionModule } from './config/database/typeorm/connection.module';
 import { LivroModule } from './modules/livro/livro.module';
@@ -13,10 +13,10 @@ import { ConfigModule } from '@nestjs/config';
 import { AluguelModule } from './modules/aluguel/aluguel.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EstoqueModule } from './modules/estoque/estoque.module';
-import { AuthModule } from 'src/config/utils/auth/auth.module';
+import { AuthModule } from 'src/utils/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { CodigoRecuperarSenhaModule } from './modules/codigo_recuperar_senha/codigo_recuperar_senha.module';
-import { MailModule } from './config/utils/mail/mail.module';
+import { MailModule } from './utils/mail/mail.module';
 import { PagamentoModule } from 'src/modules/pagamento/pagamento.module';
 
 @Module({

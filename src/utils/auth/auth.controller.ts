@@ -1,5 +1,5 @@
 import { Role } from 'src/modules/usuario/enums/role.enum';
-import { Roles } from 'src/config/utils/auth/decorators/roles.decorator';
+import { Roles } from 'src/utils/auth/decorators/roles.decorator';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import {
   Controller,

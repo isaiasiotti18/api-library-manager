@@ -1,5 +1,5 @@
 import { AtualizarLivroDTO } from './../dtos/atualizar-livro.dto';
-import { AwsS3Service } from '../../../config/utils/aws/aws-s3.service';
+import { AwsS3Service } from '../../../utils/aws/aws-s3.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConsultarLivroService } from './consultar-livro.service';
 import { AtualizarLivroService } from './atualizar-livro.service';

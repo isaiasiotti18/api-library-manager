@@ -1,5 +1,5 @@
-import { AuthRequest } from 'src/config/utils/auth/models/AuthRequest';
-import { User } from './../models/user.class';
+import { AuthRequest } from 'src/utils/auth/models/AuthRequest';
+import { User } from '../models/user.class';
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Role } from 'src/modules/usuario/enums/role.enum';

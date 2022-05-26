@@ -1,6 +1,6 @@
 import { UsuarioModule } from 'src/modules/usuario/usuario.module';
-import { MailModule } from 'src/config/utils/mail/mail.module';
-import { AluguelModule } from './../../../modules/aluguel/aluguel.module';
+import { MailModule } from 'src/utils/mail/mail.module';
+import { AluguelModule } from '../../modules/aluguel/aluguel.module';
 import { Module, forwardRef } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { PagamentoModule } from 'src/modules/pagamento/pagamento.module';

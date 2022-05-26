@@ -1,8 +1,8 @@
 import { LivroDTO } from '../dtos/livro.dto';
 import { Livro } from '../model/livro.model';
 import { LivroResultado } from './livro-resultado.interface';
-import { PageDto } from 'src/config/utils/pagination/page.dto';
-import { PageOptionsDto } from 'src/config/utils/pagination/page-options.dto';
+import { PageDto } from 'src/utils/pagination/page.dto';
+import { PageOptionsDto } from 'src/utils/pagination/page-options.dto';
 
 export interface LivroRepositoryInterface {
   cadastrarLivro(livro: LivroDTO): Promise<Livro>;

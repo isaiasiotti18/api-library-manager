@@ -1,4 +1,4 @@
-import { CodigoRecuperarSenha } from './../../../modules/codigo_recuperar_senha/model/codigo_recuperar_senha.model';
+import { CodigoRecuperarSenha } from '../../../modules/codigo_recuperar_senha/model/codigo_recuperar_senha.model';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Aluguel } from 'src/modules/aluguel/model/aluguel.model';

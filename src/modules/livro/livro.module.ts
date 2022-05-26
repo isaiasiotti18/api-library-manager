@@ -5,7 +5,7 @@ import { EditoraModule } from '../editora/editora.module';
 import { GeneroModule } from '../genero/genero.module';
 import { LivroController } from './livro.controller';
 import { LivroRepository } from './livro.repository';
-import { AwsModule } from 'src/config/utils/aws/aws.module';
+import { AwsModule } from 'src/utils/aws/aws.module';
 import { EstoqueModule } from '../estoque/estoque.module';
 
 import { ConsultarLivroService } from './services/consultar-livro.service';

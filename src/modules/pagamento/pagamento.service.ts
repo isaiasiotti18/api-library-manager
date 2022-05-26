@@ -1,11 +1,11 @@
 import { HttpService } from '@nestjs/axios';
 import { NovoPagamentoDTO } from './dtos/novo-pagamento.dto';
-import { MailService } from './../../config/utils/mail/mail.service';
+import { MailService } from '../../utils/mail/mail.service';
 import { ConsultarUsuarioPorIdService } from './../usuario/services/consultar-usuario-porId.service';
 import { AluguelRepository } from './../aluguel/aluguel.repository';
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectStripe } from 'nestjs-stripe';
-import { currencyFormat } from 'src/config/utils/functions/currencyFormat';
+import { currencyFormat } from 'src/utils/functions/currencyFormat';
 import Stripe from 'stripe';
 import { PagamentoRepository } from './pagamento.repository';
 import { Pagamento } from './model/pagamento.model';
@@ -50,11 +50,15 @@ export class PagamentoService {
     );
 
     //Verificar se o aluguel em questão já tem um link de pagamento gerado
-    const consultaPagamento = await this.pagamentoRepository.consultarPagamento(
-      aluguel.aluguel_id,
-    );
+    const consultaPagamento =
+      await this.pagamentoRepository.consultarPagamentoPorAluguelId(
+        aluguel.aluguel_id,
+      );
 
-    if (consultaPagamento) {
+    if (
+      !consultaPagamento.pagamento_realizado &&
+      !consultaPagamento.link_multa
+    ) {
       return {
         message:
           'Esse aluguel já possui uma LINK de Pagamento, porém ainda não foi pago.',
@@ -75,7 +79,10 @@ export class PagamentoService {
         },
       ],
       metadata: {
+        tipo_pagamento: 'aluguel_livros',
         usuario_id: usuario.id,
+        email: usuario.email,
+        nome: usuario.nome,
       },
     });
 
@@ -117,6 +124,19 @@ export class PagamentoService {
       usuario.aluguel_id,
     );
 
+    const consultaPagamentoLinkMulta =
+      await this.pagamentoRepository.consultaPagamentoLinkMulta(
+        aluguel.aluguel_id,
+        true,
+      );
+
+    if (consultaPagamentoLinkMulta?.pagamento_realizado === false) {
+      return {
+        message: 'Esse Aluguel já possui um link de pagamento para multa.',
+        url_para_pagamento: consultaPagamentoLinkMulta?.url_pagamento,
+      };
+    }
+
     const produto = await this.criarProduto(
       `${aluguel.aluguel_id}-Multa-Aluguel`,
       aluguel.valor_total * 0.1,
@@ -130,31 +150,24 @@ export class PagamentoService {
         },
       ],
       metadata: {
+        tipo_pagamento: 'multa',
         usuario_id: usuario.id,
+        email: usuario.email,
+        nome: usuario.nome,
       },
     });
-
-    const consultaPagamentoLinkMulta = await this.pagamentoRepository.findOne({
-      where: {
-        aluguel_id: aluguel.aluguel_id,
-        link_multa: true,
-      },
-    });
-
-    if (consultaPagamentoLinkMulta) {
-      return {
-        message: 'Esse Aluguel já possui um link de pagamento para multa.',
-        url_para_pagamento: consultaPagamentoLinkMulta.url_pagamento,
-      };
-    }
 
     const novoPagamento = await this.novoPagamento({
       aluguel_id: aluguel.aluguel_id,
       usuario_id: usuario.id,
       id: linkDePagamento.id,
       url_pagamento: linkDePagamento.url,
-      link_multa: true,
       valor: aluguel.valor_total,
+    });
+
+    await this.pagamentoRepository.save({
+      id: novoPagamento.id,
+      link_multa: true,
     });
 
     const retornoLinkDePagamento = {
@@ -177,7 +190,6 @@ export class PagamentoService {
     url_pagamento,
     usuario_id,
     valor,
-    link_multa,
   }: NovoPagamentoDTO): Promise<Pagamento> {
     const novoPagamento = await this.pagamentoRepository.novoPagamento({
       id,
@@ -185,18 +197,52 @@ export class PagamentoService {
       aluguel_id,
       valor,
       url_pagamento,
-      link_multa,
     });
 
     return novoPagamento;
   }
 
-  async listaPagamentos() {
-    const balanceTransactions =
-      await this.stripeClient.balanceTransactions.list({
-        limit: 3,
-      });
+  async listaPagamentosMultas() {
+    const pagamentos = (await this.stripeClient.checkout.sessions.list()).data;
 
-    return balanceTransactions;
+    const filterPagamentos = pagamentos.filter(
+      (pagamento) => pagamento.metadata.tipo_pagamento === 'multa',
+    );
+
+    return filterPagamentos.map((pagamento) => {
+      return {
+        metadata: pagamento.metadata,
+        payment_intent: pagamento.payment_intent,
+        payment_link: pagamento.payment_link,
+        payment_status: 'paid',
+        status: 'complete',
+      };
+    });
+  }
+
+  async listaPagamentos() {
+    const pagamentos = (await this.stripeClient.checkout.sessions.list()).data;
+
+    const filterPagamentos = pagamentos.filter(
+      (pagamento) => pagamento.metadata.tipo_pagamento === 'aluguel_livros',
+    );
+
+    return filterPagamentos.map((pagamento) => {
+      return {
+        metadata: pagamento.metadata,
+        payment_intent: pagamento.payment_intent,
+        payment_link: pagamento.payment_link,
+        payment_status: 'paid',
+        status: 'complete',
+      };
+    });
+  }
+
+  async atualizarPagamento(pagamento_id: string): Promise<void> {
+    const pagamento = await this.pagamentoRepository.consultarPagamento(
+      pagamento_id,
+    );
+
+    await this.pagamentoRepository.atualizarPagamento(pagamento.id);
   }
 }

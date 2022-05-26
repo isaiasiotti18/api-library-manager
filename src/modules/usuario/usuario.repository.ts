@@ -55,6 +55,13 @@ export class UsuarioRepository
     });
   }
 
+  async desbloquearUsuario(usuario_id: string): Promise<void> {
+    await this.save({
+      id: usuario_id,
+      status_acesso: StatusAcesso.DESBLOQUEADO,
+    });
+  }
+
   async listarUsuariosBloqueados(): Promise<Usuario[]> {
     const listaUsuariosBloqueados = await this.find({
       where: {

@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PageOptionsDto } from '../../../config/utils/pagination/page-options.dto';
-import { PageDto } from '../../../config/utils/pagination/page.dto';
+import { PageOptionsDto } from '../../../utils/pagination/page-options.dto';
+import { PageDto } from '../../../utils/pagination/page.dto';
 import { LivroResultado } from '../interfaces/livro-resultado.interface';
 import { LivroRepository } from '../livro.repository';
 

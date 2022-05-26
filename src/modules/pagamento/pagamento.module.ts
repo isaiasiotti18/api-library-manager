@@ -8,7 +8,7 @@ import { PagamentoService } from './pagamento.service';
 import { StripeModule } from 'nestjs-stripe';
 import { AluguelModule } from '../aluguel/aluguel.module';
 import { UsuarioModule } from '../usuario/usuario.module';
-import { MailModule } from 'src/config/utils/mail/mail.module';
+import { MailModule } from 'src/utils/mail/mail.module';
 
 @Module({
   imports: [

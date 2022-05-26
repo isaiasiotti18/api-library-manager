@@ -3,7 +3,7 @@ import { UsuarioRepository } from './../usuario.repository';
 import { Injectable, BadRequestException } from '@nestjs/common';
 
 @Injectable()
-export class BloquearUsuarioService {
+export class DesbloquearUsuarioService {
   constructor(
     private readonly usuarioRepository: UsuarioRepository,
     private readonly consultarUsuarioPorId: ConsultarUsuarioPorIdService,
@@ -14,7 +14,7 @@ export class BloquearUsuarioService {
       const usuario = await this.consultarUsuarioPorId.execute(usuario_id);
 
       if (usuario) {
-        await this.usuarioRepository.bloquearUsuario(usuario.id);
+        await this.usuarioRepository.desbloquearUsuario(usuario.id);
       }
     } catch (error: any) {
       throw new BadRequestException(error?.message);

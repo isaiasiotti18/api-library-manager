@@ -1,8 +1,9 @@
-import { PagamentoService } from './../../../modules/pagamento/pagamento.service';
-import { BloquearUsuarioService } from './../../../modules/usuario/services/bloquear-usuario.service';
+import { DesbloquearUsuarioService } from '../../modules/usuario/services/desbloquear-usuario.service';
+import { PagamentoService } from '../../modules/pagamento/pagamento.service';
+import { BloquearUsuarioService } from '../../modules/usuario/services/bloquear-usuario.service';
 import { ConsultarUsuarioPorIdService } from 'src/modules/usuario/services/consultar-usuario-porId.service';
-import { AluguelRepository } from './../../../modules/aluguel/aluguel.repository';
-import { Injectable, Logger } from '@nestjs/common';
+import { AluguelRepository } from '../../modules/aluguel/aluguel.repository';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { MailService } from '../mail/mail.service';
 import * as moment from 'moment';
@@ -14,6 +15,7 @@ export class TasksService {
   constructor(
     private readonly aluguelRepository: AluguelRepository,
     private readonly consultarUsuarioPorIdService: ConsultarUsuarioPorIdService,
+    private readonly desbloquearUsuarioService: DesbloquearUsuarioService,
     private readonly bloquearUsuarioService: BloquearUsuarioService,
     private readonly pagamentoService: PagamentoService,
     private readonly mailService: MailService,
@@ -42,7 +44,7 @@ export class TasksService {
           usuario_id,
         );
 
-        await this.mailService.sendEmailMessageTimeToReturnTheBooks({
+        await this.mailService.sendEmailTimeToReturnTheBooks({
           to: `"${usuario.nome}" ${usuario.email}`,
           subject: 'A data para a devolução dos livros já passou',
           nome: usuario.nome,
@@ -52,7 +54,7 @@ export class TasksService {
     }
   }
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron(CronExpression.EVERY_DAY_AT_10AM)
   async AlugueisQueJaPassaramDezDiasDaDataDevolucao() {
     const idUsuarioComAluguelAtrasado: any[] = await this.aluguelRepository
       .query(`
@@ -82,6 +84,39 @@ export class TasksService {
           valor_multa: aluguel.valor_total,
         });
       }
+    }
+  }
+
+  @Cron(CronExpression.EVERY_HOUR)
+  async conferindoPagamentosDeMultasDesbloqueandoUsuarios() {
+    try {
+      const pagamentos = await this.pagamentoService.listaPagamentosMultas();
+
+      if (pagamentos.length > 0) {
+        this.logger.log('Conferindo lista de pagantes...');
+        this.logger.log('Liberando usuários no sistema...');
+        this.logger.log('Enviando Emails de Aviso...');
+        for await (const pagamento of pagamentos) {
+          const usuario_id = pagamento.metadata.usuario_id;
+          const email = pagamento.metadata.email;
+          const nome = pagamento.metadata.nome;
+          const pagamento_id = pagamento.payment_intent;
+
+          await this.desbloquearUsuarioService.execute(usuario_id);
+
+          await this.mailService.sendEmailToUsersBeingUnblockedFromTheSystem({
+            to: email,
+            subject: 'Desbloqueio de Conta',
+            nome,
+          });
+
+          await this.pagamentoService.atualizarPagamento(
+            pagamento_id.toString(),
+          );
+        }
+      }
+    } catch (error: any) {
+      throw new BadRequestException(error?.message);
     }
   }
 }
