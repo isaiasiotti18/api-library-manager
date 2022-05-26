@@ -16,21 +16,21 @@ Uma certa biblioteca está com dificuldades para gerenciar os livros que são al
 
 Pretendo adicionar mais algumas features, e também fazer modificações no código para deixar ele mais "clean" e organizado.
 
-### Segue algumas features que pretendo adicionar futuramente.
-  - [] 
+### Atualizações:
+  - [] Hospedar a Api
   - [] Pretendo lançar uma versão 2.0, porém seguindo os padrões arquiteturais de microserviços
 
 ## Ferramentas que usei no projeto:
 
-- NodeJs e Typescript
-- NestJs
-- TypeORM
-- Swagger
-- MySQL
-- AWS S3
-- MailTrap
-- Stripe
-- Cep Correios
+- [x] NodeJs e Typescript
+- [x] NestJs
+- [x] TypeORM
+- [x] Swagger
+- [x] MySQL
+- [x] AWS S3
+- [x] MailTrap
+- [x] Stripe
+- [x] Cep Correios
 
 ## Endpoints e funcionalidades
 
