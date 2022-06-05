@@ -10,25 +10,35 @@ Uma certa biblioteca está com dificuldades para gerenciar os livros que são al
 
 ## Caso queira testar a Api:
 
+```git
+git clone https://github.com/isaiasiotti18/api-library-manager.git
 
+npm install
 
+Você vai precisar criar um container com um banco de dados MySQL
+
+docker run -e MYSQL_ROOT_PASSWORD=root --name myMySQL -d mysql:5.7
+
+Como eu criei todas as entidades na mão no banco de dados, pegue o script na pasta /generate_db e rode ele para criar o banco de dados.
+```
 ## Status do Projeto [FINALIZADO PARCIALMENTE]
 
 Pretendo adicionar mais algumas features, e também fazer modificações no código para deixar ele mais "clean" e organizado.
 
 ### Atualizações: 
-  - [] Lista de livros favoritos
-  - [] Hospedar a Api
-  - [] Pretendo lançar uma versão 2.0, porém seguindo os padrões arquiteturais de microserviços
+  - [ ] Lista de livros favoritos
+  - [ ] Implementar a regra de níveis
+  - [ ] Hospedar a Api
+  - [ ] Pretendo lançar uma versão 2.0, porém seguindo os padrões arquiteturais de microserviços
 
 ### Refatorações que preciso fazer:
-  -[] VERIFICAR REPETIÇÕES DE CÓDIGO
-  -[] NOMES DE VARIÁVEIS, FUNÇÕES, CLASSES
-  -[] PARAMETROS E RETORNOS DE FUNÇÕES
-  -[] SEPARAÇÃO DE ERROS E EXCEÇÕES
-  -[] SEPARAÇÃO DE RESPONSABILIDADES
-  -[] CONSCISTÊNCIA DE NOMES DE VARIÁVEIS, FUNÇÕES, CLASSES, ABSTRAÇÕES
-  -[] DIVIDIR FUNÇÕES GRANDES EM VÁRIAS OUTRAS MENORES
+  - [ ] VERIFICAR REPETIÇÕES DE CÓDIGO
+  - [ ] NOMES DE VARIÁVEIS, FUNÇÕES, CLASSES
+  - [ ] PARAMETROS E RETORNOS DE FUNÇÕES
+  - [ ] SEPARAÇÃO DE ERROS E EXCEÇÕES
+  - [ ] SEPARAÇÃO DE RESPONSABILIDADES
+  - [ ] CONSCISTÊNCIA DE NOMES DE VARIÁVEIS, FUNÇÕES, CLASSES, ABSTRAÇÕES
+  - [ ] DIVIDIR FUNÇÕES GRANDES EM VÁRIAS OUTRAS MENORES
 
 ## Ferramentas que usei no projeto:
 
