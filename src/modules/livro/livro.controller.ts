@@ -129,9 +129,13 @@ export class LivroController {
   @ApiQuery({ name: 'titulo_livro' })
   @UsePipes(ValidationPipe)
   async consultarLivrosPorTitulo(
+    @Query() pageOptionsDto: PageOptionsDto,
     @Query('titulo_livro') titulo_livro: string,
-  ): Promise<LivroResultado[]> {
-    return await this.consultarlivrosPorTituloService.execute(titulo_livro);
+  ): Promise<PageDto<LivroResultado>> {
+    return await this.consultarlivrosPorTituloService.execute(
+      pageOptionsDto,
+      titulo_livro,
+    );
   }
 
   @IsPublic()

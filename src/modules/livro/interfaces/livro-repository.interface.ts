@@ -9,7 +9,10 @@ export interface LivroRepositoryInterface {
 
   consultarLivro(isbn_livro: string): Promise<Livro>;
 
-  consultarLivrosPorTitulo(titulo_livro: string): Promise<LivroResultado[]>;
+  consultarLivrosPorTitulo(
+    pageOptionsDto: PageOptionsDto,
+    titulo_livro: string,
+  ): Promise<PageDto<LivroResultado>>;
 
   consultarLivros(
     pageOptionsDto: PageOptionsDto,

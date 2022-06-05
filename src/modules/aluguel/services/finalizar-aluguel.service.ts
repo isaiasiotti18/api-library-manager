@@ -44,15 +44,15 @@ export class FinalizarAluguelEDevolverLivrosService {
     const livrosDoAluguel =
       await this.aluguelRepository.consultaLivrosDoAluguel(aluguel.aluguel_id);
 
-    const verificandoOsLivrosDevolvidosBatem = compareArrays(
+    const verificandoSeOsLivrosDevolvidosBatem = compareArrays(
       livrosDevolvidos,
       livrosDoAluguel,
     );
 
-    if (verificandoOsLivrosDevolvidosBatem) {
-      livrosDoAluguel.map(async (livro_id: string) => {
-        await this.creditaEstoqueLivroService.execute(livro_id);
-      });
+    if (verificandoSeOsLivrosDevolvidosBatem) {
+      for await (const livroAluguel of livrosDoAluguel) {
+        await this.creditaEstoqueLivroService.execute(livroAluguel);
+      }
     } else {
       throw new BadRequestException(
         'Livros devolvidos não batem com os livros do aluguel',
@@ -77,7 +77,6 @@ export class FinalizarAluguelEDevolverLivrosService {
 
     const retornoAluguelFinalizado: RetornoAluguelFinalizado = {
       data_devolucao: dataDevoluçãoAluguel,
-      link_multa: '',
       valor_total_pago: aluguel.valor_total,
       valor_da_multa: 0.1 * aluguel.valor_total,
       valor_total_com_multa: 0.1 * aluguel.valor_total + aluguel.valor_total,

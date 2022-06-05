@@ -13,7 +13,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-@Entity({ name: 'livro' })
+@Entity('livro')
 export class Livro {
   @PrimaryGeneratedColumn('uuid')
   livro_id: string;

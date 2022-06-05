@@ -1,20 +1,18 @@
+import { RetornoAluguelRealizado } from './interfaces/retorno-aluguel-realizado.interface';
 import { FinalizarAluguelDTO } from './dtos/finalizar-aluguel.dto';
 import { ValidarAluguelService } from './services/validar-aluguel.service';
 import { AuthRequest } from 'src/utils/auth/models/AuthRequest';
 import {
   Body,
   Controller,
-  Get,
   Param,
   Post,
   Request,
-  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CriarAluguelDTO } from './dtos/criar-aluguel.dto';
-import { Aluguel } from './model/aluguel.model';
 import { RealizarAluguelService } from './services/realizar-aluguel.service';
 import { FinalizarAluguelEDevolverLivrosService } from './services/finalizar-aluguel.service';
 
@@ -34,7 +32,7 @@ export class AluguelController {
   async realizarAluguel(
     @Request() req: AuthRequest,
     @Body() criarAluguelDTO: CriarAluguelDTO,
-  ): Promise<Aluguel> {
+  ): Promise<RetornoAluguelRealizado> {
     return await this.realizarAluguelService.realizarAluguel(
       req.user.id,
       criarAluguelDTO,

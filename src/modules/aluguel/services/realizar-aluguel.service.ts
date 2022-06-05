@@ -1,3 +1,4 @@
+import { RetornoAluguelRealizado } from './../interfaces/retorno-aluguel-realizado.interface';
 import { ConsultaEstoqueService } from './../../estoque/services/consulta-estoque.service';
 import { AtribuirAluguelAoUsuarioService } from './../../usuario/services/atribuir-aluguel.service';
 import { ConsultarLivroService } from './../../livro/services/consultar-livro.service';
@@ -27,7 +28,7 @@ export class RealizarAluguelService {
   async realizarAluguel(
     usuario_id: string,
     { isbns_passados }: CriarAluguelDTO,
-  ): Promise<any> {
+  ): Promise<RetornoAluguelRealizado> {
     try {
       //Validar o usuário que está alugando
       const usuarioJaCadastrado =
@@ -89,7 +90,6 @@ export class RealizarAluguelService {
         .format('YYYY-MM-DD');
 
       const valores_livros = livros_alugados.map((livro) => livro);
-
       const valor_total = sumBooksValues(valores_livros);
 
       //Gerar Aluguel
@@ -113,7 +113,7 @@ export class RealizarAluguelService {
       const { codigo, data_alugacao, data_devolucao, aluguel_id, livros } =
         novoAluguel;
 
-      const retornoAluguel = {
+      const retornoAluguel: RetornoAluguelRealizado = {
         usuario_id,
         informacoes_aluguel: {
           aluguel_id,

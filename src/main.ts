@@ -37,7 +37,7 @@ async function bootstrap() {
     }),
   );
 
-  //app.useGlobalFilters(new AllExceptionFilter());
+  app.useGlobalFilters(new AllExceptionFilter());
 
   Date.prototype.toJSON = function (): any {
     return momentTimezone(this)

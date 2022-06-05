@@ -16,9 +16,19 @@ Uma certa biblioteca está com dificuldades para gerenciar os livros que são al
 
 Pretendo adicionar mais algumas features, e também fazer modificações no código para deixar ele mais "clean" e organizado.
 
-### Atualizações:
+### Atualizações: 
+  - [] Lista de livros favoritos
   - [] Hospedar a Api
   - [] Pretendo lançar uma versão 2.0, porém seguindo os padrões arquiteturais de microserviços
+
+### Refatorações que preciso fazer:
+  -[] VERIFICAR REPETIÇÕES DE CÓDIGO
+  -[] NOMES DE VARIÁVEIS, FUNÇÕES, CLASSES
+  -[] PARAMETROS E RETORNOS DE FUNÇÕES
+  -[] SEPARAÇÃO DE ERROS E EXCEÇÕES
+  -[] SEPARAÇÃO DE RESPONSABILIDADES
+  -[] CONSCISTÊNCIA DE NOMES DE VARIÁVEIS, FUNÇÕES, CLASSES, ABSTRAÇÕES
+  -[] DIVIDIR FUNÇÕES GRANDES EM VÁRIAS OUTRAS MENORES
 
 ## Ferramentas que usei no projeto:
 

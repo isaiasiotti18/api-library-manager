@@ -12,7 +12,6 @@ import { RealizarAluguelService } from './services/realizar-aluguel.service';
 import { ValidarCodigoAluguelService } from './services/validar-codigo-aluguel.service';
 import { FinalizarAluguelEDevolverLivrosService } from './services/finalizar-aluguel.service';
 import { InserirLivroAluguelFinalizadoTabelaNaTabelaLivrosAlugadosFinalizadosService } from './services/inserir-livro-aluguel-finalizado-tabela-livros-alugados-finalizados.service';
-import { MailService } from 'src/utils/mail/mail.service';
 
 @Module({
   imports: [

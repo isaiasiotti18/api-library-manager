@@ -59,7 +59,9 @@ export class AluguelRepository
     return;
   }
 
-  async verificaAluguelEDeletaAluguelSeNaoFoiValidado(aluguel_id: string) {
+  async verificaAluguelEDeletaAluguelSeNaoFoiValidado(
+    aluguel_id: string,
+  ): Promise<void> {
     if (aluguel_id) {
       //Se tiver...Irá deletar
       await this.createQueryBuilder()
@@ -86,6 +88,7 @@ export class AluguelRepository
       );
     `);
   }
+
   async inserirAluguelFinalizadoNaTabelaAlugueisFinalizados(
     aluguel_id: string,
     dia_finalizado: string,

@@ -59,44 +59,48 @@ export class LivroRepository
   async consultarLivros(
     pageOptionsDto: PageOptionsDto,
   ): Promise<PageDto<LivroResultado>> {
-    /*
-    const livros = await this.find({
-      order: { titulo: 'ASC' },
-      relations: ['autor', 'editora'],
-      skip: 0,
-      take: 5,
-    });
-
-    return livros.map((livro) => {
-      const livroObj: LivroResultado = {
-        titulo: livro.titulo,
-        autor: livro.autor.nome,
-        editora: livro.editora.editora,
-        isbn: livro.isbn,
-        publicacao: livro.publicacao,
-        qtd_paginas: livro.qtd_paginas,
-      };
-
-      return livroObj;
-    });
-    */
-
     const queryBuilder = this.createQueryBuilder('livro');
 
     queryBuilder
       .select([
-        'livro.autor_id',
-        'livro.editora_id',
+        'livro.livro_id',
         'livro.titulo',
         'livro.isbn',
         'livro.publicacao',
         'livro.qtd_paginas',
       ])
+      .innerJoinAndSelect('livro.autor', 'autor')
+      .innerJoinAndSelect('livro.editora', 'editora')
       .orderBy('livro.titulo', pageOptionsDto.order)
       .skip(pageOptionsDto.skip)
-      .take(pageOptionsDto.take);
+      .take(pageOptionsDto.take)
+      .getSql();
 
-    console.error(queryBuilder);
+    const sql = queryBuilder.getSql();
+    console.log(sql);
+
+    const itemCount = await queryBuilder.getCount();
+    const { entities } = await queryBuilder.getRawAndEntities();
+
+    const pageMetaDto = new PageMetaDto({ itemCount, pageOptionsDto });
+
+    return new PageDto(entities, pageMetaDto);
+  }
+
+  async consultarLivrosPorTitulo(
+    pageOptionsDto: PageOptionsDto,
+    titulo_livro: string,
+  ): Promise<PageDto<LivroResultado>> {
+    const queryBuilder = await this.createQueryBuilder('livro');
+
+    queryBuilder
+      .select(['livro.titulo', 'livro.publicacao', 'livro.qtd_paginas'])
+      .orderBy('livro.titulo', pageOptionsDto.order)
+      .where('livro.titulo like :titulo_livro', {
+        titulo_livro: `%${titulo_livro}%`,
+      })
+      .skip(pageOptionsDto.skip)
+      .take(pageOptionsDto.take);
 
     const itemCount = await queryBuilder.getCount();
     const { entities } = await queryBuilder.getRawAndEntities();
@@ -108,26 +112,6 @@ export class LivroRepository
 
   async consultarLivro(isbn_livro: string): Promise<Livro> {
     return await this.findOne({ isbn: isbn_livro });
-  }
-
-  async consultarLivrosPorTitulo(
-    titulo_livro: string,
-  ): Promise<LivroResultado[]> {
-    const queryResult = this.query(`
-    SELECT 
-    livro.titulo,
-    autor.nome,
-    editora.editora,
-    livro.isbn,
-    livro.publicacao,
-    livro.qtd_paginas
-    FROM livro
-    JOIN autor ON autor.autor_id = livro.autor_id
-    JOIN editora ON editora.editora_id = livro.editora_id
-    WHERE livro.titulo LIKE '%${titulo_livro}%';
-    `);
-
-    return queryResult;
   }
 
   async consultarLivrosPorGenero(genero: string): Promise<LivroResultado[]> {
