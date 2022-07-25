@@ -65,3 +65,6 @@ Pretendo adicionar mais algumas features, e também fazer modificações no cód
 
 ## Licença
 
+MIT LICENSE
+
+Isaias Batista dos Santos - 2022
