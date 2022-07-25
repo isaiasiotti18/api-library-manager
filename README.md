@@ -1,6 +1,6 @@
 # API LIBRARY MANAGER
 
-Eu desenvolvi essa Api mais como projeto pessoal para ter no meu currículo. E também testar minha habilidades como desenvolvedor. Aceito qualquer tipo de critica construtiva e dicas. O codigo não e dos melhores, mas foi feito com amor <3 s2 kkkk
+Eu desenvolvi essa Api mais como projeto pessoal para ter no meu currículo. E também testar minha habilidades como desenvolvedor. Aceito qualquer tipo de critica construtiva e dicas. O codigo não é dos melhores, mas foi feito com amor <3 s2 kkkk
 
 Pequei em muitas partes e sei que preciso melhorar, porém desenvolver esse projeto foi uma experiência muito boa! Em certos pontos do código vocês irão perceber algumas "lambanças" que ocorreram por causa da pressa. Esse projeto, como ja foi dito, foi construido com o intuito de ser usado como projeto pessoal para o meu currículo.
 
